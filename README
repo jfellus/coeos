@@ -1,0 +1,19 @@
+To install
+---------
+
+Standard Installation:
+sh Create_Leto_Makefile.sh
+make leto
+
+
+
+OPTION :
+In order to have teh option "export" to export scipts in file export.fig :
+
+sh Create_Leto_Makefile.sh -enable-export
+make leto
+
+
+
+Support:
+make clean : erase all *.o and leto binary
