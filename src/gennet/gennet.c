@@ -574,7 +574,7 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 
   if(nom_script_draw == NULL || strlen(nom_script_draw) == 0)
     {
-      if ((nom_script_draw = malloc (sizeof(char)*strlen(nom_script_script))) == NULL)
+       if ((nom_script_draw = malloc (sizeof(char)*(strlen(nom_script_script)+1))) == NULL)
 	{
 	  g_critical("Edit_Script_With_Leto : Memory error");
 	  /* fermer ce qu'il faut */
@@ -609,8 +609,6 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
       if(copie_script_script != NULL)
 	free(copie_script_script);
     }
-  
-
   
   /*** Controle si le script n'est pas deja ouvert, cela est utile uniquement 
    *** si le nombre d'onglet genere par gtk est superieur a 1 
@@ -718,6 +716,7 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 
       if (nom_script_script != NULL)
 	free(nom_script_script);
+
       if (nom_script_draw != NULL)
 	free(nom_script_draw);
     }
@@ -1135,35 +1134,38 @@ void		separate_superimposed_comlink_by_script_out(t_gennet *gen, t_gennet_script
     {
       if (comlinklist_out->comlink->out == script_out)
 	{
-	  if (script_in->pos_x < script_out->pos_x)
-	    {
-	      x = (script_in->pos_x + IMG_SCRIPT_WIDTH) + ((script_out->pos_x - (script_in->pos_x + IMG_SCRIPT_WIDTH)) / 2);
-	    }
-	  else
-	    {
-	      x = (script_out->pos_x + IMG_SCRIPT_WIDTH) + ((script_in->pos_x - (script_out->pos_x + IMG_SCRIPT_WIDTH)) / 2);
-	    }
-
-	  if (script_in->pos_y < script_out->pos_y)
-	    {
-	      y = (script_in->pos_y + IMG_SCRIPT_HEIGHT) + ((script_out->pos_y - (script_in->pos_y + IMG_SCRIPT_HEIGHT)) / 2);
-	    }
-	  else
-	    {
-	      y = (script_out->pos_y + IMG_SCRIPT_HEIGHT) + ((script_in->pos_y - (script_out->pos_y + IMG_SCRIPT_HEIGHT)) / 2);
-	    }
-	  polyline = comlinklist_out->comlink->polyline_list.first;
-
-	  if (fabs(polyline->a) < 1)
-	  {
-	     insert_polyline_after_at_coordinates(polyline, x, y + BEND_SPACE_SIZE * cpt);
-	  }
-	  else
-	  {
-	     insert_polyline_after_at_coordinates(polyline, x + BEND_SPACE_SIZE * cpt, y);
-	  }
-	  cpt++;
-	  refresh_link(gen, comlinklist_out->comlink);
+	   cpt++;
+	   if (cpt > 1)
+	   {
+	      if (script_in->pos_x < script_out->pos_x)
+	      {
+		 x = (script_in->pos_x + IMG_SCRIPT_WIDTH) + ((script_out->pos_x - (script_in->pos_x + IMG_SCRIPT_WIDTH)) / 2);
+	      }
+	      else
+	      {
+		 x = (script_out->pos_x + IMG_SCRIPT_WIDTH) + ((script_in->pos_x - (script_out->pos_x + IMG_SCRIPT_WIDTH)) / 2);
+	      }
+	      
+	      if (script_in->pos_y < script_out->pos_y)
+	      {
+		 y = (script_in->pos_y + IMG_SCRIPT_HEIGHT) + ((script_out->pos_y - (script_in->pos_y + IMG_SCRIPT_HEIGHT)) / 2);
+	      }
+	      else
+	      {
+		 y = (script_out->pos_y + IMG_SCRIPT_HEIGHT) + ((script_in->pos_y - (script_out->pos_y + IMG_SCRIPT_HEIGHT)) / 2);
+	      }
+	      polyline = comlinklist_out->comlink->polyline_list.first;
+	      
+	      if (fabs(polyline->a) < 1)
+	      {
+		 insert_polyline_after_at_coordinates(polyline, x, y + BEND_SPACE_SIZE * cpt);
+	      }
+	      else
+	      {
+		 insert_polyline_after_at_coordinates(polyline, x + BEND_SPACE_SIZE * cpt, y);
+	      }
+	      refresh_link(gen, comlinklist_out->comlink);
+	   }
 	}
     }
 }

@@ -2243,10 +2243,10 @@ void                tabLeto_removed(GtkNotebook *notebook, GtkWidget *child, gui
 	}
     }
   if (pscript == NULL)
-    {
-      fprintf(stdout, "PSCRIPT NULL\n");      
-      return;
-    }
+  {
+     debug_printf("PSCRIPT NULL, page_num = %i\n", page_num);      
+     return;
+  }
 
   /* on supprime les raccourcis clavier */
   /* Probleme: les raccourcis sont definis pour la fenetre principale, il ne faut pas les supprimer lorsqu'on enleve un onglet */
