@@ -388,7 +388,12 @@ int read_macro(char *base_base, char *nom,int px, int py,int relatif,
     {
       groupe_local = (type_groupe *) creer_groupeb(groupe_local);
       if(sc->deb_groupe==NULL) sc->deb_groupe=groupe_local; /* c'est le 1er groupe lu */
-      sc->nbre_neurone += read_one_group_leto(f1, groupe_local,base_nom_complet, (void **)&onglet_leto->hashtab);
+
+	if (onglet_leto == NULL)
+	  sc->nbre_neurone += read_one_group_leto(f1, groupe_local,base_nom_complet, (void **)NULL);
+	else
+	  sc->nbre_neurone += read_one_group_leto(f1, groupe_local,base_nom_complet, (void **)&onglet_leto->hashtab);
+
 	debug_printf("read macro %s group %s no=%d\n",base_nom,groupe_local->no_name,groupe_local->no);
 	if(debut_macro==NULL) debut_macro=groupe_local;
 	sc->fin_groupe=groupe_local ;
@@ -449,7 +454,12 @@ int read_macro(char *base_base, char *nom,int px, int py,int relatif,
 	  liaison = sc->deb_liaison = sc->fin_liaison = (type_liaison *) creer_liaison(NULL);
 	}
       else liaison = creer_liaison(liaison);
-      read_one_link(f1, liaison,base_nom_complet, (void **)&onglet_leto->hashtab);
+
+      if (onglet_leto == NULL)
+	read_one_link(f1, liaison, base_nom_complet, NULL);
+      else
+	read_one_link(f1, liaison,base_nom_complet, (void **)&onglet_leto->hashtab);
+
       debug_printf("liaison de %s a %s \n",liaison->depart_name,liaison->arrivee_name);
       liaison->deja_active=mode_inclusion;
       /* liaison->depart = liaison->depart + sc->nbre_groupe;  */  /* offset to change the connected groups (inutile maintenant)*/
@@ -475,7 +485,8 @@ int read_macro(char *base_base, char *nom,int px, int py,int relatif,
 
     debug_printf("debug_Fin lecture macro\n");
 #ifndef AVEUGLE
-    regenerer_test(onglet_leto);
+    if (sc->premiere_lecture == 0 && onglet_leto->window != NULL)
+      regenerer_test(onglet_leto);
 #endif
     return ( nbre_groupe_macro+nbre_gpes_inclus);
 
