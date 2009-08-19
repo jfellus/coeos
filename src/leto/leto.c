@@ -1181,63 +1181,6 @@ void init_target_table()
     target_table[0].info = 0;
 }
 
-
-/* petite fenetre pour avoir la valeur initial du pseudo random generator
- * avant la lecture d'un script */
-gint init_random_gen(TxDonneesFenetre *onglet_leto)
-{
-  GtkWidget *window;
-  GtkWidget *WinMain;
-  GtkWidget *hBox;
-  GtkWidget *label;
-  GtkWidget *e_val;
-  gint      result = -1;
-  int	    val = 1;
-
-  /*printf("init_random_gen\n");*/
-#ifndef LETO
-  WinMain = lookup_widget ( onglet_leto->window ,"Winmain");
-#else
-  WinMain = onglet_leto->window;
-#endif
-
-  window = gtk_dialog_new_with_buttons ("Pseudo random generator",
-				       GTK_WINDOW(WinMain),
-				       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-				       GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, 
-				       GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
-  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-
-  hBox = gtk_hbox_new(FALSE, 5);
-
-  label = gtk_label_new("Initial value");
-  gtk_box_pack_start(GTK_BOX(hBox), label, FALSE, TRUE, 0);
-
-  e_val = gtk_entry_new_with_max_length(10);
-  gtk_box_pack_start(GTK_BOX(hBox), e_val, FALSE, TRUE, 0);
-
-  gtk_container_add(GTK_CONTAINER(GTK_DIALOG(window)->vbox), hBox);
-  gtk_widget_show_all(window);
-
-  result = gtk_dialog_run(GTK_DIALOG(window));
-
-  switch(result)
-    {
-    case GTK_RESPONSE_ACCEPT :
-	sscanf(((char *)gtk_entry_get_text(GTK_ENTRY(e_val))),"%d",&val);
-	break;
-/* on ferme l'onglet en cas de refus ?
- * si oui, faire retourner une valeur
- * indiquant a run_leto de ne pas continuer */
-    case GTK_RESPONSE_REJECT :
-	break;
-    default :
-	break;
-    }
-  gtk_widget_destroy(window);
-  return val;
-}
-
 /* fonction de lancement de leto via metaleto */
 void run_leto(char *fichier_script, char *fichier_draw,TxDonneesFenetre *onglet_leto,int idx,int numPage, long seed)
 {
@@ -1251,7 +1194,9 @@ void run_leto(char *fichier_script, char *fichier_draw,TxDonneesFenetre *onglet_
 /****************** INITIALISATION ***********************************************/
 
     if (seed < 0)
-       seed = (long)init_random_gen(onglet_leto);
+    {
+       seed = time(NULL);
+    }
     srand48(seed);
 
     if (sc->draw == NULL || strlen(sc->draw) == 0)
