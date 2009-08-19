@@ -494,7 +494,7 @@ void create_fenetre_dialogue(TxDonneesFenetre * fenetre, TxDonneesFenetre *ongle
 						  NULL);
     gtk_window_set_default_size (GTK_WINDOW(fenetre->window), 250, 100);
 
-    content_area = gtk_dialog_get_content_area (GTK_DIALOG (fenetre->window));				  
+    content_area = ((GtkDialog *) fenetre->window)->vbox;				  
     g_signal_connect(GTK_OBJECT(fenetre->window), "delete_event",
                      GTK_SIGNAL_FUNC(callback_hide_find_group), NULL);  /* definie dans find_and_manage.c */
 
