@@ -568,7 +568,6 @@ void save_script(int comment,int save_sub_networks, TxDonneesFenetre *onglet_let
 void save_script_selected(int comment,int save_sub_networks, char *nom, TxDonneesFenetre *onglet_leto)
 {
 #ifndef AVEUGLE
-   type_groupe *groupe;
    selected_group *sel_group;
    type_liaison *liaison;
    FILE *f1;
@@ -611,7 +610,7 @@ void save_script_selected(int comment,int save_sub_networks, char *nom, TxDonnee
    for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
    {
       if (save_sub_networks == 1 || sel_group->group->deja_active == 0) 
-	 write_one_group(f1, groupe, comment);
+	 write_one_group(f1, sel_group->group, comment);
    }
     
    if (comment == 1 && sc->first_comment_link != NULL)
