@@ -243,34 +243,59 @@ void affiche_liaison_b(TxDonneesFenetre * onglet_leto, TxPoint point1,
 
 void  affiche_parametres_liaison(type_liaison *liaison, TxPoint point2,TxDonneesFenetre *onglet_leto)  
 {      
-  TxPoint point1;
-  point1.x=point2.x; point1.y=point2.y;
+   TxPoint point1;
+   char nom[256];
+   point1.x = point2.x;
+   point1.y = point2.y;
+   
+   if (liaison->type == No_l_algorithmique || liaison->type == No_l_neuro_mod)
+   {
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, liaison->nom, NULL);
+   }
+   
+   point1.x = point2.x + 14;
+   point1.y = point1.y + 3;
 
-  if (liaison->type == No_l_algorithmique || liaison->type == No_l_neuro_mod) TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, liaison->nom, NULL);
-  point1.x = point2.x + 14; point1.y=point1.y+3;
-  if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod)
-    {
-      if (liaison->mode == 0 || liaison->mode == 2) TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, "X", NULL);
-      else                                          TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, "d", NULL);
-      point1.x = point1.x + 5;
-    }
-    point1.x = point1.x /*+ 5*/;
-    point2.y=point2.y+3;
-    if (liaison->secondaire == 0) TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, ".", NULL);
-    
-    if (liaison->type == No_l_1_a)                TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "A", NULL);
-    else if (liaison->type == No_l_1_t)           TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "//", NULL);
-    else if (liaison->type == No_l_1_1_non_modif) TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "/", NULL);
-    else if (liaison->type == No_l_1_1_modif)     TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "\\", NULL);
-    else if (liaison->type == No_l_1_v)           TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "V", NULL);
-    /*         else if(liaison->type==No_l_algorithmique) TxEcrireChaine(&fenetre1,sc->couleur_texte,point2,"S",NULL); */
-
-    point1.x = point1.x - 40; point1.y = point1.y + 10;
-    if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod)
+   if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod)
+   {
+      if (liaison->mode == 0 || liaison->mode == 2)
       {
-	simplifie_nom(liaison->nom);
-	TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, liaison->nom, NULL);
+	 TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, "X", NULL);
       }
+      else
+      {
+	 TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, "d", NULL);
+      }
+      point1.x = point1.x + 5;
+   }
+
+   point1.x = point1.x /*+ 5*/;
+   point2.y = point2.y + 3;
+   
+   if (liaison->secondaire == 0)
+   {
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, ".", NULL);
+   }
+    
+   if (liaison->type == No_l_1_a)
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "A", NULL);
+   else if (liaison->type == No_l_1_t)
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "//", NULL);
+   else if (liaison->type == No_l_1_1_non_modif)
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "/", NULL);
+   else if (liaison->type == No_l_1_1_modif)
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "\\", NULL);
+   else if (liaison->type == No_l_1_v)
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "V", NULL);
+   
+   point1.x = point1.x - 40;
+   point1.y = point1.y + 10;
+   if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod)
+   {
+      strcpy(nom, MY_Float2Str(liaison->norme));
+      simplifie_nom(nom);
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, nom, NULL);
+   }
 }
 
 void affiche_liaison(type_liaison *liaison, type_groupe * groupe1, type_groupe * groupe2,TxDonneesFenetre *onglet_leto)
