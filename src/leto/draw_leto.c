@@ -52,158 +52,155 @@ void affiche_macro(TxPoint point, type_groupe * groupe,TxDonneesFenetre *onglet_
 
 void affiche_groupe(TxPoint point, type_groupe * groupe,TxDonneesFenetre *onglet_leto)
 {
-    TxPoint point2, point3, point4, point5, point6, point7;
-    int x,y,type;
+   TxPoint point2, point3, point4, point5, point6, point7;
+   int x,y,type;
+   char *font_weight = NULL;
 
-    x = point.x;
-    y = point.y;
+   x = point.x;
+   y = point.y;
 
-    point.x = point.x - deltax;
-    point.y = point.y - deltay;
+   point.x = point.x - deltax;
+   point.y = point.y - deltay;
 
-    point2.x = point.x + deltax / 3;    /* position de l'ecriture du no du gpe */
-    point2.y = point.y + 3 * deltay / 2;
+   point2.x = point.x + deltax / 3;    /* position de l'ecriture du no du gpe */
+   point2.y = point.y + 3 * deltay / 2;
 
-    point3.x = point.x - distc;
-    point3.y = point.y + 2 * deltay;
+   point3.x = point.x - distc;
+   point3.y = point.y + 2 * deltay;
 
-    point4.x = point.x + 2 * deltax + distc;
-    point4.y = point.y + deltay;
+   point4.x = point.x + 2 * deltax + distc;
+   point4.y = point.y + deltay;
 
-    point5.x = point.x + 2 * deltax + distc;
-    point5.y = point.y + 3 * deltay;
+   point5.x = point.x + 2 * deltax + distc;
+   point5.y = point.y + 3 * deltay;
 
-    type = groupe->type % 30;
+   type = groupe->type % 30;
 
-    if (is_selected(groupe) != NULL)
-    {
-       TxDessinerRectangle(onglet_leto, lut_g[type], TRUE, point,
-                        2 * deltax + 1, 2 * deltay, 1);
-    }
-    else
-    {
-       TxDessinerRectangle(onglet_leto, lut_g[type], FALSE, point,
-                        2 * deltax, 2 * deltay, 1);
-    }
-
-    point.y = point.y + 2 * deltay;
-    TxDessinerRectangle(onglet_leto, lut_g[type], 0, point,
-                        2 * deltax, 2 * deltay, 1);
-
-    point.y = point3.y;
-
-    if (groupe->reverse <= 0)
-    {
-        if (groupe->type != No_Entree)
-        {
-            TxDessinerCercle(onglet_leto, lut_g[type], TxPlein, point3, 4, 1);
-            TxDessinerSegment(onglet_leto, lut_g[type], point3, point, 1);
-        }
-
-        FlecheHorizontale(onglet_leto, lut_g[type], point4, 6, 2);
-        point.x = point.x + 2 * deltax;
-        point.y = point4.y;
-        TxDessinerSegment(onglet_leto, lut_g[type], point4, point, 1);
-
-        FlecheHorizontale(onglet_leto, lut_g[type], point5, 6, 2);
-        point.y = point5.y;
-        TxDessinerSegment(onglet_leto, lut_g[type], point5, point, 1);
-
-    }
-    else if (groupe->reverse > 0)
-    {
-
-        point3.y = point3.y - deltay;
-        FlecheHorizontale(onglet_leto, lut_g[type], point3, -6, 2);
-        point.x = point3.x + distc;
-        point.y = point3.y;
-        TxDessinerSegment(onglet_leto, lut_g[type], point3, point, 1);
-
-        point3.y = point3.y + 2 * deltay;
-        FlecheHorizontale(onglet_leto, lut_g[type], point3, -6, 2);
-        point.y = point3.y;
-        TxDessinerSegment(onglet_leto, lut_g[type], point3, point, 1);
+   if (is_selected(groupe) != NULL)
+   {
+      font_weight = "bold";
+      TxDessinerRectangle(onglet_leto, lut_g[type], TRUE, point, 2 * deltax + 1, 2 * deltay, 1);
+   }
+   else
+   {
+      TxDessinerRectangle(onglet_leto, lut_g[type], FALSE, point, 2 * deltax, 2 * deltay, 1);
+   }
 
 
-        if (groupe->type != No_Entree)
-        {
-            point4.y = point4.y + deltax;
-            point.y = point4.y;
-            point.x = point4.x - distc;
-            TxDessinerCercle(onglet_leto, lut_g[type], TxPlein, point4, 4, 1);
-            TxDessinerSegment(onglet_leto, lut_g[type], point4, point, 1);
-        }
-    }
+   point.y = point.y + 2 * deltay;
+   TxDessinerRectangle(onglet_leto, lut_g[type], 0, point, 2 * deltax, 2 * deltay, 1);
 
-    TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, groupe->no_name,NULL);
+   point.y = point3.y;
+
+   if (groupe->reverse <= 0)
+   {
+      if (groupe->type != No_Entree)
+      {
+	 TxDessinerCercle(onglet_leto, lut_g[type], TxPlein, point3, 4, 1);
+	 TxDessinerSegment(onglet_leto, lut_g[type], point3, point, 1);
+      }
+
+      FlecheHorizontale(onglet_leto, lut_g[type], point4, 6, 2);
+      point.x = point.x + 2 * deltax;
+      point.y = point4.y;
+      TxDessinerSegment(onglet_leto, lut_g[type], point4, point, 1);
+
+      FlecheHorizontale(onglet_leto, lut_g[type], point5, 6, 2);
+      point.y = point5.y;
+      TxDessinerSegment(onglet_leto, lut_g[type], point5, point, 1);
+
+   }
+   else if (groupe->reverse > 0)
+   {
+
+      point3.y = point3.y - deltay;
+      FlecheHorizontale(onglet_leto, lut_g[type], point3, -6, 2);
+      point.x = point3.x + distc;
+      point.y = point3.y;
+      TxDessinerSegment(onglet_leto, lut_g[type], point3, point, 1);
+
+      point3.y = point3.y + 2 * deltay;
+      FlecheHorizontale(onglet_leto, lut_g[type], point3, -6, 2);
+      point.y = point3.y;
+      TxDessinerSegment(onglet_leto, lut_g[type], point3, point, 1);
+
+
+      if (groupe->type != No_Entree)
+      {
+	 point4.y = point4.y + deltax;
+	 point.y = point4.y;
+	 point.x = point4.x - distc;
+	 TxDessinerCercle(onglet_leto, lut_g[type], TxPlein, point4, 4, 1);
+	 TxDessinerSegment(onglet_leto, lut_g[type], point4, point, 1);
+      }
+   }
+
+   TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, groupe->no_name, NULL);
 #ifndef SYMBOLIQUE_VERSION
-    if(groupe->taillex > 1 || groupe->tailley > 1) 
-    {
-    	point6.x=point2.x;
-    	point6.y=point2.y+2*deltax+1;
+   if (groupe->taillex > 1 || groupe->tailley > 1) 
+   {
+      point6.x = point2.x;
+      point6.y = point2.y + 2 * deltax + 1;
 	
-	if(groupe->taillex>1)
-	{
-		point7.x=point6.x+7;
-		point7.y=point6.y;
-		TxDessinerSegment(onglet_leto, lut_g[type], point6, point7, 1);
-	        point7.x=point7.x+7;
-		FlecheHorizontale(onglet_leto, lut_g[type], point7, 1, 1);
+      if (groupe->taillex > 1)
+      {
+	 point7.x = point6.x + 7;
+	 point7.y = point6.y;
+	 TxDessinerSegment(onglet_leto, lut_g[type], point6, point7, 1);
+	 point7.x = point7.x + 7;
+	 FlecheHorizontale(onglet_leto, lut_g[type], point7, 1, 1);
 	
-	}
-	if(groupe->tailley>1)
-	{
-		point7.x=point6.x;
-		point7.y=point6.y-7;
-		TxDessinerSegment(onglet_leto, lut_g[type], point6, point7, 1);
-		point7.y=point7.y-7;
-		FlecheVerticale(onglet_leto, lut_g[type], point7, -1, 1);
-	}
-    }
-    else
-    {
-	point6.x=point2.x+5;
-    	point6.y=point2.y+15;
-	TxDessinerCercle(onglet_leto,
-                             lut_g[type], TxPlein,
-                             point6, 2, 1);
-    }
+      }
+
+      if (groupe->tailley > 1)
+      {
+	 point7.x = point6.x;
+	 point7.y = point6.y - 7;
+	 TxDessinerSegment(onglet_leto, lut_g[type], point6, point7, 1);
+	 point7.y = point7.y - 7;
+	 FlecheVerticale(onglet_leto, lut_g[type], point7, -1, 1);
+      }
+   }
+   else
+   {
+      point6.x = point2.x + 5;
+      point6.y = point2.y + 15;
+      TxDessinerCercle(onglet_leto, lut_g[type], TxPlein, point6, 2, 1);
+   }
 #else
-    if(  !verify_if_int(groupe->taillex) || !verify_if_int(groupe->tailley) || (MY_Int2Int(groupe->taillex) > 1) || (MY_Int2Int(groupe->tailley) > 1)) 
-    {
-      point6.x=point2.x;
-      point6.y=point2.y+2*deltax+1;
+   if(!verify_if_int(groupe->taillex) || !verify_if_int(groupe->tailley) || (MY_Int2Int(groupe->taillex) > 1) || (MY_Int2Int(groupe->tailley) > 1)) 
+   {
+      point6.x = point2.x;
+      point6.y = point2.y + 2 * deltax + 1;
       
       if(!verify_if_int(groupe->taillex) || (MY_Int2Int(groupe->taillex) > 1))
-	{
-	  point7.x=point6.x+7;
-	  point7.y=point6.y;
-	  TxDessinerSegment(onglet_leto, lut_g[type], point6, point7, 1);
-	  point7.x=point7.x+7;
-	  FlecheHorizontale(onglet_leto, lut_g[type], point7, 1, 1);
+      {
+	 point7.x = point6.x + 7;
+	 point7.y = point6.y;
+	 TxDessinerSegment(onglet_leto, lut_g[type], point6, point7, 1);
+	 point7.x = point7.x + 7;
+	 FlecheHorizontale(onglet_leto, lut_g[type], point7, 1, 1);
 	  
-	}
+      }
       if(!verify_if_int(groupe->tailley) || (MY_Int2Int(groupe->tailley) > 1))
-	{
-	  point7.x=point6.x;
-	  point7.y=point6.y-7;
-	  TxDessinerSegment(onglet_leto, lut_g[type], point6, point7, 1);
-	  point7.y=point7.y-7;
-	  FlecheVerticale(onglet_leto, lut_g[type], point7, -1, 1);
-	}
-    }
- else
+      {
+	 point7.x = point6.x;
+	 point7.y = point6.y - 7;
+	 TxDessinerSegment(onglet_leto, lut_g[type], point6, point7, 1);
+	 point7.y = point7.y - 7;
+	 FlecheVerticale(onglet_leto, lut_g[type], point7, -1, 1);
+      }
+   }
+   else
    {
-     point6.x=point2.x+5;
-     point6.y=point2.y+15;
-     TxDessinerCercle(onglet_leto,
-		      lut_g[type], TxPlein,
-		      point6, 2, 1);
+      point6.x = point2.x + 5;
+      point6.y = point2.y + 15;
+      TxDessinerCercle(onglet_leto, lut_g[type], TxPlein, point6, 2, 1);
    }
 #endif
- point3.x = point3.x /*+ deltax*/;
- point3.y = point3.y + 3 * (deltay+1);
- TxEcrireChaine(onglet_leto, sc->couleur_texte, point3, groupe->nom, NULL); 
+   point3.x = point3.x /*+ deltax*/;
+   point3.y = point3.y + 3 * (deltay+1);
+   TxEcrireChaine(onglet_leto, sc->couleur_texte, point3, groupe->nom, font_weight); 
 }
 
 
@@ -245,12 +242,19 @@ void  affiche_parametres_liaison(type_liaison *liaison, TxPoint point2,TxDonnees
 {      
    TxPoint point1;
    char nom[256];
+   char *font_weight = NULL;
+
    point1.x = point2.x;
    point1.y = point2.y;
+
+   if (liaison == sc->liaison_courante)
+   {
+      font_weight = "bold";
+   }
    
    if (liaison->type == No_l_algorithmique || liaison->type == No_l_neuro_mod)
    {
-      TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, liaison->nom, NULL);
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, liaison->nom, font_weight);
    }
    
    point1.x = point2.x + 14;
@@ -260,11 +264,11 @@ void  affiche_parametres_liaison(type_liaison *liaison, TxPoint point2,TxDonnees
    {
       if (liaison->mode == 0 || liaison->mode == 2)
       {
-	 TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, "X", NULL);
+	 TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, "X", font_weight);
       }
       else
       {
-	 TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, "d", NULL);
+	 TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, "d", font_weight);
       }
       point1.x = point1.x + 5;
    }
@@ -274,19 +278,19 @@ void  affiche_parametres_liaison(type_liaison *liaison, TxPoint point2,TxDonnees
    
    if (liaison->secondaire == 0)
    {
-      TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, ".", NULL);
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, ".", font_weight);
    }
     
    if (liaison->type == No_l_1_a)
-      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "A", NULL);
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "A", font_weight);
    else if (liaison->type == No_l_1_t)
-      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "//", NULL);
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "//", font_weight);
    else if (liaison->type == No_l_1_1_non_modif)
-      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "/", NULL);
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "/", font_weight);
    else if (liaison->type == No_l_1_1_modif)
-      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "\\", NULL);
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "\\", font_weight);
    else if (liaison->type == No_l_1_v)
-      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "V", NULL);
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "V", font_weight);
    
    point1.x = point1.x - 40;
    point1.y = point1.y + 10;
@@ -294,7 +298,7 @@ void  affiche_parametres_liaison(type_liaison *liaison, TxPoint point2,TxDonnees
    {
       strcpy(nom, MY_Float2Str(liaison->norme));
       simplifie_nom(nom);
-      TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, nom, NULL);
+      TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, nom, font_weight);
    }
 }
 
