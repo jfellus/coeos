@@ -53,7 +53,8 @@ type_lien_no_nom lien_no_nom_type_groupe[nbre_type_groupes] = {  /* par defaut t
   {No_LMS_delayed, "LMS_delayed",                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 40 */
   {No_Winner_Macro, "Winner_Macro",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 41 */
   {No_CA3_timing, "CA3_timing",                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 42 */
-  {No_Sutton_Barto, "Sutton_Barto",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}  /* 43 */
+  {No_Sutton_Barto, "Sutton_Barto",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 43 */
+  {No_PCR, "PCR",                                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}  /* 44 */
 };
 
 static GtkToggleActionEntry menu_toggle_items[] = {
