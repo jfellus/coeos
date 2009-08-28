@@ -159,7 +159,7 @@ type_noeud_comment *validate_comments(type_noeud_comment *anchor_comment, GtkWid
 
      /* recopie dans le champs comment en rajoutant un % au debut s'il a ete oublie */
      /* on ne fait rien pour les lignes vides */
-     if (test_comment(pt_comment->chaine) == 1 || empty_line(pt_comment->chaine) == 1)
+     if (test_comment(text) == 1 || empty_line(text) == 1)
      {
 	memcpy(pt_comment->chaine, text, longueur * sizeof(char)); 
      }
