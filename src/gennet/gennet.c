@@ -501,6 +501,7 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
   char			*nom_script_script = NULL;
   char			*copie_script_script = NULL;
   char			*pt = NULL;
+  char			*tab_name = NULL;
   gchar			*sMenuLabel = NULL;
   GtkWidget		*NomOnglet = NULL;
   GtkWidget 		*pMenuLabel = NULL;
@@ -621,8 +622,10 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
       page = gtk_notebook_get_nth_page(pNotebook, i);
       /* comparaison du nom du label de l'onglet parcouru 
        * avec le nom du label que l'utilisateur souhaite creer */
-      if(strncmp(gtk_notebook_get_tab_label_text(pNotebook, page), nom_script, strlen(nom_script) * sizeof(char))==0)
+      tab_name = gtk_notebook_get_tab_label_text(pNotebook, page);
+      if(strncmp(tab_name, nom_script, strlen(nom_script) * sizeof(char))==0 && (tab_name[strlen(nom_script)] == '*' || tab_name[strlen(nom_script)] == '\0'))
 	{
+	   fprintf(stderr, "WARNING: the script already has a Leto tab\n");
 	   break;
 	}
     }
