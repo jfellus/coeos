@@ -1551,12 +1551,27 @@ type_liaison	*find_liaison_by_name(type_liaison *liaison, char *name)
 {
   int		i = 0;
   type_liaison	*save_liaison = NULL;
+  char			*end_name_liaison = NULL;
+  char			lname[LETO_LIAISON_NAME_SIZE];
+
 
   if (name == NULL)
     return NULL;
   for(; liaison != NULL; liaison = liaison->s)
     {
-      if (strncmp(liaison->nom, name, strlen(name)) == 0)
+  
+	memset(lname, 0, LETO_LIAISON_NAME_SIZE * sizeof(char));
+	end_name_liaison = strstr(liaison->nom, LETO_NETWORK_OPTION_SEPARATOR);
+	if (end_name_liaison != NULL)
+	  {
+	    memcpy(lname, liaison->nom, (end_name_liaison - liaison->nom) * sizeof(char));
+	  }
+	else
+	  {
+	    memcpy(lname, liaison->nom, LETO_LIAISON_NAME_SIZE * sizeof(char));
+	  }
+
+      if (strcmp(lname, name) == 0)
 	{
 	  save_liaison = liaison;
 	  i++;
