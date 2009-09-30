@@ -429,8 +429,8 @@ int compte_neurone()
 	  groupe_nbre = (taillex * tailley);
 
         }
-        printf("groupe %d, nbre de neurones = %d , nbre_voie = %d\n",
-               groupe->no, groupe_nbre, nbre_voie);
+        printf("groupe %d (%s), nbre de neurones = %d , nbre_voie = %d\n",
+               groupe->no, groupe->no_name,  groupe_nbre, nbre_voie);
 
 /*         printf("groupe %d, nbre de neurones = %s , nbre_voie = %d\n", */
 /*                groupe->no, MY_Int2Str(groupe->nbre), nbre_voie); */

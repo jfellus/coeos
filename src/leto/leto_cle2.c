@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <math.h>
 
+/*#define DEBUG*/
+
 #include "public_leto.h"
 
 
@@ -14,15 +16,16 @@ void ecrit_reseau_ascii()
 {
     int i, j;
     type_coeff *pt;
+    type_groupe *groupe;
     FILE *f1;
 
     f1 = fopen(sc->freseau, "w");
     if (f1 == NULL)
     {
-        printf
-            ("\n Erreur lors de l'ecriture du fichier contenant le reseau \n");
-        exit(0);
+        printf("\n Erreur lors de l'ecriture du fichier contenant le reseau \n");
+        exit(1);
     }
+
     printf("ecriture du reseau\n");
     fprintf(f1, "Reseau de neurone\n");
     fprintf(f1, "Copyright Philippe GAUSSIER oct 1991\n");
@@ -33,19 +36,18 @@ void ecrit_reseau_ascii()
     fprintf(f1, "%d\n", sc->nbre_neurone);
     fprintf(f1, "%d\n", sc->nbre_entree);
     fprintf(f1, "%d\n", sc->nbre_sortie);
-    sc->ca = 0;
-    sc->ck = 0;                     /*on peut les demander a utilisat  */
-    fprintf(f1, "%f\n", sc->ca);    /* constantes de la sigmoide       */
-    fprintf(f1, "%f\n", sc->ck);
+
     /*ecrit le nbre de neurones par couches */
     for (i = 0; i < sc->nbre_couche; i++)
         fprintf(f1, "%d\n", sc->t[i]);
 
-    /*ecrit type de chaque groupe           */
-    for (i = 0; i < sc->nbre_groupe; i++)
+    /*ecrit type de chaque groupe */
+    groupe = sc->deb_groupe;
+    while (groupe != NULL) 
     {
-        fprintf(f1, "%d\n", (trouver_groupe(i))->type);
-        fprintf(f1, "nom du groupe : %s\n", (trouver_groupe(i))->nom);
+        fprintf(f1, "%d\n", groupe->type);
+        fprintf(f1, "nom du groupe : %s\n", groupe->nom);
+	groupe = groupe->s;
     }
 
     for (i = 0; i < sc->nbre_neurone; i++)
@@ -104,69 +106,90 @@ void ecrit_reseau_ascii()
 void ecrit_reseau()
 {
    int i, res;
-    int taille_int, taille_float;
-    type_coeff *pt;
-    char statut_continuer = 1;
-    char statut_fin = 0;
-    int taille_char;
-    FILE *f1;
+   int taille_int, taille_float;
+   type_coeff *pt;
+   char statut_continuer = 1;
+   char statut_fin = 0;
+   int taille_char;
+   FILE *f1;
     
-    f1 = fopen(sc->freseau, "w");
-    if (f1 == NULL)
-    {
-        printf
-            ("\n Erreur lors de l'ecriture du fichier contenant le reseau \n");
-        exit(0);
-    }
+   f1 = fopen(sc->freseau, "w");
+   if (f1 == NULL)
+   {
+      printf("Erreur lors de l'ecriture du fichier contenant le reseau");
+      exit(1);
+   }
 
-#ifdef DEBUG
-    printf("Write .res to disk \n");
-#endif
+   debug_printf("Write .res to disk \n");
 
-    fprintf(f1, "Reseau de neurone\n");
-    fprintf(f1, "Copyright Philippe GAUSSIER oct 1991\n");
-    fprintf(f1, "Version %d\n\n", RESEAU_VERSION);
-    fprintf(f1, "script associe : %s\n", sc->nomfich1);
-    fprintf(f1, "%d\n", sc->nbre_couche);
-    fprintf(f1, "%d\n", sc->nbre_groupe);
-    fprintf(f1, "%d\n", sc->nbre_neurone);
+   fprintf(f1, "Reseau de neurone\n");
+   fprintf(f1, "Copyright Philippe GAUSSIER oct 1991\n");
 
-    for (i = 0; i < sc->nbre_couche; i++)
-        fprintf(f1, "%d\n", sc->t[i]);
+   fprintf(f1, "Version %i\n\n", RESEAU_VERSION);
+   debug_printf("Version %i\n\n", RESEAU_VERSION);
 
-    res = fwrite(sc->neurone, sizeof(type_neurone), sc->nbre_neurone, f1);
-/*     for (i = 0; i < sc->nbre_neurone; i++) */
-/*     { */
-/*         fwrite(&sc->neurone[i], sizeof(type_neurone), 1, f1); */
-/*     } */
+   fprintf(f1, "script associe : %s\n", sc->nomfich1);
+   debug_printf("script associe : %s\n", sc->nomfich1);
 
-    taille_int = sizeof(int);
-    taille_float = sizeof(float);
-    taille_char = sizeof(char);
+   fprintf(f1, "%i\n", sc->nbre_couche);
+   debug_printf("nbre_couche = %i\n", sc->nbre_couche);
 
-    for (i = 0; i < sc->nbre_neurone; i++)
-    {
-        pt = sc->neurone[i].coeff;
-        while (pt != nil)       /* ecrit tous les coefficients     */
-        {
-            /*fwrite(pt,sizeof(type_coeff),1,f1); */
-            res = fwrite(&(pt->val), taille_float, 1, f1);
-            res = fwrite(&(pt->entree), taille_int, 1, f1);
-            res = fwrite(&(pt->type), taille_int, 1, f1);
-            res = fwrite(&(pt->evolution), taille_int, 1, f1);
-            res = fwrite(&(pt->proba), taille_float, 1, f1);
-            res = fwrite(&(pt->gpe_liaison), taille_int, 1, f1);
-            res = fwrite(&(pt->Nbre_E), taille_int, 1, f1);
-            res = fwrite(&(pt->Nbre_S), taille_int, 1, f1);
-            res = fwrite(&(pt->Nbre_ES), taille_int, 1, f1);
-            pt = pt->s;         /* inscrit coeff suivant           */
-            if (pt == nil)
-                res = fwrite(&statut_fin, taille_char, 1, f1);
-            else
-                res = fwrite(&statut_continuer, taille_char, 1, f1);
-        }
-    }
-    fclose(f1);
+   fprintf(f1, "%i\n", sc->nbre_groupe);
+   debug_printf("nbre_groupe = %i\n", sc->nbre_groupe);
+
+   fprintf(f1, "%i\n", sc->nbre_neurone);
+   debug_printf("nbre_neurone = %i\n", sc->nbre_neurone);
+      
+   for (i = 0; i < sc->nbre_couche; i++)
+   {
+      fprintf(f1, "%i\n", sc->t[i]);
+      debug_printf("couche %i, val = %i\n", i, sc->t[i]);
+   }
+
+   res = fwrite(sc->neurone, sizeof(type_neurone), sc->nbre_neurone, f1);
+   debug_printf("neurons written to res file\n");
+
+/*   for (i = 0; i < sc->nbre_neurone; i++) 
+   { 
+      printf("neuron %i : seuil = %f, s = %f, s1 = %f, s2 = %f, flag = %i, d = %f, last_activation = %f, cste = %f, groupe = %i, nbre_voie = %i, nbre_coeff = %i, max = %c, posx = %f, posy = %f, posz = %f, coeff = %p, nsor = %p\n\n", i, sc->neurone[i].seuil, sc->neurone[i].s, sc->neurone[i].s1, sc->neurone[i].s2, sc->neurone[i].flag, sc->neurone[i].d, sc->neurone[i].last_activation, sc->neurone[i].cste, sc->neurone[i].groupe, sc->neurone[i].nbre_voie, sc->neurone[i].nbre_coeff, sc->neurone[i].max, sc->neurone[i].posx, sc->neurone[i].posy, sc->neurone[i].posz, (void *)sc->neurone[i].coeff, (void *)sc->neurone[i].nsor);
+      } */
+
+   taille_int = sizeof(int);
+   taille_float = sizeof(float);
+   taille_char = sizeof(char);
+
+   for (i = 0; i < sc->nbre_neurone; i++)
+   {
+      pt = sc->neurone[i].coeff;
+      while (pt != nil)       /* ecrit tous les coefficients     */
+      {
+	 res = fwrite(&(pt->val), taille_float, 1, f1);
+	 res = fwrite(&(pt->entree), taille_int, 1, f1);
+	 res = fwrite(&(pt->type), taille_int, 1, f1);
+	 res = fwrite(&(pt->evolution), taille_int, 1, f1);
+	 res = fwrite(&(pt->proba), taille_float, 1, f1);
+	 res = fwrite(&(pt->gpe_liaison), taille_int, 1, f1);
+	 res = fwrite(&(pt->Nbre_E), taille_float, 1, f1);
+	 res = fwrite(&(pt->Nbre_S), taille_float, 1, f1);
+	 res = fwrite(&(pt->Nbre_ES), taille_float, 1, f1);
+
+/*	 debug_printf("ecrit_reseau: neuron %i, coeff %p => (val = %f, entree = %i, type = %i, evolution = %i, proba = %f, gpe_liaison = %i, Nbre_E = %i, Nbre_S = %i, Nbre ES = %i\n", i, (void *) pt, pt->val, pt->entree, pt->type, pt->evolution, pt->proba, pt->gpe_liaison, pt->Nbre_E, pt->Nbre_S, pt->Nbre_ES);*/
+
+	 pt = pt->s;         /* inscrit coeff suivant           */
+
+	 if (pt == nil)
+	 {
+	    res = fwrite(&statut_fin, taille_char, 1, f1);
+	 }
+	 else
+	 {
+	    res = fwrite(&statut_continuer, taille_char, 1, f1);
+	 }
+      }
+   }
+   debug_printf("coeff written to res file\n");
+
+   fclose(f1);
 }
 
 /*-------------------------------------------------------------------------*/
@@ -519,8 +542,8 @@ void init_corps_neurone(type_groupe * groupe, int j, int s_deb)
 {
   float seuil,tolerance;
 
-  seuil=MY_Float2Float(groupe->seuil);
-  tolerance=MY_Float2Float(groupe->tolerance);
+  seuil = MY_Float2Float(groupe->seuil);
+  tolerance = MY_Float2Float(groupe->tolerance);
   
   sc->neurone[j].seuil = seuil;
   sc->neurone[j].d = tolerance;
@@ -704,7 +727,7 @@ void creer_liaison_1_vers_1_neurone(type_groupe * groupe, type_liaison * liaison
   
   float norme;
   
-  norme=MY_Float2Float(liaison->norme);
+  norme = MY_Float2Float(liaison->norme);
 
   j = *no_neurone;
   if (sc->neurone[j].coeff == NULL)
@@ -888,7 +911,10 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
       || groupe->type == No_Macro_Colonne || groupe->type == No_KO_Discret || groupe->type == No_KO_Continu)
     decalage = no_voie / 2;
   else decalage = 0;
-  if (pas > 1)  printf("creation d'un lien pour une categorie de micro neurones %d\n", decalage);
+
+  if (pas > 1)  
+     printf("creation d'un lien pour une categorie de micro neurones %d\n", decalage);
+
   x = y = z = 0;
   for (j = s_deb + decalage; j <= s_fin; j += pas)
     {

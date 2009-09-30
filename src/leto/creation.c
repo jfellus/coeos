@@ -78,13 +78,8 @@ void creation(TxDonneesFenetre *onglet_leto)
     groupe = sc->deb_groupe;
     while (groupe != NULL)
       {
-        i=groupe->no;
+        i = groupe->no;
         printf("etude du groupe %d\n", i);
-	if(groupe==NULL)
-	  {
-	    printf("Le groupe %d n'a pas ete trouve dans les groupes [0,%d[ !!!\n",i,sc->nbre_groupe);
-	    exit(1);
-	  }
         nbre_voie = 0;
         if (groupe->nbre_voie > 1
             && (groupe->type == No_PTM || groupe->type == No_Winner_Macro
@@ -99,7 +94,7 @@ void creation(TxDonneesFenetre *onglet_leto)
         else
 	  pas = 1;
 	
-	taillex=MY_Int2Int(groupe->taillex); /* on convertit au cas ou on serait en version symbolique */
+	taillex = MY_Int2Int(groupe->taillex); /* on convertit au cas ou on serait en version symbolique */
 	
         dx = taillex;
 	
