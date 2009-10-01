@@ -196,6 +196,7 @@ void init_gui_arg(t_gennet *data);
 void loadNetwork_net(t_gennet *data, char *netfile);
 void loadNetwork_cpt(t_gennet *data, char *cptfile);
 void AutoCreateComlink(GtkWidget *widget, gpointer data);
+void CompileAllScripts(GtkWidget *widget, gpointer data);
 void GenerateNetwork(GtkWidget *widget, gpointer data);
 void GenerateRunSh(GtkWidget *widget, gpointer data);
 void GenerateDeploySh(GtkWidget *widget, gpointer data);

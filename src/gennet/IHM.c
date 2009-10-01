@@ -1402,6 +1402,11 @@ void		init_gui_toolbar(t_gennet *data)
   gtk_widget_show(button);
   gtk_toolbar_append_space(GTK_TOOLBAR(ToolBar));
 
+  /* Bouton Compile tous les scripts */
+  button = gtk_toolbar_append_item(GTK_TOOLBAR(ToolBar), "Compile all", "Compile all neural scripts", "Private", NULL, GTK_SIGNAL_FUNC(CompileAllScripts), data);
+  gtk_widget_show(button);
+  gtk_toolbar_append_space(GTK_TOOLBAR(ToolBar));
+
   /* Bouton GenerateDeploy */
   button = gtk_toolbar_append_item(GTK_TOOLBAR(ToolBar), "Generate deploy.sh", "Generate deployment script", "Private", NULL, GTK_SIGNAL_FUNC(GenerateDeploySh), data);
   gtk_widget_show(button);

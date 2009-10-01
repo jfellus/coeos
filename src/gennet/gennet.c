@@ -1875,10 +1875,47 @@ void	AutoCreateComlink(GtkWidget *widget, gpointer data)
 	{
 	  Edit_Script_With_Leto(gen, script);
 	}
-
       AutoCreateComlink_by_send_group(gen, script);
       AutoCreateComlink_by_receive_group(gen, script);
     }
+}
+
+void	CompileAllScripts(GtkWidget *widget, gpointer data)
+{
+  t_gennet		*gen = (t_gennet *)data;
+  t_gennet_computer	*computer = NULL;
+  t_gennet_script	*script = NULL;
+  t_gennet_script_list	*script_list = NULL;
+  GtkWidget		*Notebook = NULL;
+
+  Notebook = gen->gui->tabbedWin;
+
+  for (script = gen->scripts; script != NULL; script = script->next)
+    {
+      if (script->sc == NULL)
+	{
+	  Edit_Script_With_Leto(gen, script);
+	}
+      gtk_notebook_set_current_page(GTK_NOTEBOOK(Notebook),script->sc->num_onglet); 
+      creation_cb(widget, script);
+    }
+
+  for (computer = gen->computers; computer != NULL; computer = computer->next)
+    {
+      for (script_list = computer->scriptlist; script_list != NULL; script_list = script_list->next)
+	{
+	  script = script_list->script;
+
+	  if (script->sc == NULL)
+	    {
+	      Edit_Script_With_Leto(gen, script);
+	    }
+	  gtk_notebook_set_current_page(GTK_NOTEBOOK(Notebook),script->sc->num_onglet); 
+	  creation_cb(widget, script);
+	}
+    }
+  /* Retour a l onglet coeos */
+  gtk_notebook_set_current_page(GTK_NOTEBOOK(Notebook),0); 
 }
 
 void	GenerateNetwork(GtkWidget *widget, gpointer data)
