@@ -1309,12 +1309,12 @@ void open_file(GtkWidget * widget, gpointer data)
         memcpy(sc->nomfich1, filename1, (strlen(sc->nomfich1) + 1) * sizeof(char));
 
 	/* on met a jour le .draw */
-	get_base_name(filename1);
+	get_base_path_name(filename1);
 	strcat(filename1,".draw");
 	memcpy(sc->draw, filename1, (strlen(filename1) + 1) * sizeof(char));
 
 	/* on met a jour le .res */
-	get_base_name(filename1);
+	get_base_path_name(filename1);
 	strcat(filename1,".res");
 	memcpy(sc->freseau, filename1, (strlen(filename1) + 1) * sizeof(char));
 
@@ -2482,7 +2482,7 @@ void creation_cb(GtkWidget * widget, gpointer data)
 	
 
 	memcpy(file_script,sc->nomfich1, (strlen(sc->nomfich1) + 1) * sizeof(char));
-	get_base_name(file_script);
+	get_base_path_name(file_script);
 	strcat(file_script,".script");
 	
 	/* lancement du script :
@@ -2532,7 +2532,7 @@ void creation_cb(GtkWidget * widget, gpointer data)
 
     memset(script,0,sizeof(char)*MAX_PATH); /* initialise le tableau */
     memcpy(script,sc->nomfich1, (strlen(sc->nomfich1) + 1) * sizeof(char));
-    get_base_name(script);
+    get_base_path_name(script);
     strcat(script,".script");
 
     memset(file_res,0,sizeof(char)*MAX_PATH); /* initialise le tableau */

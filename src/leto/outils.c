@@ -2,6 +2,17 @@
 #include "outils_script.h"
 #include "gere_coudes.h"
 
+/* Fonction qui retire l'extension .script */
+void get_base_path_name(char *filename)
+{
+	char	*pt;
+	
+	/* recherche l'adr du debut de l'extension */
+	pt=rindex(filename,'.');
+	if(pt!=NULL) 
+	  *pt='\0'; /* on oublie l'extension du fichier: on met fin de chaine au debut de l'extension*/
+}
+
 /* Fonction qui retire l'extension .script et le path d'un nom de fichier */
 void get_base_name(char *filename)
 {
