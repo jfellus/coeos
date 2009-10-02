@@ -2439,6 +2439,130 @@ void		writeDeploy(t_gennet *data, FILE *frun)
 
 }
 
+void	init_gui_arg_find_cpt(t_gennet *data)
+{
+  int			i = 0;
+  char			*ext = NULL;
+
+  for (i = 1; i < data->ac; i++)
+  {
+    ext = get_file_extension(data->av[i]);
+    if (strcmp(ext, "cpt") == 0)
+      {
+	loadNetwork_cpt(data,data->av[i]);
+	debug_printf("loadNetwork_cpt done \n");
+      }
+  }
+}
+
+void	init_gui_arg_find_net(t_gennet *data)
+{
+  int			i = 0;
+  char			*ext = NULL;
+
+  for (i = 1; i < data->ac; i++)
+  {
+    ext = get_file_extension(data->av[i]);
+    if (strcmp(ext, "net") == 0)
+      {
+	loadNetwork_net(data,data->av[i]);
+	debug_printf("loadNetwork_net done \n");
+      }
+  }
+}
+
+void	init_gui_arg_find_symb(t_gennet *data)
+{
+  int			i = 0;
+  char			*ext = NULL;
+  char			nom[1024];
+  char			*end_path = NULL;
+  char			basepath[MAX_ALL_PATH];
+  t_gennet_script	*pscript = NULL;
+
+  for (i = 1; i < data->ac; i++)
+  {
+    ext = get_file_extension(data->av[i]);
+    if (strcmp(ext, "symb") == 0)
+      {
+	   /* c'est un script donc on creer le pscript
+	    * et on ouvre l'onglet */
+	   pscript = add_gennet_script(data);
+	   pscript->prom_script = promnet_add_new_prom_script(data->promnet);
+	   if (pscript->prom_script != promnet_prom_script_get_next(data->promnet,NULL))
+	      fprintf(stderr, "Probleme d'ajout du script %s a la liste des scripts\n", data->av[i]);
+	     
+	   /* on ajoute le nom logique du script */
+	   memset(nom,0,sizeof(char) * 1024);
+	   memcpy(nom,data->av[i],(strlen(data->av[i])+1) * sizeof(char));
+	   get_base_name(nom);
+	   promnet_prom_script_set_logical_name(pscript->prom_script, nom);
+	   if ((end_path = rindex(data->av[i], '/')) != NULL)
+	   {
+	      memset(basepath, 0, MAX_ALL_PATH);
+	      memcpy(basepath, data->av[i], end_path - data->av[i]);
+	      /* on ajoute le chemin du script */
+	      promnet_prom_script_set_all_path(pscript->prom_script, basepath, nom, ext);
+	   }
+	   else
+	   {
+	      promnet_prom_script_set_all_path(pscript->prom_script, ".", nom, ext);
+/* 	      promnet_prom_script_set_path_file_script(pscript->prom_script, data->av[i]); */
+	   }
+	   pscript->pango = gtk_widget_create_pango_layout(GTK_WIDGET(data->gui->DrawingArea), nom);
+
+	   /* on ouvre l'onglet */
+	   Edit_Script_With_Leto(data,pscript);
+      }
+  }
+}
+
+void	init_gui_arg_find_script(t_gennet *data)
+{
+  int			i = 0;
+  char			*ext = NULL;
+  char			nom[1024];
+  char			*end_path = NULL;
+  char			basepath[MAX_ALL_PATH];
+  t_gennet_script	*pscript = NULL;
+
+  for (i = 1; i < data->ac; i++)
+  {
+    ext = get_file_extension(data->av[i]);
+    if (strcmp(ext, "script") == 0)
+      {
+	   /* c'est un script donc on creer le pscript
+	    * et on ouvre l'onglet */
+	   pscript = add_gennet_script(data);
+	   pscript->prom_script = promnet_add_new_prom_script(data->promnet);
+	   if (pscript->prom_script != promnet_prom_script_get_next(data->promnet,NULL))
+	      fprintf(stderr, "Probleme d'ajout du script %s a la liste des scripts\n", data->av[i]);
+	     
+	   /* on ajoute le nom logique du script */
+	   memset(nom,0,sizeof(char) * 1024);
+	   memcpy(nom,data->av[i],(strlen(data->av[i])+1) * sizeof(char));
+	   get_base_name(nom);
+	   promnet_prom_script_set_logical_name(pscript->prom_script, nom);
+	   if ((end_path = rindex(data->av[i], '/')) != NULL)
+	   {
+	      memset(basepath, 0, MAX_ALL_PATH);
+	      memcpy(basepath, data->av[i], end_path - data->av[i]);
+	      /* on ajoute le chemin du script */
+	      promnet_prom_script_set_all_path(pscript->prom_script, basepath, nom, ext);
+	   }
+	   else
+	   {
+	      promnet_prom_script_set_all_path(pscript->prom_script, ".", nom, ext);
+/* 	      promnet_prom_script_set_path_file_script(pscript->prom_script, data->av[i]); */
+	   }
+	   pscript->pango = gtk_widget_create_pango_layout(GTK_WIDGET(data->gui->DrawingArea), nom);
+
+	   /* on ouvre l'onglet */
+	   Edit_Script_With_Leto(data,pscript);
+      }
+  }
+}
+
 /* fonction qui initialise les onglets et leurs contenues
  * de Metaleto en fonction des arguments donnees
  * en ligne de commande */
@@ -2447,10 +2571,6 @@ void init_gui_arg(t_gennet *data)
   int			i = 1;
   long			seed = -1;
   char			*tailptr = NULL;
-  char			*ext = NULL, nom[1024];
-  char			*end_path = NULL;
-  char			basepath[MAX_ALL_PATH];
-  t_gennet_script	*pscript = NULL;
 
   /* normalement cela ne devrait jamais se produire
    * mais on ne sait jamais */
@@ -2488,57 +2608,11 @@ void init_gui_arg(t_gennet *data)
 		
 	}
      }
-     else
-     {
-	ext = get_file_extension(data->av[i]);
-	  
-	if( (strcmp(ext, "script") == 0) || (strcmp(ext, "symb") == 0))
-	{
-	   /* c'est un script donc on creer le pscript
-	    * et on ouvre l'onglet */
-	   pscript = add_gennet_script(data);
-	   pscript->prom_script = promnet_add_new_prom_script(data->promnet);
-	   if (pscript->prom_script != promnet_prom_script_get_next(data->promnet,NULL))
-	      fprintf(stderr, "Probleme d'ajout du script %s a la liste des scripts\n", data->av[i]);
-	     
-	   /* on ajoute le nom logique du script */
-	   memset(nom,0,sizeof(char) * 1024);
-	   memcpy(nom,data->av[i],(strlen(data->av[i])+1) * sizeof(char));
-	   get_base_name(nom);
-	   promnet_prom_script_set_logical_name(pscript->prom_script, nom);
-	   if ((end_path = rindex(data->av[i], '/')) != NULL)
-	   {
-	      memset(basepath, 0, MAX_ALL_PATH);
-	      memcpy(basepath, data->av[i], end_path - data->av[i]);
-	      /* on ajoute le chemin du script */
-	      promnet_prom_script_set_all_path(pscript->prom_script, basepath, nom, ext);
-	   }
-	   else
-	   {
-	      promnet_prom_script_set_all_path(pscript->prom_script, "./", nom, ext);
-/* 	      promnet_prom_script_set_path_file_script(pscript->prom_script, data->av[i]); */
-	   }
-	   pscript->pango = gtk_widget_create_pango_layout(GTK_WIDGET(data->gui->DrawingArea), nom);
-
-	   /* on ouvre l'onglet */
-	   Edit_Script_With_Leto(data,pscript);
-	}
-
-	if(strcmp(ext, "cpt") == 0)
-	{
-	   /* c'est un .cpt */
-	   loadNetwork_cpt(data,data->av[i]);
-	   debug_printf("loadNetwork_cpt done \n");
-	}
-	if(strcmp(ext, "net") == 0)
-	{
-	   /* c'est un .net */
-	   loadNetwork_net(data,data->av[i]);
-	   debug_printf("loadNetwork_net done \n");
-	}
-     }
   }
-  
+  init_gui_arg_find_cpt(data);
+  init_gui_arg_find_net(data);
+  init_gui_arg_find_symb(data);
+  init_gui_arg_find_script(data);
   refresh_all(data);
 }
 
