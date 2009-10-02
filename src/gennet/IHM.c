@@ -866,6 +866,37 @@ static void	menuComputerDelete(gpointer data)
   refresh_all(gen);
 }
 
+static void	menuComputerCompileScripts(gpointer data)
+{
+  t_gennet		*gen = (t_gennet *)data;
+  t_gennet_computer	*computer = NULL;
+  t_gennet_script_list	*script_list = NULL;
+  t_gennet_script	*script = NULL;
+  GtkWidget		*Notebook = NULL;
+
+  if ((computer = find_widget_computer(gen, gen->gui->mouse_x, gen->gui->mouse_y)) == NULL)
+    {
+      return;
+    }
+
+  Notebook = gen->gui->tabbedWin;
+  for (script_list = computer->scriptlist; script_list != NULL; script_list = script_list->next)
+    {
+      script = script_list->script;
+
+      if (script->sc == NULL)
+	{
+	  Edit_Script_With_Leto(gen, script);
+	}
+      gtk_notebook_set_current_page(GTK_NOTEBOOK(Notebook),script->sc->num_onglet); 
+      /* widget mis a NULL car il y en a pas ici ! de toute maniere creation_cb ne l'utilise pas */
+      creation_cb(NULL, script);
+    }
+
+  /* Retour a l onglet coeos */
+  gtk_notebook_set_current_page(GTK_NOTEBOOK(Notebook),0); 
+}
+
 static void	menuScriptEdit(gpointer data)
 {
   t_gennet		*gen = (t_gennet *)data;
@@ -913,6 +944,32 @@ static void	menuScriptDelete(gpointer data)
   del_all_comlinklist(data, script);
   del_gennet_script(gen, script);
   refresh_all(gen);
+}
+
+static void	menuScriptCompile(gpointer data)
+{
+  t_gennet		*gen = (t_gennet *)data;
+  t_gennet_script	*script = NULL;
+  GtkWidget		*Notebook = NULL;
+
+  if ((script = find_widget_script(gen, gen->gui->mouse_x, gen->gui->mouse_y)) == NULL)
+    {
+      return;
+    }
+
+  Notebook = gen->gui->tabbedWin;
+
+  if (script->sc == NULL)
+    {
+      Edit_Script_With_Leto(gen, script);
+    }
+  gtk_notebook_set_current_page(GTK_NOTEBOOK(Notebook),script->sc->num_onglet); 
+  /* widget mis a NULL car il y en a pas ici ! de toute maniere creation_cb ne l'utilise pas */
+  creation_cb(NULL, script);
+
+  /* Retour a l onglet coeos */
+  gtk_notebook_set_current_page(GTK_NOTEBOOK(Notebook),0); 
+
 }
 
 static void	menuScriptInComputerEdit(gpointer data)
@@ -966,6 +1023,34 @@ static void	menuScriptInComputerDelete(gpointer data)
   del_gennet_script(gen, scriptlist->script);
   del_gennet_scriptlist(computer, scriptlist);
   refresh_all(gen);
+}
+
+static void	menuScriptInComputerCompile(gpointer data)
+{
+  t_gennet		*gen = (t_gennet *)data;
+  t_gennet_script_list	*scriptlist = NULL;
+  t_gennet_script	*script = NULL;
+  GtkWidget		*Notebook = NULL;
+
+ if ((scriptlist = find_widget_script_in_computer(gen, gen->gui->mouse_x, gen->gui->mouse_y)) == NULL)
+    {
+      return;
+    }
+
+ script = scriptlist->script;
+  Notebook = gen->gui->tabbedWin;
+
+  if (script->sc == NULL)
+    {
+      Edit_Script_With_Leto(gen, script);
+    }
+  gtk_notebook_set_current_page(GTK_NOTEBOOK(Notebook),script->sc->num_onglet); 
+  /* widget mis a NULL car il y en a pas ici ! de toute maniere creation_cb ne l'utilise pas */
+  creation_cb(NULL, script);
+
+  /* Retour a l onglet coeos */
+  gtk_notebook_set_current_page(GTK_NOTEBOOK(Notebook),0); 
+
 }
 
 int		NewComlink_getName(t_gennet *data, t_gennet_comlink *comlink)
@@ -1079,6 +1164,12 @@ void	    popup_menu_computer(t_gennet *data, GtkMenu *menu)
   gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_items);
   g_signal_connect_swapped(G_OBJECT(menu_items), "activate", G_CALLBACK(menuComputerDelete), data);
   gtk_widget_show(menu_items);
+
+  /* menu Computer -> Compile script */
+  menu_items = gtk_menu_item_new_with_label("Compile scripts");
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_items);
+  g_signal_connect_swapped(G_OBJECT(menu_items), "activate", G_CALLBACK(menuComputerCompileScripts), data);
+  gtk_widget_show(menu_items);
 }
 
 void	    popup_menu_script(t_gennet *data, GtkMenu *menu)
@@ -1104,6 +1195,13 @@ void	    popup_menu_script(t_gennet *data, GtkMenu *menu)
   gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_items);
   g_signal_connect_swapped(G_OBJECT(menu_items), "activate", G_CALLBACK(menuScriptDelete), data);
   gtk_widget_show(menu_items);
+
+  /* menu Script -> Compile */
+  menu_items = gtk_menu_item_new_with_label("Compile");
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_items);
+  g_signal_connect_swapped(G_OBJECT(menu_items), "activate", G_CALLBACK(menuScriptCompile), data);
+  gtk_widget_show(menu_items);
+
 }
 
 void	    popup_menu_script_in_computer(t_gennet *data, GtkMenu *menu)
@@ -1129,6 +1227,13 @@ void	    popup_menu_script_in_computer(t_gennet *data, GtkMenu *menu)
   gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_items);
   g_signal_connect_swapped(G_OBJECT(menu_items), "activate", G_CALLBACK(menuScriptInComputerDelete), data);
   gtk_widget_show(menu_items);
+
+  /* menu ScriptInComputer -> Compile */
+  menu_items = gtk_menu_item_new_with_label("Compile");
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_items);
+  g_signal_connect_swapped(G_OBJECT(menu_items), "activate", G_CALLBACK(menuScriptInComputerCompile), data);
+  gtk_widget_show(menu_items);
+
 }
 
 void	    popup_menu_link(t_gennet *data, GtkMenu *menu)
