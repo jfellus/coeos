@@ -388,12 +388,16 @@ void		del_gennet_comlink(t_gennet *data, t_gennet_comlink *comlink)
 void		del_all_comlinklist_in(t_gennet *data, t_gennet_script *script)
 {
   t_gennet_comlink_list	*comlinklist = NULL;
+  t_gennet_comlink_list	*next = NULL;
   t_gennet_comlink_list	*pcomlinklist = NULL;
 
   if (script == NULL)
     return;
-  for (comlinklist = script->comlinklist_in; comlinklist != NULL; comlinklist = comlinklist->next)
+
+  comlinklist = script->comlinklist_in;
+  while (comlinklist != NULL)
     {
+      next = comlinklist->next;
       if (comlinklist->comlink != NULL)
 	{
 	  if ((pcomlinklist = find_comlink_list_by_comlink(comlinklist->comlink->in->comlinklist_out, comlinklist->comlink)) != NULL)
@@ -403,18 +407,22 @@ void		del_all_comlinklist_in(t_gennet *data, t_gennet_script *script)
 	  del_gennet_comlink(data, comlinklist->comlink);
 	}
       del_gennet_comlinklist_in(script, comlinklist);
+      comlinklist = next;
     }
 }
 
 void		del_all_comlinklist_out(t_gennet *data, t_gennet_script *script)
 {
   t_gennet_comlink_list	*comlinklist = NULL;
+  t_gennet_comlink_list	*next = NULL;
   t_gennet_comlink_list	*pcomlinklist = NULL;
 
   if (script == NULL)
     return;
-  for (comlinklist = script->comlinklist_out; comlinklist != NULL; comlinklist = comlinklist->next)
+  comlinklist = script->comlinklist_out;
+  while (comlinklist != NULL)
     {
+      next = comlinklist->next;
       if (comlinklist->comlink != NULL)
 	{
 	  if ((pcomlinklist = find_comlink_list_by_comlink(comlinklist->comlink->out->comlinklist_in, comlinklist->comlink)) != NULL)
@@ -424,6 +432,7 @@ void		del_all_comlinklist_out(t_gennet *data, t_gennet_script *script)
 	  del_gennet_comlink(data, comlinklist->comlink);
 	}
       del_gennet_comlinklist_out(script, comlinklist);
+      comlinklist = next;
     }
 }
 
@@ -813,11 +822,14 @@ void			del_all_gennet_comlink(t_gennet *data)
 void		del_all_scriptlist(t_gennet *data, t_gennet_computer *computer)
 {
   t_gennet_script_list	*current = NULL;
+  t_gennet_script_list	*next = NULL;
 
   if (computer == NULL)
     return;
-  for (current = computer->scriptlist; current != NULL; current = current->next)
+  current = computer->scriptlist;
+  while (current != NULL)
     {
+      next = current->next;
       if (current->script != NULL)
 	{
 	  del_all_comlinklist(data, current->script);
@@ -834,20 +846,25 @@ void		del_all_scriptlist(t_gennet *data, t_gennet_computer *computer)
 	  del_gennet_script(data, current->script);
 	}
       del_gennet_scriptlist(computer, current);
+      current = next;
     }
 }
 
 void		del_all_computer(t_gennet *data)
 {
   t_gennet_computer	*current = NULL;
+  t_gennet_computer	*next = NULL;
 
-  for (current = data->computers; current != NULL; current = current->next)
+  current = data->computers;
+  while (current != NULL)
     {
+      next = current->next;
       if (current->scriptlist != NULL)
 	{
 	  del_all_scriptlist(data, current);
 	}
       del_gennet_computer(data, current);
+      current = next;
     }
 }
 
