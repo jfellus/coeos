@@ -429,6 +429,8 @@ void		del_all_comlinklist_out(t_gennet *data, t_gennet_script *script)
 
 void		del_all_comlinklist(t_gennet *data, t_gennet_script *script)
 {
+  if (script == NULL)
+    return;
   if (script->comlinklist_in != NULL)
     del_all_comlinklist_in(data, script);
   if (script->comlinklist_out != NULL)
@@ -852,9 +854,12 @@ void		del_all_computer(t_gennet *data)
 void		del_all_script(t_gennet *data)
 {
   t_gennet_script	*current = NULL;
+  t_gennet_script	*next = NULL;
 
-  for (current = data->scripts; current != NULL; current = current->next)
+  current = data->scripts;
+  while (current != NULL)
     {
+      next = current->next;
       del_all_comlinklist(data, current);
 
       /* on supprime tout le(s) onglet(s) leto rattache(s) au(x) script(s) */
@@ -867,6 +872,7 @@ void		del_all_script(t_gennet *data)
 	gtk_notebook_remove_page (GTK_NOTEBOOK(((t_gennet *)data)->gui->tabbedWin),current->sc->num_onglet);
 
       del_gennet_script(data, current);
+      current = next;
     }
 }
 
