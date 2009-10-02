@@ -611,7 +611,7 @@ void		promnet_prom_script_set_all_path(t_prom_script *prom_script, char *path, c
   if (strlen(prom_script->path_file_script_non_symb) <= 0)
     {
       memset(all_path, 0, MAX_ALL_PATH * sizeof(char));
-      sprintf(all_path, "%s/%s.%s", path, prom_script->logical_name, EXT_SCRIPT_NON_SYMB);
+      sprintf(all_path, "%s/%s%s", path, prom_script->logical_name, EXT_SCRIPT_NON_SYMB);
       promnet_prom_script_set_path_file_script_non_symb(prom_script, all_path);
     }
   if (strlen(prom_script->path_file_draw) <= 0)

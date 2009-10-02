@@ -54,12 +54,12 @@ typedef	struct		s_computer
 #define	MAX_PATH_PROM_DEPLOY	256
 
 #define	EXT_SCRIPT_SCRIPT	".script"
-#define	EXT_SCRIPT_NON_SYMB	".script"
+#define	EXT_SCRIPT_NON_SYMB	".script_o"
 #define	EXT_SCRIPT_SYMB		".symb"
 #define	EXT_SCRIPT_DRAW		".draw"
 #define	EXT_SCRIPT_RES		".res"
 #define	EXT_SCRIPT_CONFIG	".config"
-#define	EXT_SCRIPT_BUS	".bus"
+#define	EXT_SCRIPT_BUS		".bus"
 #define	EXT_SCRIPT_DEV		".dev"
 #define	EXT_SCRIPT_GCD		".gcd"
 #define	EXT_SCRIPT_PRT		".prt"
