@@ -1513,12 +1513,12 @@ void		init_gui_toolbar(t_gennet *data)
   gtk_toolbar_append_space(GTK_TOOLBAR(ToolBar));
 
   /* Bouton GenerateDeploy */
-  button = gtk_toolbar_append_item(GTK_TOOLBAR(ToolBar), "Generate deploy.sh", "Generate deployment script", "Private", NULL, GTK_SIGNAL_FUNC(GenerateDeploySh), data);
+  button = gtk_toolbar_append_item(GTK_TOOLBAR(ToolBar), "Generate deployment", "Generate deployment script", "Private", NULL, GTK_SIGNAL_FUNC(GenerateDeploySh), data);
   gtk_widget_show(button);
   gtk_toolbar_append_space(GTK_TOOLBAR(ToolBar));
 
   /* Bouton GenerateRun */
-  button = gtk_toolbar_append_item(GTK_TOOLBAR(ToolBar), "Generate run.sh", "Generate executable script", "Private", NULL, GTK_SIGNAL_FUNC(GenerateRunSh), data);
+  button = gtk_toolbar_append_item(GTK_TOOLBAR(ToolBar), "Generate launcher", "Generate launch script", "Private", NULL, GTK_SIGNAL_FUNC(GenerateRunSh), data);
   gtk_widget_show(button);
   gtk_toolbar_append_space(GTK_TOOLBAR(ToolBar));
 

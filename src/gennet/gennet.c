@@ -1470,10 +1470,10 @@ void		writeLinkSection(t_gennet *data, FILE *fprt)
 
 void		writePrt(t_gennet *data, FILE *fprt)
 {
-  debug_printf("\nWriting prt file ... \n");
+  printf("\nWriting prt file ...");
   writeNetworkSection(data, fprt);
   writeLinkSection(data, fprt);
-  debug_printf(".................... completed !!\n\n");
+  printf(".................... completed !!\n\n");
 }
 
 type_groupe	*find_next_network_send_group(type_groupe *groupe)
@@ -2092,7 +2092,7 @@ void		writeRun(t_gennet *data, FILE *frun)
   t_gennet_script_list	*scriptlist = NULL;
   char			*val = NULL;
   
-  debug_printf("\nWriting run file ... \n");
+  printf("\nWriting run file .....");
 
   fprintf(frun,"#!/bin/bash\n");  
   fprintf(frun,"export IVYBUS=%s && ivyprobe '(.*)' &\nsleep 5 \n",data->promnet->ivybus_envvar);  
@@ -2111,14 +2111,12 @@ void		writeRun(t_gennet *data, FILE *frun)
 	    free(val);
 	
           fprintf(frun,"%s/launch_%s.sh & \n",promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script),promnet_prom_script_get_logical_name(scriptlist->script->prom_script));
-
-	  
 	}
     }
    
     fprintf(frun, "exit\n");
     
-    debug_printf(".................... completed !!\n\n");
+    printf(".................... completed !!\n\n");
     
 
 }
@@ -2131,7 +2129,7 @@ void		writeDeploy(t_gennet *data, FILE *frun)
   char filename[256],chmod_cmd[256];
   int tmpi;
   FILE * f_launch=NULL;
-  debug_printf("Creating applis launcher");
+  printf("Creating deployment file ....");
   
   for (computer = data->computers; computer != NULL; computer = computer->next)
     {
@@ -2217,205 +2215,74 @@ void		writeDeploy(t_gennet *data, FILE *frun)
 	  
 	  
 /*deploy launcher */	  
-	      fprintf(frun, "rsync -av %s/%s ",getenv("PWD"),filename);						
-	      val = promnet_computer_get_login(computer->computer);
-	      fprintf(frun, "%s@", val);
-	      if (val != NULL)
-		free(val);
-
-	      val = promnet_computer_get_address(computer->computer);
-	      fprintf(frun, "%s:", val);
-	      if (val != NULL)
-		free(val);
-
-	      val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
-	      fprintf(frun, "%s \n", val);
-	      if (val != NULL)
-		free(val);
-	  
+	      fprintf(frun, "scp %s/%s ",getenv("PWD"),filename);						
 /*deploy .script_o*/
-
-	    val = promnet_prom_script_get_path_file_script_non_symb(scriptlist->script->prom_script);
-	    if(strcmp(val,"")!=0)
-	    {
-	      fprintf(frun, "rsync -av ");						
-	      fprintf(frun, "%s ", val);
-	      if (val != NULL)
-		free(val);
-	      
-	      val = promnet_computer_get_login(computer->computer);
-	      fprintf(frun, "%s@", val);
-	      if (val != NULL)
-		free(val);
-
-	      val = promnet_computer_get_address(computer->computer);
-	      fprintf(frun, "%s:", val);
-	      if (val != NULL)
-		free(val);
-
-	      val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
-	      fprintf(frun, "%s \n", val);
-	      if (val != NULL)
-		free(val);
-	    }
-  /*deploy .res*/
-	    val = promnet_prom_script_get_path_file_res(scriptlist->script->prom_script);
-	    if(strcmp(val,"")!=0)
-	    {
-	      fprintf(frun, "rsync -av ");
-	      fprintf(frun, "%s ", val);
-	      if (val != NULL)
-		free(val);
-	      
-	      val = promnet_computer_get_login(computer->computer);
-	      fprintf(frun, "%s@", val);
-	      if (val != NULL)
-		free(val);
-
-	      val = promnet_computer_get_address(computer->computer);
-	      fprintf(frun, "%s:", val);
-	      if (val != NULL)
-		free(val);
-	      
-	      val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
-	      fprintf(frun, "%s \n", val);
-	      if (val != NULL)
-		free(val);
-	    }
-  /*deploy .draw*/
-
-	    val = promnet_prom_script_get_path_file_draw(scriptlist->script->prom_script);
-	    if(strcmp(val,"")!=0)
-	    {
-	      fprintf(frun, "rsync -av ");
-	      fprintf(frun, "%s ", val);
-
-	      if (val != NULL)
-		free(val);
-	      
-	      val = promnet_computer_get_login(computer->computer);
-	      fprintf(frun, "%s@", val);
-	      if (val != NULL)
-		free(val);
-
-	      val = promnet_computer_get_address(computer->computer);
-	      fprintf(frun, "%s:", val);
-	      if (val != NULL)
-		free(val);
-	      
-	      val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
-	      fprintf(frun, "%s \n", val);
-	      if (val != NULL)
-		free(val);
-	    }
+	      val = promnet_prom_script_get_path_file_script_non_symb(scriptlist->script->prom_script);
+	      if(strcmp(val,"")!=0)
+	      {
+		fprintf(frun, "%s ", val);
+		if (val != NULL)
+		  free(val);
+	      }
+/*deploy .res*/
+	      val = promnet_prom_script_get_path_file_res(scriptlist->script->prom_script);
+	      if(strcmp(val,"")!=0)
+	      {
+		fprintf(frun, "%s ", val);
+		if (val != NULL)
+		    free(val);
+	      }
+/*deploy .draw*/
+	      val = promnet_prom_script_get_path_file_draw(scriptlist->script->prom_script);
+	      if(strcmp(val,"")!=0)
+	      {
+		fprintf(frun, "%s ", val);
+		if (val != NULL)
+		    free(val);
+	      }
   /*deploy .config*/
 	    val = promnet_prom_script_get_path_file_config(scriptlist->script->prom_script);
 	    if(strcmp(val,"")!=0)
 	    {
-	      fprintf(frun, "rsync -av ");
 	      fprintf(frun, "%s ", val);
 	      if (val != NULL)
 		free(val);
-	      
-	      val = promnet_computer_get_login(computer->computer);
-	      fprintf(frun, "%s@", val);
-	      if (val != NULL)
-		free(val);
-
-	      val = promnet_computer_get_address(computer->computer);
-	      fprintf(frun, "%s:", val);
-	      if (val != NULL)
-		free(val);
-	      
-	      val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
-	      fprintf(frun, "%s \n", val);
-	      if (val != NULL)
-		free(val);
 	    }
-  /*deploy .bus*/
+ /*deploy .bus*/
 	    val = promnet_prom_script_get_path_file_bus(scriptlist->script->prom_script);
 	    if(strcmp(val,"")!=0)
 	    {
-	      fprintf(frun, "rsync -av ");
 	      fprintf(frun, "%s ", val);
 	      if (val != NULL)
 		free(val);
-	      
-	      val = promnet_computer_get_login(computer->computer);
-	      fprintf(frun, "%s@", val);
-	      if (val != NULL)
-		free(val);
-
-	      val = promnet_computer_get_address(computer->computer);
-	      fprintf(frun, "%s:", val);
-	      if (val != NULL)
-		free(val);
-	      
-	      val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
-	      fprintf(frun, "%s \n", val);
-	      if (val != NULL)
-		free(val);
-
 	    }
-  /*deploy .dev*/
+	    }
+ /*deploy .dev*/
 	    val = promnet_prom_script_get_path_file_dev(scriptlist->script->prom_script);
 	    if(strcmp(val,"")!=0)
 	    {
-	      fprintf(frun, "rsync -av ");
 	      fprintf(frun, "%s ", val);
 	      if (val != NULL)
 		free(val);
-	      
-	      val = promnet_computer_get_login(computer->computer);
-	      fprintf(frun, "%s@", val);
-	      if (val != NULL)
-		free(val);
-
-	      val = promnet_computer_get_address(computer->computer);
-	      fprintf(frun, "%s:", val);
-	      if (val != NULL)
-		free(val);
-	      
-	      val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
-	      fprintf(frun, "%s \n", val);
-	      if (val != NULL)
-		free(val);
-	    }
+	    }	 
   /*deploy .gcd*/
-	    
 	    val = promnet_prom_script_get_path_file_gcd(scriptlist->script->prom_script);
 	    if(strcmp(val,"")!=0)
 	    {
-	      fprintf(frun, "rsync -av ");
 	      fprintf(frun, "%s ", val);
 	      if (val != NULL)
 		free(val);
-	      
-	      val = promnet_computer_get_login(computer->computer);
-	      fprintf(frun, "%s@", val);
-	      if (val != NULL)
-		free(val);
-
-	      val = promnet_computer_get_address(computer->computer);
-	      fprintf(frun, "%s:", val);
-	      if (val != NULL)
-		free(val);
-	      
-	      val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
-	      fprintf(frun, "%s \n", val);
-	      if (val != NULL)
-		free(val);
-	    }
-  /*deploy .prt*/
-	    
+	    } 
+ /*deploy .prt*/
 	    val = promnet_prom_script_get_path_file_prt(scriptlist->script->prom_script);
 	    if(strcmp(val,"")!=0)
 	    {
-	      fprintf(frun, "rsync -av ");
 	      fprintf(frun, "%s ", val);
 	      if (val != NULL)
 		free(val);
-	      
+	    }
+
+/*destination du scp*/
 	      val = promnet_computer_get_login(computer->computer);
 	      fprintf(frun, "%s@", val);
 	      if (val != NULL)
@@ -2430,12 +2297,10 @@ void		writeDeploy(t_gennet *data, FILE *frun)
 	      fprintf(frun, "%s \n", val);
 	      if (val != NULL)
 		free(val);
-	    }
+              fprintf(frun, "\n");  
 	  }
 	}
-	
-    }
-  debug_printf(".................... completed !!\n\n");
+	printf(".................... completed !!\n\n");
 
 }
 
