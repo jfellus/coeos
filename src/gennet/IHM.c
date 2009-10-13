@@ -571,7 +571,7 @@ void		Computer_Edit_Computer(t_gennet *gen, t_gennet_computer *pcomputer)
       if (val != NULL)
 	free(val);
     }
-  SelectFolder_control_browse(gen->gui->AddComputerDialog, gpath, "Path to binary : ");
+  SelectFolder_control_browse(gen->gui->AddComputerDialog, gpath, "Path to binary or simulator: ");
 
   gcpu = gtk_entry_new_with_max_length(MAX_CPU - 1);
   if (pcomputer != NULL)

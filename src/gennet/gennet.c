@@ -2129,11 +2129,49 @@ void		writeDeploy(t_gennet *data, FILE *frun)
   char filename[256],chmod_cmd[256];
   int tmpi;
   FILE * f_launch=NULL;
+  FILE * f_synchro=NULL;
   printf("Creating deployment file ....");
   
   for (computer = data->computers; computer != NULL; computer = computer->next)
     {
-      for (scriptlist = computer->scriptlist; scriptlist != NULL; scriptlist = scriptlist->next)
+	
+	/* Creation des synchonizer pour chaque PC pour la synchronization des code des ordinateur */
+	sprintf(filename,"synchronize_%s.sh",promnet_computer_get_name(computer->computer));
+	f_synchro=fopen(filename,"w+");
+	if(f_synchro==NULL)
+	{
+	    printf("ouverture de %s impossible\n",filename);
+	    exit(-1);
+	}    
+	fprintf(f_synchro,"#!/bin/sh\n\n");
+	fprintf(f_synchro,"rep_emb=%s\nrep_local=%s\nip_emb=%s\n\n",promnet_computer_get_path(computer->computer),getenv("PROM_HOME"),promnet_computer_get_address(computer->computer));
+	fprintf(f_synchro,"cd $rep_local/prom_user/prom_user/user/ \n");
+	fprintf(f_synchro,"rsync -avR --exclude '*.o' --exclude '*akefile*' . $ip_emb:$rep_emb/prom_user/prom_user/user/\n");
+
+	fprintf(f_synchro,"cd $rep_local/coeos/coeos/\n");
+	fprintf(f_synchro,"rsync -avR --exclude '*.o' --exclude '*akefile*'  . $ip_emb:$rep_emb/coeos/coeos/\n");
+
+	fprintf(f_synchro,"cd $rep_local/hardware/hardware/\n");
+	fprintf(f_synchro,"rsync -avR --exclude '*.o' --exclude '*akefile*' . $ip_emb:$rep_emb/hardware/hardware/\n");
+
+	fprintf(f_synchro,"cd $rep_local/graphique/graphique/\n");
+	fprintf(f_synchro,"rsync -avR --exclude '*.o' --exclude '*akefile*' . $ip_emb:$rep_emb/graphique/graphique\n");
+
+	fprintf(f_synchro,"cd $rep_local/prom_kernel/prom_kernel/\n");
+	fprintf(f_synchro,"rsync -avR --exclude '*.o' --exclude '*akefile*' . $ip_emb:$rep_emb/prom_kernel/prom_kernel/\n");
+
+	fprintf(f_synchro,"cd $rep_local/basic_parser/basic_parser/\n");
+	fprintf(f_synchro,"rsync -avR --exclude '*.o' --exclude '*akefile*' . $ip_emb:$rep_emb/basic_parser/basic_parser/\n");
+
+	fprintf(f_synchro,"cd $rep_local/libcomm/libcomm/\n");
+	fprintf(f_synchro,"rsync -avR --exclude '*.o' --exclude '*akefile*' . $ip_emb:$rep_emb/libcomm/libcomm/\n");
+	fclose(f_synchro);
+
+	sprintf(chmod_cmd,"chmod +x %s\n",filename);
+	system(chmod_cmd);
+
+	/*Creation des launcher pour chaque script associed a un computer*/
+	for (scriptlist = computer->scriptlist; scriptlist != NULL; scriptlist = scriptlist->next)
 	{
           val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
 	  if(strcmp(val,"")!=0)
@@ -2196,14 +2234,14 @@ void		writeDeploy(t_gennet *data, FILE *frun)
 	    if (val != NULL)
 	      free(val);
 	    
-	    val = promnet_prom_script_get_logical_name(scriptlist->script->prom_script);
+	    val = promnet_prom_script_get_path_file_prt(scriptlist->script->prom_script);
 	    tmpi=get_filename_from_path(val);
 	    fprintf(f_launch, "%s ", val+tmpi);
 	    if (val != NULL)
 	      free(val);
 	    
 	    val = promnet_prom_script_get_logical_name(scriptlist->script->prom_script);
-	    fprintf(f_launch, "-n %s &\n", val);
+	    fprintf(f_launch, "-n %s\n", val);
 	    if (val != NULL)
 	      free(val);
 	    
@@ -2211,93 +2249,97 @@ void		writeDeploy(t_gennet *data, FILE *frun)
 	    
             sprintf(chmod_cmd,"chmod +x %s",filename);
             system(chmod_cmd);
-	  
-	  
-	  
+		
 /*deploy launcher */	  
-	      fprintf(frun, "scp %s/%s ",getenv("PWD"),filename);						
+	    fprintf(frun, "scp -r %s/%s ",getenv("PWD"),filename);						
 /*deploy .script_o*/
-	      val = promnet_prom_script_get_path_file_script_non_symb(scriptlist->script->prom_script);
-	      if(strcmp(val,"")!=0)
-	      {
-		fprintf(frun, "%s ", val);
-		if (val != NULL)
-		  free(val);
-	      }
+	    val = promnet_prom_script_get_path_file_script_non_symb(scriptlist->script->prom_script);
+	    if(strcmp(val,"")!=0)
+	    {
+	      fprintf(frun, "%s ", val);
+	      if (val != NULL)
+		free(val);
+	    }
 /*deploy .res*/
-	      val = promnet_prom_script_get_path_file_res(scriptlist->script->prom_script);
-	      if(strcmp(val,"")!=0)
-	      {
-		fprintf(frun, "%s ", val);
-		if (val != NULL)
-		    free(val);
-	      }
+	    val = promnet_prom_script_get_path_file_res(scriptlist->script->prom_script);
+	    if(strcmp(val,"")!=0)
+	    {
+	      fprintf(frun, "%s ", val);
+	      if (val != NULL)
+		  free(val);
+	    }
 /*deploy .draw*/
-	      val = promnet_prom_script_get_path_file_draw(scriptlist->script->prom_script);
-	      if(strcmp(val,"")!=0)
-	      {
-		fprintf(frun, "%s ", val);
-		if (val != NULL)
-		    free(val);
-	      }
-  /*deploy .config*/
-	    val = promnet_prom_script_get_path_file_config(scriptlist->script->prom_script);
+	    val = promnet_prom_script_get_path_file_draw(scriptlist->script->prom_script);
 	    if(strcmp(val,"")!=0)
 	    {
 	      fprintf(frun, "%s ", val);
 	      if (val != NULL)
-		free(val);
+		  free(val);
 	    }
- /*deploy .bus*/
-	    val = promnet_prom_script_get_path_file_bus(scriptlist->script->prom_script);
-	    if(strcmp(val,"")!=0)
-	    {
-	      fprintf(frun, "%s ", val);
-	      if (val != NULL)
-		free(val);
-	    }
-	    }
- /*deploy .dev*/
-	    val = promnet_prom_script_get_path_file_dev(scriptlist->script->prom_script);
-	    if(strcmp(val,"")!=0)
-	    {
-	      fprintf(frun, "%s ", val);
-	      if (val != NULL)
-		free(val);
-	    }	 
-  /*deploy .gcd*/
-	    val = promnet_prom_script_get_path_file_gcd(scriptlist->script->prom_script);
-	    if(strcmp(val,"")!=0)
-	    {
-	      fprintf(frun, "%s ", val);
-	      if (val != NULL)
-		free(val);
-	    } 
- /*deploy .prt*/
-	    val = promnet_prom_script_get_path_file_prt(scriptlist->script->prom_script);
-	    if(strcmp(val,"")!=0)
-	    {
-	      fprintf(frun, "%s ", val);
-	      if (val != NULL)
-		free(val);
-	    }
+/*deploy .config*/
+	  val = promnet_prom_script_get_path_file_config(scriptlist->script->prom_script);
+	  if(strcmp(val,"")!=0)
+	  {
+	    fprintf(frun, "%s ", val);
+	    if (val != NULL)
+	      free(val);
+	  }
+/*deploy .bus*/
+	  val = promnet_prom_script_get_path_file_bus(scriptlist->script->prom_script);
+	  if(strcmp(val,"")!=0)
+	  {
+	    fprintf(frun, "%s ", val);
+	    if (val != NULL)
+	      free(val);
+	  }
+	  }
+/*deploy .dev*/
+	  val = promnet_prom_script_get_path_file_dev(scriptlist->script->prom_script);
+	  if(strcmp(val,"")!=0)
+	  {
+	    fprintf(frun, "%s ", val);
+	    if (val != NULL)
+	      free(val);
+	  }	 
+/*deploy .gcd*/
+	  val = promnet_prom_script_get_path_file_gcd(scriptlist->script->prom_script);
+	  if(strcmp(val,"")!=0)
+	  {
+	    fprintf(frun, "%s ", val);
+	    if (val != NULL)
+	      free(val);
+	  } 
+/*deploy .prt*/
+	  val = promnet_prom_script_get_path_file_prt(scriptlist->script->prom_script);
+	  if(strcmp(val,"")!=0)
+	  {
+	    fprintf(frun, "%s ", val);
+	    if (val != NULL)
+	      free(val);
+	  }
+
+/*deploy des .hw* et des mask*/
+	    val = promnet_prom_script_get_logical_name(scriptlist->script->prom_script);;
+	    fprintf(frun, "%s/*.hw* %s/*.mask %s/mask/ ", val,val,val);
+	    if (val != NULL)
+	      free(val);
 
 /*destination du scp*/
-	      val = promnet_computer_get_login(computer->computer);
-	      fprintf(frun, "%s@", val);
-	      if (val != NULL)
-		free(val);
+	    val = promnet_computer_get_login(computer->computer);
+	    fprintf(frun, "%s@", val);
+	    if (val != NULL)
+	      free(val);
 
-	      val = promnet_computer_get_address(computer->computer);
-	      fprintf(frun, "%s:", val);
-	      if (val != NULL)
-		free(val);
-	      
-	      val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
-	      fprintf(frun, "%s \n", val);
-	      if (val != NULL)
-		free(val);
-              fprintf(frun, "\n");  
+	    val = promnet_computer_get_address(computer->computer);
+	    fprintf(frun, "%s:", val);
+	    if (val != NULL)
+	      free(val);
+	    
+	    val = promnet_prom_script_get_path_prom_deploy(scriptlist->script->prom_script);
+	    fprintf(frun, "%s \n", val);
+	    if (val != NULL)
+	      free(val);
+	    fprintf(frun, "\n");  
 	  }
 	}
 	printf(".................... completed !!\n\n");
