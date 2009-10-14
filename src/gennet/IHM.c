@@ -1518,9 +1518,9 @@ void		init_gui_toolbar(t_gennet *data)
   gtk_toolbar_append_space(GTK_TOOLBAR(ToolBar));
 
   /* Bouton GenerateRun */
-  button = gtk_toolbar_append_item(GTK_TOOLBAR(ToolBar), "Generate launcher", "Generate launch script", "Private", NULL, GTK_SIGNAL_FUNC(GenerateRunSh), data);
+  /*button = gtk_toolbar_append_item(GTK_TOOLBAR(ToolBar), "Generate launcher", "Generate launch script", "Private", NULL, GTK_SIGNAL_FUNC(GenerateRunSh), data);
   gtk_widget_show(button);
-  gtk_toolbar_append_space(GTK_TOOLBAR(ToolBar));
+  gtk_toolbar_append_space(GTK_TOOLBAR(ToolBar));*/
 
   /* bouton quit */
   button = gtk_toolbar_append_item(GTK_TOOLBAR(ToolBar), "Quit", "Quit", "Private", NULL, GTK_SIGNAL_FUNC(WinMain_destroy), data);

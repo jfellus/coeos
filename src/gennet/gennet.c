@@ -1976,7 +1976,7 @@ void	GenerateNetwork(GtkWidget *widget, gpointer data)
   gtk_widget_destroy(gen->gui->PathDialog);
 }
 
-void	GenerateRunSh(GtkWidget *widget, gpointer data)
+/*void	GenerateRunSh(GtkWidget *widget, gpointer data)
 {
   t_gennet		*gen = (t_gennet *)data;
   GtkWidget		*e_path = NULL;
@@ -2029,7 +2029,7 @@ void	GenerateRunSh(GtkWidget *widget, gpointer data)
       break;
     }
   gtk_widget_destroy(gen->gui->PathDialog);
-}
+}*/
 
 void	GenerateDeploySh(GtkWidget *widget, gpointer data)
 {
@@ -2086,7 +2086,7 @@ void	GenerateDeploySh(GtkWidget *widget, gpointer data)
   gtk_widget_destroy(gen->gui->PathDialog);
 }
 
-void		writeRun(t_gennet *data, FILE *frun)
+/*void		writeRun(t_gennet *data, FILE *frun)
 {
   t_gennet_computer	*computer = NULL;
   t_gennet_script_list	*scriptlist = NULL;
@@ -2119,7 +2119,7 @@ void		writeRun(t_gennet *data, FILE *frun)
     printf(".................... completed !!\n\n");
     
 
-}
+}*/
 
 void		writeDeploy(t_gennet *data, FILE *frun)
 {
@@ -2130,13 +2130,31 @@ void		writeDeploy(t_gennet *data, FILE *frun)
   int tmpi;
   FILE * f_launch=NULL;
   FILE * f_synchro=NULL;
+  FILE * f_synchro_bin=NULL;
   printf("Creating deployment file ....");
   
+/* Creation des synchonizer de binaire */
+  f_synchro_bin=fopen("synchronize_binaries.sh","w+");
+  if(f_synchro_bin==NULL)
+  {
+      printf("ouverture de synchronize_binaries.sh impossible\n");
+      exit(-1);
+  }    
+  fprintf(f_synchro_bin,"#!/bin/sh\n\n");
+ 
+  sprintf(chmod_cmd,"chmod +x %s\n",filename);
+  
+   system("mkdir -p .deployment\n");
+
+
   for (computer = data->computers; computer != NULL; computer = computer->next)
     {
+	/*synchro des bin vers le pc concerned*/
+
+	fprintf(f_synchro_bin,"scp %s/bin_leto_prom/* %s@%s:./bin_leto_prom/ \n",getenv("HOME"),promnet_computer_get_login(computer->computer),promnet_computer_get_address(computer->computer));
 	
-	/* Creation des synchonizer pour chaque PC pour la synchronization des code des ordinateur */
-	sprintf(filename,"synchronize_%s.sh",promnet_computer_get_name(computer->computer));
+	/* Creation des synchonizer de simulateur pour chaque PC pour la synchronization des code des ordinateur */
+	sprintf(filename,"synchronize_simulator_to_%s.sh",promnet_computer_get_name(computer->computer));
 	f_synchro=fopen(filename,"w+");
 	if(f_synchro==NULL)
 	{
@@ -2178,7 +2196,7 @@ void		writeDeploy(t_gennet *data, FILE *frun)
 	  {
 	    free(val);
   
-	    sprintf(filename,"launch_%s.sh",promnet_prom_script_get_logical_name(scriptlist->script->prom_script));
+	    sprintf(filename,".deployment/launch_%s.sh",promnet_prom_script_get_logical_name(scriptlist->script->prom_script));
 	    f_launch=fopen(filename,"w+");
 	    if(f_launch==NULL)
 	    {
@@ -2251,7 +2269,7 @@ void		writeDeploy(t_gennet *data, FILE *frun)
             system(chmod_cmd);
 		
 /*deploy launcher */	  
-	    fprintf(frun, "scp -r %s/%s ",getenv("PWD"),filename);						
+	    fprintf(frun, "scp -r %s ",filename);						
 /*deploy .script_o*/
 	    val = promnet_prom_script_get_path_file_script_non_symb(scriptlist->script->prom_script);
 	    if(strcmp(val,"")!=0)
@@ -2342,6 +2360,11 @@ void		writeDeploy(t_gennet *data, FILE *frun)
 	    fprintf(frun, "\n");  
 	  }
 	}
+
+        fclose(f_synchro_bin);
+	sprintf(chmod_cmd,"chmod +x synchronize_binaries.sh\n");
+	system(chmod_cmd);
+
 	printf(".................... completed !!\n\n");
 
 }
