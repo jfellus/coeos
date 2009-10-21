@@ -464,6 +464,9 @@ void zoom_groups(float scale, TxDonneesFenetre *onglet_leto)
     type_groupe *gpe;
     type_liaison *liaison = NULL;
     TxPoint point;
+    selected_group *sel_group = NULL;
+    int selected_planes[nb_max_planes];
+    int planes_to_select = 0;
 
 #ifndef LETO
     /* controle si on est dans un onglet Leto
@@ -472,6 +475,7 @@ void zoom_groups(float scale, TxDonneesFenetre *onglet_leto)
     if(tab_is_Metaleto(onglet_leto) == 0) return;
 #endif
 
+    memset(selected_planes, 0, sizeof(selected_planes));
 
     x = 0;                      /* translation vector */
     y = 0;
@@ -480,33 +484,71 @@ void zoom_groups(float scale, TxDonneesFenetre *onglet_leto)
     xmax = ymax = 0;
     xmin = ymin = 3000;
 
-    gpe = sc->deb_groupe;
-    while (gpe != NULL)
+    if (sc->groupes_courants == NULL)
     {
-       x += gpe->posx;
-       y += gpe->posy;
-       nbre_gpes++;
-       gpe = gpe->s;
+      gpe = sc->deb_groupe;
+      while (gpe != NULL)
+      {
+	x += gpe->posx;
+	y += gpe->posy;
+	nbre_gpes++;
+
+	gpe = gpe->s;
+      }
     }
+    else
+    {       
+       for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
+       {
+	 x += sel_group->group->posx;
+	 y += sel_group->group->posy;
+	 nbre_gpes++;
+
+	 if (abs(sel_group->group->reverse) >= 100)
+	 {
+	   planes_to_select = 1;
+	   selected_planes[abs(sel_group->group->reverse)] = 1;
+	 }
+       }
+
+       if (planes_to_select == 1)
+       {
+	  gpe = sc->deb_groupe;
+	  while (gpe != NULL)
+	  {
+	    if (is_selected(gpe) == NULL && selected_planes[abs(gpe->reverse)] == 1)
+	    {
+	      x += gpe->posx;
+	      y += gpe->posy;
+	      nbre_gpes++;
+	    }
+	    gpe = gpe->s;
+	  }    
+       }
+    }
+
     x = x / nbre_gpes;          /* position of the gravity center */
     y = y / nbre_gpes;
 
     gpe = sc->deb_groupe;
     while (gpe != NULL)
     {
-       gpe->posx = x + (gpe->posx - x) * scale;
-       gpe->posy = y + (gpe->posy - y) * scale;
-       if (gpe->posx < xmin)
+      if (sc->groupes_courants == NULL || is_selected(gpe) || selected_planes[abs(gpe->reverse)] == 1)
+      {
+	gpe->posx = x + (gpe->posx - x) * scale;
+	gpe->posy = y + (gpe->posy - y) * scale;
+	if (gpe->posx < xmin)
 	  xmin = gpe->posx;
-       else if (gpe->posx > xmax)
+	else if (gpe->posx > xmax)
 	  xmax = gpe->posx;
-       if (gpe->posy < ymin)
+	if (gpe->posy < ymin)
 	  ymin = gpe->posy;
-       else if (gpe->posy > ymax)
+	else if (gpe->posy > ymax)
 	  ymax = gpe->posy;
-       
-       gpe = gpe->s;
+      }
+      gpe = gpe->s;
     }
+
     point.x = xmin;
     point.y = ymin;
 
@@ -520,9 +562,13 @@ void zoom_groups(float scale, TxDonneesFenetre *onglet_leto)
         gpe = sc->deb_groupe;
         while (gpe != NULL)
         {
+	  if (sc->groupes_courants == NULL || is_selected(gpe) || selected_planes[abs(gpe->reverse)] == 1)
+	  {
             gpe->posx += xoffset;
             gpe->posy += yoffset;
-            gpe = gpe->s;
+	  }
+	  
+	  gpe = gpe->s;
         }
     }
 
@@ -686,8 +732,7 @@ void creation_groupe(GtkWidget * widget, gpointer data)
    if(tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
 
-   if (data != NULL)
-      onglet_leto = ((t_gennet_script *)data)->onglet_leto;
+   onglet_leto = ((t_gennet_script *)data)->onglet_leto;
 
    groupe2 = creer_groupeb(NULL);
    if(sc->fin_groupe != NULL)
@@ -733,7 +778,7 @@ void creation_groupe(GtkWidget * widget, gpointer data)
 
 	 sc->nbre_groupes_lus = sc->last_groupe_number + 1;
 	 debug_printf("Lancement de la lecture de la macro %s \n", base_nom);
-	 nbre = read_macro(groupe2->no_name, groupe2->nom, groupe2->posx, groupe2->posy, 1, 1, &selected_plane, ((TxDonneesFenetre *) data));
+	 nbre = read_macro(groupe2->no_name, groupe2->nom, groupe2->posx, groupe2->posy, 1, 1, &selected_plane, onglet_leto);
 	 /* le nbre de groupes a ete modifie dans read_macro */
 	 
 	 if (groupe2->reverse > 0)

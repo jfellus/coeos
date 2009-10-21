@@ -220,7 +220,9 @@ void lecture(int recursive_load,TxDonneesFenetre *onglet_leto)
 	if (onglet_leto == NULL)
 	  sc->nbre_neurone += read_one_group_leto(f1, groupe, NULL, (void **)NULL);
 	else
+        {
 	  sc->nbre_neurone += read_one_group_leto(f1, groupe, NULL, (void **)&onglet_leto->hashtab);
+        }
 	/* gestion de la lecture d'un sous reseau */
 	if(groupe->type==No_Sub_Network && recursive_load==1)
 	  {
@@ -233,7 +235,6 @@ void lecture(int recursive_load,TxDonneesFenetre *onglet_leto)
 	  }
 
 	groupe->deja_active=0; /* c'est un groupe en direct de ce script, non un groupe insere */
-	/* printf("groupe->no = %d last = %d\n",groupe->no,sc->last_groupe_number); */
 	debug_printf("-------------------\n");
     }
     sc->nbre_groupes_lus = nbre_groupes_lus = sc->nbre_groupe;
@@ -242,7 +243,6 @@ void lecture(int recursive_load,TxDonneesFenetre *onglet_leto)
 
     sc->first_comment_link = (type_noeud_comment *) read_line_with_comment(f1, NULL, ligne);
 
-    /*   printf("message :: nombre de liaisons --> %s \n",ligne);*/
 
     sscanf(ligne, "nombre de liaisons = %d\n", &nbre_liaison_provisoire);
     debug_printf("(lecture) nombre de liaisons = %d \n", nbre_liaison_provisoire);
@@ -356,11 +356,6 @@ int read_macro(char *base_base, char *nom,int px, int py,int relatif,
 		printf("PASTE \n");
 		memcpy(base_nom,"c",(strlen("c")+1) * sizeof(char));
       }
- /* interprete nom2[numero] en nom2 et numero*/
-    /*  scanf("%s",nom2);
-    pt=rindex(nom2,']');*pt='\0';pt=rindex(nom2,'[');
-    sscanf((pt+1),"%d",&numero);(*pt)='\0';
-    printf("nom2 = %s , numero = %d \n",nom2,numero);*/
 
     if(base_base==NULL) sprintf(base_nom_complet,"%s[%d]",base_nom,no_macro_used);
     /* else sprintf(base_nom_complet,"%s_%s[%d]",base_base,base_nom,no_macro_used);*/
@@ -372,7 +367,6 @@ int read_macro(char *base_base, char *nom,int px, int py,int relatif,
 
     sc->first_comment_group = (type_noeud_comment *) read_line_with_comment(f1, sc->first_comment_group,ligne);
 
-    /* printf("1ere ligne sub network (non comment) : %s \n",ligne);*/
     sscanf(ligne, "nombre de groupes = %d\n", &nbre_groupe_macro);
     debug_printf("nbre groupes deja lu %d, nombre de groupes macro = %d\n",  sc->nbre_groupe, nbre_groupe_macro);
     if(nbre_groupe_macro==0)
@@ -392,7 +386,9 @@ int read_macro(char *base_base, char *nom,int px, int py,int relatif,
 	if (onglet_leto == NULL)
 	  sc->nbre_neurone += read_one_group_leto(f1, groupe_local,base_nom_complet, (void **)NULL);
 	else
+        {
 	  sc->nbre_neurone += read_one_group_leto(f1, groupe_local,base_nom_complet, (void **)&onglet_leto->hashtab);
+        }
 
 	debug_printf("read macro %s group %s no=%d\n",base_nom,groupe_local->no_name,groupe_local->no);
 	if(debut_macro==NULL) debut_macro=groupe_local;
@@ -481,7 +477,6 @@ int read_macro(char *base_base, char *nom,int px, int py,int relatif,
     fclose(f1);
     if(no_macro_used>sc->nbre_macro_lues) sc->nbre_macro_lues=no_macro_used+1; 
     else  sc->nbre_macro_lues=sc->nbre_macro_lues+1;
-    /* printf("LISTE des groupes fin: \n"); affiche_liste_groupes();*/
 
     debug_printf("debug_Fin lecture macro\n");
 #ifndef AVEUGLE
