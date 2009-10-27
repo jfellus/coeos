@@ -1,7 +1,7 @@
-Bugs COEOS
+Bugs COEOS 
 
 - Enlever les infos de chemin de fichiers de scripts et se baser sur une architecture standard (dossiers etc.) des applis multi-script (gestion des cas particuliers a l'aide de liens symboliques dans les repertoires)
-- Possibilite d'importer des scripts d'une bibliotheque de scripts "validés" lors de la création d'un script
+- Possibilite d'importer des scripts d'une bibliotheque de scripts "validï¿½s" lors de la crï¿½ation d'un script
 
 
 PB1: la copie d'une macro n'est pas geree (elle plante!).
