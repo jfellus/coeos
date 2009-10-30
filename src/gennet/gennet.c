@@ -69,7 +69,7 @@ t_gennet_computer	*find_widget_computer_by_script_list(t_gennet *data, t_gennet_
 
   for (computer = data->computers; computer != NULL; computer = computer->next)
     {
-      for (script_list = computer->scriptlist; script_list != NULL; scriptlist = scriptlist->next)
+      for (script_list = computer->scriptlist; script_list != NULL; script_list = script_list->next)
 	{
 	  if (scriptlist == script_list)
 	    return computer;
