@@ -96,6 +96,9 @@ typedef	struct			s_gennet_computer
   int				pointer_x;
   int				pointer_y;
   int				nb_script;
+  unsigned int			width;
+  unsigned int			height;
+  char				resize;
   struct s_gennet_script_list	*scriptlist;
   struct s_gennet_computer	*prev;
   struct s_gennet_computer	*next;
@@ -244,4 +247,5 @@ void menuLinkAddBend(gpointer data);
 void menuLinkDeletePolyline(gpointer data);
 void menuLinkDeleteBend(gpointer data);
 
+int		is_resize_computer(t_gennet_computer *computer, int x, int y);
 #endif /* _GENNET_H_ */

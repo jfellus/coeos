@@ -136,8 +136,8 @@ void		refresh_computer(t_gennet *data, t_gennet_computer *computer, int x, int y
 
   gtk_widget_queue_draw_area(data->gui->DrawingArea, 
 			     x - 5, y - 5,
-			     GENNET_COMPUTER_PARK_WIDTH + 10,
-			     GENNET_COMPUTER_PARK_HEIGHT + 10);
+			     computer->width + 10,
+			     computer->height + 10);
 }
 
 
@@ -301,7 +301,13 @@ void		DrawingArea_expose_event_computer(GtkWidget *widget, GdkEventExpose *event
 			     widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
 			     FALSE,
 			     computer->pos_x, computer->pos_y,
-			     GENNET_COMPUTER_PARK_WIDTH, GENNET_COMPUTER_PARK_HEIGHT);
+			     computer->width, computer->height);
+
+	  gdk_draw_rectangle(GTK_LAYOUT(widget)->bin_window,
+			     widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
+			     TRUE,
+			     computer->pos_x + computer->width - 10, computer->pos_y + computer->height - 10,
+			     10, 10);
 
 	  gdk_draw_layout(GTK_LAYOUT(widget)->bin_window,
 			  widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
@@ -885,10 +891,21 @@ void		DrawingArea_button1_press_event(GtkWidget *widget, GdkEventButton *event, 
     {
       if (gen->gui->NewComlink == 0)
 	{
-	  computer->pointer_x = (((int)event->x) - computer->pos_x);
-	  computer->pointer_y = (((int)event->y) - computer->pos_y);
+	  if (is_resize_computer(computer, event->x, event->y))
+	    {
+	      computer->pointer_x = (((int)event->x) - computer->width);
+	      computer->pointer_y = (((int)event->y) - computer->height);
+
+	      computer->resize = 1;
+	    }
+	  else
+	    {
+	      computer->pointer_x = (((int)event->x) - computer->pos_x);
+	      computer->pointer_y = (((int)event->y) - computer->pos_y);
+
+	      update_pointer_script_in_computer_park(gen, computer, event);
+	    }
 	  computer->hold = 1;
-	  update_pointer_script_in_computer_park(gen, computer, event);
 	}
     }
   else
@@ -965,14 +982,21 @@ void		DrawingArea_button_motion_event_callback(GtkWidget *widget, GdkEventMotion
   }
   else if ((computer = find_widget_held_computer(gen, event->x, event->y)) != NULL)
     {
-      old_x = computer->pos_x;
-      old_y = computer->pos_y;
-      
-      if ((computer->pos_x = (((int)event->x) - computer->pointer_x)) < 0)
-	computer->pos_x = 0;
-      if ((computer->pos_y = (((int)event->y) - computer->pointer_y)) < 0)
-	computer->pos_y = 0;
-      update_position_script_in_computer_park(gen, computer, event);
+      if (computer->resize == 1)
+	{
+	  if ((computer->width = (((int)event->x) - computer->pointer_x)) < 100)
+	    computer->width = 100;
+	  if ((computer->height = (((int)event->y) - computer->pointer_y)) < 100)
+	    computer->height = 100;	  
+	}
+      else
+	{
+	  if ((computer->pos_x = (((int)event->x) - computer->pointer_x)) < 0)
+	    computer->pos_x = 0;
+	  if ((computer->pos_y = (((int)event->y) - computer->pointer_y)) < 0)
+	    computer->pos_y = 0;
+	  update_position_script_in_computer_park(gen, computer, event);
+	}
     }
 }
 
@@ -1009,6 +1033,7 @@ gboolean	DrawingArea_button_release_event_callback(GtkWidget *widget, GdkEventBu
       computer->pointer_x = -1;
       computer->pointer_y = -1;
       computer->hold = 0;
+      computer->resize = 0;
       reset_pointer_script_in_computer_park(gen, computer, event);
     }
   else if ((script = find_widget_held_script(gen, event->x, event->y)) != NULL)
@@ -1193,12 +1218,23 @@ t_gennet_computer	*find_widget_computer(t_gennet *data, int x, int y)
   for (computer = data->computers; computer != NULL; computer = computer->next)
     {
       if (
-	  (x > (computer->pos_x - COMPUTER_CLICK_ZONE)) && (x < (computer->pos_x + GENNET_COMPUTER_PARK_WIDTH + COMPUTER_CLICK_ZONE))
-	  && (y > (computer->pos_y - COMPUTER_CLICK_ZONE)) && (y < (computer->pos_y + GENNET_COMPUTER_PARK_HEIGHT + COMPUTER_CLICK_ZONE))
+	  (x > (computer->pos_x - COMPUTER_CLICK_ZONE)) && (x < (computer->pos_x + computer->width + COMPUTER_CLICK_ZONE))
+	  && (y > (computer->pos_y - COMPUTER_CLICK_ZONE)) && (y < (computer->pos_y + computer->height + COMPUTER_CLICK_ZONE))
 	  )
 	  return computer;
     }
   return NULL;
+}
+
+int		is_resize_computer(t_gennet_computer *computer, int x, int y)
+{
+  if (
+      (x > (computer->pos_x + computer->width - 10)) && (x < (computer->pos_x + computer->width))
+      && (y > (computer->pos_y + computer->height - 10)) && (y < (computer->pos_y + computer->height))
+      )
+    return 1;
+  else
+    return 0;
 }
 
 t_gennet_computer	*find_widget_held_computer(t_gennet *data, int x, int y)
@@ -1331,7 +1367,7 @@ void init_draw_script(t_gennet *data, t_gennet_script *script)
    script->pos_y = GENNET_COMPUTER_PARK_HEIGHT + 20 + (IMG_SCRIPT_HEIGHT + 10) * (index / 6);
 }
 
-void init_draw_computer(t_gennet *data, t_gennet_computer *script)
+void init_draw_computer(t_gennet *data, t_gennet_computer *computer)
 {
    int index = 0;
    t_gennet_computer *tmp = NULL;
@@ -1344,16 +1380,18 @@ void init_draw_computer(t_gennet *data, t_gennet_computer *script)
       index++;
    }
 
-   script->pixmap = Get_Pixmap_From_File(data, IMG_COMPUTER, NULL, NULL);
-   script->pos_x = (GENNET_COMPUTER_PARK_WIDTH + 20) * index;
-   script->pos_y = 0;
+   computer->width = GENNET_COMPUTER_PARK_WIDTH;
+   computer->height = GENNET_COMPUTER_PARK_HEIGHT;
+   computer->pixmap = Get_Pixmap_From_File(data, IMG_COMPUTER, NULL, NULL);
+   computer->pos_x = (computer->width + 20) * index;
+   computer->pos_y = 0;
 }
 
 void draw_script_in_computer(t_gennet *data, t_gennet_computer *computer, t_gennet_script *script)
 {
    int index = 0;
    t_gennet_script_list *tmp = NULL;
-   int nb_script_width = GENNET_COMPUTER_PARK_WIDTH / (IMG_SCRIPT_WIDTH + 10);
+   int nb_script_width = computer->width / (IMG_SCRIPT_WIDTH + 10);
 
   for (tmp = computer->scriptlist; tmp != NULL; tmp = tmp->next)
      index++;
