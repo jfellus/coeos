@@ -2049,6 +2049,7 @@ gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, gpointer data
       { 
  	 show_status(donnees, "Bend selected");	 
 	 reset_selection_groups();
+	 sc->flag_drag_group = 0;
 	 popup_menu_type = POPUP_MENU_BEND;
       }
       else if (sc->groupes_courants != NULL)
