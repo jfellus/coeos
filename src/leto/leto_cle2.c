@@ -43,7 +43,7 @@ void ecrit_reseau_ascii()
 
     /*ecrit type de chaque groupe */
     groupe = sc->deb_groupe;
-    while (groupe != NULL) 
+    while (groupe != NULL)
     {
         fprintf(f1, "%d\n", groupe->type);
         fprintf(f1, "nom du groupe : %s\n", groupe->nom);
@@ -112,7 +112,7 @@ void ecrit_reseau()
    char statut_fin = 0;
    int taille_char;
    FILE *f1;
-    
+
    f1 = fopen(sc->freseau, "w");
    if (f1 == NULL)
    {
@@ -139,7 +139,7 @@ void ecrit_reseau()
 
    fprintf(f1, "%i\n", sc->nbre_neurone);
    debug_printf("nbre_neurone = %i\n", sc->nbre_neurone);
-      
+
    for (i = 0; i < sc->nbre_couche; i++)
    {
       fprintf(f1, "%i\n", sc->t[i]);
@@ -149,8 +149,8 @@ void ecrit_reseau()
    res = fwrite(sc->neurone, sizeof(type_neurone), sc->nbre_neurone, f1);
    debug_printf("neurons written to res file\n");
 
-/*   for (i = 0; i < sc->nbre_neurone; i++) 
-   { 
+/*   for (i = 0; i < sc->nbre_neurone; i++)
+   {
       printf("neuron %i : seuil = %f, s = %f, s1 = %f, s2 = %f, flag = %i, d = %f, last_activation = %f, cste = %f, groupe = %i, nbre_voie = %i, nbre_coeff = %i, max = %c, posx = %f, posy = %f, posz = %f, coeff = %p, nsor = %p\n\n", i, sc->neurone[i].seuil, sc->neurone[i].s, sc->neurone[i].s1, sc->neurone[i].s2, sc->neurone[i].flag, sc->neurone[i].d, sc->neurone[i].last_activation, sc->neurone[i].cste, sc->neurone[i].groupe, sc->neurone[i].nbre_voie, sc->neurone[i].nbre_coeff, sc->neurone[i].max, sc->neurone[i].posx, sc->neurone[i].posy, sc->neurone[i].posz, (void *)sc->neurone[i].coeff, (void *)sc->neurone[i].nsor);
       } */
 
@@ -239,12 +239,12 @@ int choix_liaisons_hasard(type_liaison * liaison, int neurone_deb,  /* numero du
 
 /*
 int choix_liaisons_voisinage(liaison,neurone_deb,neurone_fin,x,y,taille_arrivee,pas_entree,gpe_entree)
- type_liaison *liaison;     
- int neurone_deb;   numero du 1er neurone du groupe d'entree             
- int neurone_fin;   numero du dernier neurone ....                       
- int x,y;           position du neurone                                  
- int taille_arrivee;  taille de la matrice neurones sortie               
- int pas_entree;     pour ne tenir compte que des macro neurones          
+ type_liaison *liaison;
+ int neurone_deb;   numero du 1er neurone du groupe d'entree
+ int neurone_fin;   numero du dernier neurone ....
+ int x,y;           position du neurone
+ int taille_arrivee;  taille de la matrice neurones sortie
+ int pas_entree;     pour ne tenir compte que des macro neurones
  type_groupe *gpe_entree;
 */
 
@@ -270,7 +270,7 @@ int choix_liaisons_voisinage_core(type_liaison * liaison, int neurone_deb,  /* n
 
     entree_taillex=MY_Int2Int(gpe_entree->taillex);
     entree_tailley=MY_Int2Int(gpe_entree->tailley);
-    
+
     taillex=MY_Int2Int(gpe->taillex);
     tailley=MY_Int2Int(gpe->tailley);
 
@@ -300,7 +300,7 @@ int choix_liaisons_voisinage_core(type_liaison * liaison, int neurone_deb,  /* n
 
     if (dvx > 0. && dvx < echx) /* pour gerer les cas ou des liens ne seraient pas connectes */
     {
-        /*        dvx=echx; 
+        /*        dvx=echx;
            printf("nouvelle taille du voisinage dvx = %f \n",dvx); */
     }
     if (dvy > 0. && dvy < echy)
@@ -407,12 +407,12 @@ void conditionne_liaison(type_groupe * groupe, type_liaison * liaison,
   float norme;
 
   norme=MY_Float2Float(liaison->norme);
-  
+
   pt->type = no_voie + liaison->mode;
-  
+
   pt->gpe_liaison = no_gpe_liaison;
   pt->proba = 0.5;
-  
+
   if (groupe->type == No_Ou)
     {
       pt->val = 1.;
@@ -515,7 +515,7 @@ float alea_gauss(float moyenne, float ecart_type)
 }
 
 /* Mathias Quoy 01/03/2005 */
-/* initialisation aleatoire des poids suivant une loi normale de moyenne "J_barre" 
+/* initialisation aleatoire des poids suivant une loi normale de moyenne "J_barre"
    et d'ecart-type "J" */
 /* Pour fonctionnement chaotique, J_barre=0 et J=1/sqrt(nb de neurones) */
 
@@ -544,10 +544,10 @@ void init_corps_neurone(type_groupe * groupe, int j, int s_deb)
 
   seuil = MY_Float2Float(groupe->seuil);
   tolerance = MY_Float2Float(groupe->tolerance);
-  
+
   sc->neurone[j].seuil = seuil;
   sc->neurone[j].d = tolerance;
-  
+
   if (groupe->type == No_Kohonen)
     {
       sc->neurone[j].seuil = 0.;
@@ -560,7 +560,7 @@ void init_corps_neurone(type_groupe * groupe, int j, int s_deb)
     {
       sc->neurone[j].seuil = 0.;
     }
-  
+
   if (groupe->type == No_Ou)
     {
       sc->neurone[j].seuil = 1. - 1.e-6;
@@ -569,7 +569,7 @@ void init_corps_neurone(type_groupe * groupe, int j, int s_deb)
     {
       sc->neurone[j].seuil = 0.99;
     }
-  
+
   /* pas de liaison d'un neurone vers lui-meme */
   if (groupe->type == No_KO_Discret || groupe->type == No_KO_Continu)
     {
@@ -605,108 +605,114 @@ void creer_liaison_1_vers_tous_neurone(type_groupe * groupe, type_liaison * liai
       sc->neurone[j].coeff = pt;
       pt->entree = e_deb + pas_entree - 1;
       pt->evolution = sorte_liaison(liaison->type);
-      
-      if (groupe->type == No_KO_Discret
-      || groupe->type == No_KO_Continu)
+
+      if (groupe->type == No_KO_Discret || groupe->type == No_KO_Continu)
 	 /* entree recurrente */
-	 pt->proba = proba; /*1./sqrt(nbre); */
-      else
-	 pt->proba = 0.5;
-      
+      pt->proba = proba; /*1./sqrt(nbre); */
+		else pt->proba = 0.5;
+
+
+
       pt->type = no_voie + liaison->mode;
       pt->gpe_liaison = no_gpe_liaison;
       pt->val = norme + 0.001 + alea(0.001);
-      
+
       if (groupe->type == No_Ou)
         {
-	  pt->val = 1.;
-	  pt->evolution = 0;
+	        pt->val = 1.;
+			  pt->evolution = 0;
         }
       if (groupe->type == No_Et)
         {
-	  pt->val = 1. / ((float) groupe->nbre_voie);
-	  pt->evolution = 0;
+	         pt->val = 1. / ((float) groupe->nbre_voie);
+	         pt->evolution = 0;
         }
-      
+
       /* pas de liaison d'un neurone vers lui-meme */
       if (groupe->type == No_KO_Discret || groupe->type == No_KO_Continu)
         {
-	  init_seuils_alea_gauss(j,seuil,tolerance);
-	  if (j != (pt->entree- pas_entree + 1))
-	    init_poids_alea_gauss(pt, norme, pt->proba);
-	  else
-	    pt->val = 0.;
+	         init_seuils_alea_gauss(j,seuil,tolerance);
+	         if (j != (pt->entree- pas_entree + 1))   init_poids_alea_gauss(pt, norme, pt->proba);
+				else  pt->val = 0.;
         }
+
+		if (groupe->type == No_PCR)
+		{
+			if(rand()>RAND_MAX/2) pt->val = 1; else pt->val = 0;
+      }
     }                           /* traitement des coefficients suivants */
   else
     {
       pt1 = pointe_vers_dernier(j);
       pt = creer_coeff();
       pt->evolution = sorte_liaison(liaison->type);
-      
-      if (groupe->type == No_KO_Discret
-      || groupe->type == No_KO_Continu)
+
+      if (groupe->type == No_KO_Discret || groupe->type == No_KO_Continu)
 	 /* entree recurrente */
-	 pt->proba = proba; /*1./sqrt(nbre); */
-      else
-	 pt->proba = 0.5;
-      
+	      pt->proba = proba; /*1./sqrt(nbre); */
+      else  pt->proba = 0.5;
+
       pt1->s = pt;
       pt->entree = e_deb + pas_entree - 1;
       pt->type = no_voie + liaison->mode;
       pt->gpe_liaison = no_gpe_liaison;
       pt->val = norme + 0.001 + alea(0.001);
+
       if (groupe->type == No_Ou)
-        {
-	  pt->val = 1.;
-	  pt->evolution = 0;
-        }
+      {
+	        pt->val = 1.;
+	        pt->evolution = 0;
+      }
+
       if (groupe->type == No_Et)
-        {
-	  pt->val = 1. / ((float) groupe->nbre_voie);
-	  pt->evolution = 0;
-        }
+      {
+	        pt->val = 1. / ((float) groupe->nbre_voie);
+	        pt->evolution = 0;
+      }
+
       if (groupe->type == No_KO_Discret || groupe->type == No_KO_Continu)
-        {
-	  init_seuils_alea_gauss(j,seuil,tolerance);
-	  if (j != (pt->entree- pas_entree + 1))
-	    
-	    init_poids_alea_gauss(pt, norme, pt->proba);
-	  
-	  else
-	    pt->val = 0.;
-	  
-        }
-    }
-  
+      {
+	        init_seuils_alea_gauss(j,seuil,tolerance);
+	        if (j != (pt->entree- pas_entree + 1)) init_poids_alea_gauss(pt, norme, pt->proba);
+	        else  pt->val = 0.;
+      }
+
+		if (groupe->type == No_PCR)
+      {
+			if(rand()>RAND_MAX/2) pt->val = 1;
+			else pt->val = 0;
+		}
+
+	}
+
   for (i = e_deb + 2 * pas_entree - 1; i <= e_fin; i += pas_entree)   /*autres liaisons      *//* 2* ??? */
     {
       pt1 = pt;
       pt = creer_coeff();
       pt->evolution = sorte_liaison(liaison->type);
-      
-      if (groupe->type == No_KO_Discret
-      || groupe->type == No_KO_Continu)
-	 pt->proba = proba; /* 1./sqrt(nbre); */
-      else
-	 pt->proba = 0.5;
 
-      
+      if (groupe->type == No_KO_Discret || groupe->type == No_KO_Continu) pt->proba = proba; /* 1./sqrt(nbre); */
+      else  pt->proba = 0.5;
+
+
       pt1->s = pt;
       pt->entree = i;         /* pointe vers entree couche -1  */
       pt->type = no_voie + liaison->mode;
       pt->gpe_liaison = no_gpe_liaison;
       pt->val = norme + 0.001 + alea(0.001);
-      
+
       if (groupe->type == No_KO_Discret || groupe->type == No_KO_Continu)
-        {
-	  
-	  init_seuils_alea_gauss(j,seuil,tolerance);
-	  if (j != (pt->entree- pas_entree + 1))
-	    init_poids_alea_gauss(pt, norme, pt->proba);
-	  else
-	    pt->val = 0.;
-        }
+      {
+        		  init_seuils_alea_gauss(j,seuil,tolerance);
+        		  if (j != (pt->entree- pas_entree + 1)) init_poids_alea_gauss(pt, norme, pt->proba);
+        		  else pt->val = 0.;
+      }
+
+      if (groupe->type == No_PCR)
+      {
+			if(rand()>RAND_MAX/2) pt->val = 1;
+			else pt->val = 0;
+		}
     }
 }
 
@@ -724,9 +730,9 @@ void creer_liaison_1_vers_1_neurone(type_groupe * groupe, type_liaison * liaison
 {
   type_coeff *pt, *pt1;
   int j;
-  
+
   float norme;
-  
+
   norme = MY_Float2Float(liaison->norme);
 
   j = *no_neurone;
@@ -741,7 +747,7 @@ void creer_liaison_1_vers_1_neurone(type_groupe * groupe, type_liaison * liaison
       pt = creer_coeff();
       pt1->s = pt;
     }
-  
+
   pt->entree = *pos1;
   if (groupe->type == No_Ou)
     {
@@ -764,13 +770,13 @@ void creer_liaison_1_vers_1_neurone(type_groupe * groupe, type_liaison * liaison
       pt->val = norme;
       pt->evolution = sorte_liaison(liaison->type);
     }
-  
+
   pt->proba = 0.5;
-  
+
   pt->gpe_liaison = no_gpe_liaison;
   *pos1 = *pos1 + pas_entree;
   /*  printf("- entree = %d sortie = %d , e_fin = %d s_fin = %d\n",*pos1,j,e_fin,s_fin); */
-  
+
   if (j == s_fin && *pos1 <= e_fin) *no_neurone = s_deb - 1;    /*  dangereux si pas proportionnel */
   else if (*pos1 > e_fin)  *pos1 = e_deb + pas_entree - 1;
   /*  printf("+ entree = %d sortie = %d \n",*pos1,*no_neurone); */
@@ -791,9 +797,9 @@ void creer_liaison_1_vers_voisinage_neurone(type_groupe * groupe, type_liaison *
   type_coeff *pt, *pt1;
   int i;
   int nbre_liaisons;          /* lorsqu'il est lie au hasard = variable */
-  
+
   nbre_liaisons = MY_Int2Int(liaison->nbre);
-  
+
   if (liaison->type == No_l_1_a)
     nbre_liaisons = choix_liaisons_hasard(liaison, e_deb, e_fin, pas_entree);
   if (liaison->type == No_l_1_v || liaison->type == No_l_1_v_non_modif)
@@ -824,10 +830,10 @@ void creer_liaison_1_vers_voisinage_neurone(type_groupe * groupe, type_liaison *
 	  pt = creer_coeff();
 	  pt1->s = pt;
         }
-      
+
       conditionne_liaison(groupe, liaison, pt, no_voie, nbre_liaisons, no_gpe_liaison);
       pt->entree = liste[0];
-      
+
       for (i = 1; i < nbre_liaisons; i++) /*autres liaisons      */
         {
 	  if (liste[i] == -1)
@@ -840,7 +846,7 @@ void creer_liaison_1_vers_voisinage_neurone(type_groupe * groupe, type_liaison *
 			      no_gpe_liaison);
 	  pt->entree = liste[i];  /* pointe vers entree couche -1  */
         }
-      
+
     }
   else
     {
@@ -867,13 +873,13 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
   int dx, dy;                 /* taille du groupe de sortie */
   int j;
   int pos1;                   /* position entree prise pour 1 vers 1       */
-  
+
   type_groupe *groupe, *groupe_entree;
   int pas_entree, nbre = 0;
   int decalage;
-  
+
   int taillex,tailley,entree_nbre,groupe_taillex,groupe_tailley;
-  
+
   printf("creation des liaisons\n");
   groupe_entree = trouver_groupe(gpe_entree);
 
@@ -881,7 +887,7 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
   taillex=MY_Int2Int(groupe_entree->taillex);
   tailley=MY_Int2Int(groupe_entree->tailley);
   entree_nbre=MY_Int2Int(groupe_entree->nbre);
-  
+
   nbre = taillex * tailley;
   if(nbre == 0)
     {
@@ -890,21 +896,21 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
     }
   pas_entree = entree_nbre / nbre;
   printf("pas pour trouver les macro neurones du gpe d'entree = %d \n", pas_entree);
-  
+
   no_voie = no_voie * 2;      /* pair   = produit     */
   /* impair = distance    */
   groupe = trouver_groupe(gpe);
-  
+
   groupe_taillex=MY_Int2Int(groupe->taillex);
   groupe_tailley=MY_Int2Int(groupe->tailley);
-  
+
   dx = groupe_taillex;
   dy = groupe_tailley;
-  
+
   printf("taille du groupe de sortie en x : %d , en y : %d \n", dx, dy);
-  
+
   pos1 = e_deb + pas_entree - 1;
-  
+
   if (groupe->type == No_Winner_Colonne || groupe->type == No_PTM || groupe->type == No_Winner_Macro
       || groupe->type == No_PLG   || groupe->type == No_But || groupe->type == No_Pyramidal
       || groupe->type == No_Pyramidal_plan || groupe->type == No_Sigma_PI
@@ -912,28 +918,20 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
     decalage = no_voie / 2;
   else decalage = 0;
 
-  if (pas > 1)  
+  if (pas > 1)
      printf("creation d'un lien pour une categorie de micro neurones %d\n", decalage);
 
   x = y = z = 0;
   for (j = s_deb + decalage; j <= s_fin; j += pas)
     {
       init_corps_neurone(groupe, j, s_deb);
-      
-      if (liaison->type == No_l_1_t)
-	creer_liaison_1_vers_tous_neurone(groupe, liaison, j, pas_entree, no_voie,
-					  no_gpe_liaison, s_deb, e_deb, e_fin);
-      
-      if (liaison->type == No_l_1_1_modif
-	  || liaison->type == No_l_1_1_non_modif
-	  || liaison->type == No_l_1_1_non_modif_bloqueur)
-	creer_liaison_1_vers_1_neurone(groupe, liaison, &j, pas_entree,
-				       no_voie, no_gpe_liaison, s_deb,
-				       s_fin, e_deb, e_fin, &pos1);
-      
-      else if (liaison->type == No_l_1_a || liaison->type == No_l_1_v || liaison->type == No_l_1_v_non_modif)
-	creer_liaison_1_vers_voisinage_neurone(groupe, liaison, groupe_entree, j, x, y,
-					       pas_entree, no_voie, no_gpe_liaison, e_deb, e_fin);
+
+      if (liaison->type == No_l_1_t)	creer_liaison_1_vers_tous_neurone(groupe, liaison, j, pas_entree, no_voie, no_gpe_liaison, s_deb, e_deb, e_fin);
+
+      if (liaison->type == No_l_1_1_modif || liaison->type == No_l_1_1_non_modif || liaison->type == No_l_1_1_non_modif_bloqueur)
+	creer_liaison_1_vers_1_neurone(groupe, liaison, &j, pas_entree, no_voie, no_gpe_liaison, s_deb, s_fin, e_deb, e_fin, &pos1);
+
+      else if (liaison->type == No_l_1_a || liaison->type == No_l_1_v || liaison->type == No_l_1_v_non_modif)	creer_liaison_1_vers_voisinage_neurone(groupe, liaison, groupe_entree, j, x, y, pas_entree, no_voie, no_gpe_liaison, e_deb, e_fin);
       x++;
       if (x >= dx)
         {
