@@ -19,7 +19,7 @@ SYSTEM=`uname`
 PWD=`pwd`
 
 #les bibliotheques et leurs chemins d'acces
-GRAPHICLIBPATH="$PWD/../../lib/$SYSTEM/graphique"
+GRAPHICLIBPATH="$HOME/bin_leto_prom/Libraries"
 GRAPHICLIB="graphique"
 
 SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
