@@ -381,10 +381,10 @@ void init_group_visibility_properties()
 
 
     t = lien_no_nom_type_groupe[No_SAW].editable;
-    /*t[No_item_noise_level] = -1;
+    t[No_item_noise_level] = -1;
     t[No_item_dvp] = -1;
     t[No_item_dvn] = -1;
-     t[No_item_tolerance]=t[No_item_alpha]=t[No_item_nbre_de_1]=t[No_item_sigma_f]=-1; */
+    t[No_item_tolerance]=t[No_item_alpha]/*=t[No_item_nbre_de_1]*/=t[No_item_sigma_f]=-1; 
 
 
     t = lien_no_nom_type_groupe[No_Sigma_PI].editable;  /* fait */
