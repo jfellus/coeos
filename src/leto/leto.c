@@ -652,7 +652,7 @@ void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, Tx
     liaison->posy2 = groupe2->posy;
 
     MY_Data_Copy(liaison->nbre, groupe1->nbre);
-    MY_FloatAffect(liaison->norme, 0.1);
+    MY_FloatAffect(liaison->norme, 1.0);
     MY_FloatAffect(liaison->temps, 0.);
     MY_FloatAffect(liaison->stemps, 0.);
     MY_FloatAffect(liaison->proba, 1.);
