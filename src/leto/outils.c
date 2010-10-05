@@ -575,7 +575,7 @@ int selected_link(type_liaison *liaison, TxDonneesFenetre *onglet_leto)
 #ifndef AVEUGLE
   type_groupe *groupe_depart,*groupe_arrivee;
 
-  if(liaison->depart==-1 && liaison->arrivee==-1) return 1;
+ if(liaison->depart==-1 && liaison->arrivee==-1) return 0; /* avant =1;  pour eviter de tjs selectionner le lien -1 a -1 */
 
   groupe_depart=trouver_groupe_par_nom(liaison->depart_name,onglet_leto);
   if(groupe_depart==NULL)
