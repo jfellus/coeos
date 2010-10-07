@@ -127,6 +127,7 @@ static GtkActionEntry menu_items[] = {
     {"/Group/_Reverse", GTK_STOCK_REDO, "_Reverse", "<Release>R", "Reverse", G_CALLBACK(fonction_reverse) },
     {"/_Link", NULL, "_Link", NULL, NULL, NULL },
     {"/Link/_New", GTK_STOCK_ADD, "_New link", "<Release>L", "New", G_CALLBACK(create_link_callback) },
+    {"/Link/_New one-to-one", GTK_STOCK_ADD, "_New one-to-one link", "<Release>O", "New", G_CALLBACK(create_one_to_one_link_callback) },
     {"/Link/_Modify", NULL, "_Modify Link", "M", NULL, G_CALLBACK(modify_callback) },
     {"/Link/_Delete", GTK_STOCK_DELETE, "_Delete Link", "<Release>D", "Delete", G_CALLBACK(delete_callback) },
 

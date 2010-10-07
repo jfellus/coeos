@@ -276,10 +276,10 @@ void  affiche_parametres_liaison(type_liaison *liaison, TxPoint point2,TxDonnees
    point1.x = point1.x /*+ 5*/;
    point2.y = point2.y + 3;
    
-   if (liaison->secondaire == 0)
+   /*if (liaison->secondaire == 0)
    {
       TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, ".", font_weight);
-   }
+      }*/
     
    if (liaison->type == No_l_1_a)
       TxEcrireChaine(onglet_leto, sc->couleur_texte, point2, "A", font_weight);

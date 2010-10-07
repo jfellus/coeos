@@ -7,6 +7,9 @@
 #define LINK_CREATE_CHOOSE_START 1
 #define LINK_CREATE_CHOOSE_END 2
 
+#define LINK_ALGO 0
+#define LINK_ONE_TO_ONE 1
+
 #define	nbPoint_max	100
 #define nb_max_planes 2000
 
@@ -39,6 +42,7 @@ typedef struct donnees_script
   int modified;
 
   int flag_create_link;  /* 0 ou 1 utilise le flag modify_link */
+  int type_create_link;  /* 0 ou 1 utilise le flag modify_link */
 
   int flag_drag_group;              /* pour gere deplacement d'un groupe  */
 

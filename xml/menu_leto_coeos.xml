@@ -59,6 +59,7 @@
     </menu>
     <menu name="_Link" action="/_Link">
       <menuitem name="_New" action="/Link/_New" />
+      <menuitem name="_New one-to-one" action="/Link/_New one-to-one" />
       <menuitem name="_Modify" action="/Link/_Modify" />
       <menuitem name="_Delete" action="/Link/_Delete" />
     </menu>
@@ -89,6 +90,7 @@
   <popup name="popup">
     <menuitem name="Add group" action="/Group/_New" />
     <menuitem name="Add link" action="/Link/_New" />
+    <menuitem name="Add one-to-one link" action="/Link/_New one-to-one" />
     <separator />
     <menuitem name="Paste" action="/Edit/Paste" />
   </popup>
@@ -105,6 +107,7 @@
 
   <popup name="popupLink">
 	  <menuitem name="_New" action="/Link/_New" />
+	  <menuitem name="_New one-to-one" action="/Link/_New one-to-one" />
 	  <menuitem name="_Modify" action="/Link/_Modify" />
 	  <menuitem name="_Delete" action="/Link/_Delete" />
 	  <menuitem name="_Insert Bend" action="/Coude/_Insert" />

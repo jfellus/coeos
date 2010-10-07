@@ -28,6 +28,7 @@ void init_global_var_un_script(donnees_script *le_script)
   le_script->first_time = 1;
   le_script->modified=0;
   le_script->flag_create_link = LINK_CREATE_NO_ACTION;       /* 0 ou 1 utilise le flag modify_link */
+  le_script->type_create_link = LINK_ALGO;       /* 0 ou 1 utilise le flag modify_link */
   le_script->flag_rectangle_selection = 0;
   le_script->flag_drag_group = 0;        /* pour gere deplacement d'un groupe  */ 
   le_script->flag_drag_coude = 0;

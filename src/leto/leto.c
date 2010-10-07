@@ -218,7 +218,8 @@ void create_link_callback(GtkWidget * widget, gpointer data)
 
     if (sc->flag_create_link == LINK_CREATE_NO_ACTION)
     {
-        show_status(((t_gennet_script *) data)->onglet_leto,"Create one link -> Select start group");
+        show_status(((t_gennet_script *) data)->onglet_leto,"Create algo link -> Select start group");
+	sc->type_create_link = LINK_ALGO;       
         sc->flag_create_link = LINK_CREATE_CHOOSE_START;
     }
     else
@@ -226,6 +227,30 @@ void create_link_callback(GtkWidget * widget, gpointer data)
         sc->flag_create_link = LINK_CREATE_NO_ACTION;
         show_status(((t_gennet_script *) data)->onglet_leto,"Cancelled link creation");
     }
+}
+
+
+void create_one_to_one_link_callback(GtkWidget * widget, gpointer data)
+{
+#ifndef LETO
+    /* controle si on est dans un onglet Leto
+    * ( l'onglet Metaleto etant le numero 0 )
+    */
+    if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
+#endif
+
+    if (sc->flag_create_link == LINK_CREATE_NO_ACTION)
+    {
+        show_status(((t_gennet_script *) data)->onglet_leto,"Create one-to-one link -> Select start group");
+	sc->type_create_link = LINK_ONE_TO_ONE;       
+        sc->flag_create_link = LINK_CREATE_CHOOSE_START;
+    }
+    else
+    {
+        sc->flag_create_link = LINK_CREATE_NO_ACTION;
+        show_status(((t_gennet_script *) data)->onglet_leto,"Cancelled link creation");
+    }
+
 }
 
 /*---------------------------------------------------------------*/
@@ -612,7 +637,7 @@ void zoom(GtkWidget * widget, gpointer data)
 
 /*--------------------------------------------------*/
 
-void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, TxDonneesFenetre *onglet_leto)
+void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, TxDonneesFenetre *onglet_leto, int link_type)
 {
     type_liaison *liaison;
     type_groupe *groupe1, *groupe2;
@@ -645,14 +670,23 @@ void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, Tx
     memcpy(liaison->arrivee_name,groupe2->no_name,(strlen(groupe2->no_name)+1) * sizeof(char));
     liaison->arrivee = groupe2->no;
 
-    liaison->type = No_l_algorithmique;
+    if (link_type == LINK_ONE_TO_ONE)
+    {
+       liaison->type = No_l_1_1_non_modif;
+       MY_FloatAffect(liaison->norme, 1.0);
+    }
+    else
+    {
+       liaison->type = No_l_algorithmique;
+       MY_FloatAffect(liaison->norme, 0.1);
+    }
+       
     liaison->posx1 = groupe1->posx;
     liaison->posy1 = groupe1->posy;
     liaison->posx2 = groupe2->posx;
     liaison->posy2 = groupe2->posy;
 
     MY_Data_Copy(liaison->nbre, groupe1->nbre);
-    MY_FloatAffect(liaison->norme, 0.1);
     MY_FloatAffect(liaison->temps, 0.);
     MY_FloatAffect(liaison->stemps, 0.);
     MY_FloatAffect(liaison->proba, 1.);
@@ -703,7 +737,7 @@ int gere_modification_lien(TxPoint point,TxDonneesFenetre *onglet_leto)
 	 if ((group = test_group_position(sc->point_courant_leto)) != NULL)
 	 {
 	    memcpy(sc->groupe_arrivee_name, group->no_name, (strlen(group->no_name)+1) * sizeof(char));	    
-	    creation_lien(sc->groupe_depart_name, sc->groupe_arrivee_name, onglet_leto);
+	    creation_lien(sc->groupe_depart_name, sc->groupe_arrivee_name, onglet_leto, sc->type_create_link);
 	    sc->flag_create_link = LINK_CREATE_NO_ACTION;
 	    return 1;
 	 }

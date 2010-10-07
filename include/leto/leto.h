@@ -29,6 +29,7 @@ extern void fonction_reverse( /*w, rien, c */ );
 
 extern void creation_groupe(GtkWidget * widget, gpointer data);
 extern void create_link_callback(GtkWidget * widget, gpointer data);
+extern void create_one_to_one_link_callback(GtkWidget * widget, gpointer data);
 
 extern void detruit_liaison(type_liaison * liaison,TxDonneesFenetre *onglet_leto);
 extern void detruit_groupe(type_groupe *group, TxDonneesFenetre *onglet_leto);
