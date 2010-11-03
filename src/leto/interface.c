@@ -33,8 +33,8 @@ type_lien_no_nom lien_no_nom_type_groupe[nbre_type_groupes] = {  /* par defaut t
   {No_Micro_Pyramid, "Micro_Pyramid",               {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 20 */
   {No_SV_cor, "SV_cor",                             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 21 */
   {No_Dyn, "Dyn",                                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 22 */
-  {No_SAW, "No_SAW",                                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 23 */
-  {No_Sigma_PI, "No_Sigma_PI",                      {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 24 */
+  {No_SAW, "SAW",                                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 23 */
+  {No_Sigma_PI, "Sigma_PI",                         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 24 */
   {No_Winner_Selectif, "Selective Winner",          {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 25 */
   {No_Macro_Colonne, "Macro Column",                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 26 */
   {No_BREAK, "BREAK",                               {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 27 */
@@ -52,7 +52,7 @@ type_lien_no_nom lien_no_nom_type_groupe[nbre_type_groupes] = {  /* par defaut t
   {No_Sub_Network, "Sub_network",                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 39 */
   {No_LMS_delayed, "LMS_delayed",                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 40 */
   {No_Winner_Macro, "Winner_Macro",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 41 */
-  {No_CA3_timing, "CA3_timing",                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 42 */
+  {No_NLMS, "NLMS",                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 42 */
   {No_Sutton_Barto, "Sutton_Barto",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 43 */
   {No_PCR, "PCR",                                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}  /* 44 */
 };
@@ -333,11 +333,11 @@ void init_group_visibility_properties()
     t[No_item_dvn] = -1;
     t[No_item_tolerance] = t[No_item_alpha] = t[No_item_nbre_de_1] = t[No_item_sigma_f] = -1;
 
-    t = lien_no_nom_type_groupe[No_CA3_timing].editable;    /* fait */
+    t = lien_no_nom_type_groupe[No_NLMS].editable;    /* fait */
     t[No_item_noise_level] = -1;
     t[No_item_dvp] = -1;
     t[No_item_dvn] = -1;
-    t[No_item_tolerance] = t[No_item_alpha] = t[No_item_nbre_de_1] = t[No_item_sigma_f] = -1;
+    t[No_item_tolerance] = t[No_item_nbre_de_1] = t[No_item_sigma_f] = -1;
 
     t = lien_no_nom_type_groupe[No_Inter_neurone].editable; /* fait */
     t[No_item_noise_level] = -1;
@@ -385,7 +385,7 @@ void init_group_visibility_properties()
     t[No_item_noise_level] = -1;
     t[No_item_dvp] = -1;
     t[No_item_dvn] = -1;
-    t[No_item_tolerance]=t[No_item_alpha]/*=t[No_item_nbre_de_1]*/=t[No_item_sigma_f]=-1; 
+    t[No_item_tolerance] = t[No_item_sigma_f]=-1; 
 
 
     t = lien_no_nom_type_groupe[No_Sigma_PI].editable;  /* fait */
