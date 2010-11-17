@@ -515,11 +515,10 @@ void prepare_affichage()
     groupe = sc->deb_groupe;
     while (groupe != NULL)
     {
-        if (groupe->debug < 0)
+        if (groupe->debug > 0)
         {
             groupe->p_posx = orig_x * (taille_bloc + 20);
             groupe->p_posy = orig_y * (taille_bloc + 20) + 20;
-            groupe->debug = 1;
         }
         orig_x++;
         if (orig_x > 5)
