@@ -79,7 +79,7 @@ void creation(TxDonneesFenetre *onglet_leto)
     while (groupe != NULL)
       {
         i = groupe->no;
-        printf("etude du groupe %d\n", i);
+        debug_printf("etude du groupe %d\n", i);
         nbre_voie = 0;
         if (groupe->nbre_voie > 1
             && (groupe->type == No_PTM || groupe->type == No_Winner_Macro
@@ -121,7 +121,7 @@ void creation(TxDonneesFenetre *onglet_leto)
 	      }
 	  }
         s_fin = j - 1;
-	printf("s_deb = %d , s_fin = %d \n", s_deb, s_fin);
+	debug_printf("s_deb = %d , s_fin = %d \n", s_deb, s_fin);
         liaison = sc->deb_liaison;
         no_gpe_liaison = 1;     /* le 0 correspond aux liens entre micro et macro neurones */
         while (liaison != NULL)
@@ -143,7 +143,7 @@ void creation(TxDonneesFenetre *onglet_leto)
 		      break;
 		  }
                 e_fin = j - 1;
-	        printf("e_deb = %d ,e_fin = %d \n", e_deb, e_fin);
+	        debug_printf("e_deb = %d ,e_fin = %d \n", e_deb, e_fin);
                 creer_liaisons_entre_groupe(e_deb, e_fin, s_deb, s_fin, i, k,
                                             liaison, nbre_voie - 1, pas,
                                             no_gpe_liaison - 1);
@@ -165,7 +165,7 @@ void creation(TxDonneesFenetre *onglet_leto)
 	      val = 1.;
             else
 	      val = 1. / ((float) nbre_voie);
-            printf("creation w=%f %d \n", val, nbre_voie);
+            debug_printf("creation w=%f %d \n", val, nbre_voie);
             creer_micro_liens(s_deb, s_fin, i, nbre_voie, val);
 	  }
 	groupe = groupe->s;

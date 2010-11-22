@@ -317,7 +317,7 @@ int choix_liaisons_voisinage_core(type_liaison * liaison, int neurone_deb,  /* n
 
     if (dvx < 0. || dvy < 0.)   /*liens de 1 vers tous sur une ligne ou une colonne */
     {
-        printf("liaison de 1 vers tous sur une colonne ou une ligne \n");
+        debug_printf("liaison de 1 vers tous sur une colonne ou une ligne \n");
         if (dvx < 0.)
         {
             x = (float) (entree_taillex / 2);
@@ -880,7 +880,7 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
 
   int taillex,tailley,entree_nbre,groupe_taillex,groupe_tailley;
 
-  printf("creation des liaisons\n");
+  debug_printf("creation des liaisons\n");
   groupe_entree = trouver_groupe(gpe_entree);
 
   /* conversion si necessaire */
@@ -895,7 +895,7 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
       return;
     }
   pas_entree = entree_nbre / nbre;
-  printf("pas pour trouver les macro neurones du gpe d'entree = %d \n", pas_entree);
+  debug_printf("pas pour trouver les macro neurones du gpe d'entree = %d \n", pas_entree);
 
   no_voie = no_voie * 2;      /* pair   = produit     */
   /* impair = distance    */
@@ -907,7 +907,7 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
   dx = groupe_taillex;
   dy = groupe_tailley;
 
-  printf("taille du groupe de sortie en x : %d , en y : %d \n", dx, dy);
+  debug_printf("taille du groupe de sortie en x : %d , en y : %d \n", dx, dy);
 
   pos1 = e_deb + pas_entree - 1;
 
@@ -919,7 +919,7 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
   else decalage = 0;
 
   if (pas > 1)
-     printf("creation d'un lien pour une categorie de micro neurones %d\n", decalage);
+     debug_printf("creation d'un lien pour une categorie de micro neurones %d\n", decalage);
 
   x = y = z = 0;
   for (j = s_deb + decalage; j <= s_fin; j += pas)
@@ -939,6 +939,6 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
 	  y++;
         }
     }
-  printf("fin creation liaison\n");
+  debug_printf("fin creation liaison\n");
 }
 
