@@ -24,12 +24,11 @@ int rename_group(type_groupe *group, char *nom, TxDonneesFenetre *onglet_leto)
   type_groupe *group_temp;
 
   group_temp = lookup_hash_table((void **)&onglet_leto->hashtab, nom);
-
   if (group_temp == NULL)
   {
      debug_printf("rename_group: group %s changed to %s\n", group->no_name, nom);
      memcpy(group->no_name,nom, (strlen(nom)+1) * sizeof(char));
-     create_new_entry_in_hash_table(group, (void **)&onglet_leto->hashtab);
+     insert_hash_table((void **)&onglet_leto->hashtab, group->no_name, group);
      return 1;
   }
   else

@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
     setlocale(LC_ALL, "C");
 
     lecture(1, NULL);  /* lecture recursive a priori */
+    printf("script read: starting res file generation\n");
     creation(NULL);
     /*   ecrit_reseau();
 	 save_script(1,1);*/ /* on garde les commentaires , 0 pour les enlever*/

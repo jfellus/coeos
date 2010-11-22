@@ -128,6 +128,7 @@ void slide_groups_right(GtkWidget * widget, gpointer data);
 void about();
 
 void modify_callback(GtkWidget * widget, gpointer data);
+void automatic_rename_callback(GtkWidget * widget, gpointer data);
 void delete_callback(GtkWidget * widget, gpointer data);
 
 void dupliquer_coude_callback(GtkWidget * widget, gpointer data);

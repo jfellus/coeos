@@ -48,6 +48,7 @@ typedef	struct		s_computer
 #define	MAX_PATH_FILE_RES	256
 #define	MAX_PATH_FILE_CONFIG	256
 #define	MAX_PATH_FILE_BUS	256
+#define	MAX_PATH_FILE_VAR	256
 #define	MAX_PATH_FILE_DEV	256
 #define	MAX_PATH_FILE_PRT	256
 #define	MAX_PATH_FILE_GCD	256
@@ -60,6 +61,7 @@ typedef	struct		s_computer
 #define	EXT_SCRIPT_RES		".res"
 #define	EXT_SCRIPT_CONFIG	".config"
 #define	EXT_SCRIPT_BUS		".bus"
+#define	EXT_SCRIPT_VAR		".var"
 #define	EXT_SCRIPT_DEV		".dev"
 #define	EXT_SCRIPT_GCD		".gcd"
 #define	EXT_SCRIPT_PRT		".prt"
@@ -84,6 +86,7 @@ typedef	struct		s_prom_script
   char			path_file_res[MAX_PATH_FILE_RES];
   char			path_file_config[MAX_PATH_FILE_CONFIG];
   char			path_file_bus[MAX_PATH_FILE_BUS];
+  char			path_file_var[MAX_PATH_FILE_VAR];
   char			path_file_dev[MAX_PATH_FILE_DEV];
   char			path_file_prt[MAX_PATH_FILE_PRT];
   char			path_file_gcd[MAX_PATH_FILE_GCD];
@@ -179,6 +182,7 @@ int		promnet_prom_script_set_path_file_draw(t_prom_script *prom_script, char *pa
 int		promnet_prom_script_set_path_file_res(t_prom_script *prom_script, char *path_file_res);
 int		promnet_prom_script_set_path_file_config(t_prom_script *prom_script, char *path_file_config);
 int		promnet_prom_script_set_path_file_bus(t_prom_script *prom_script, char *path_file_bus);
+int		promnet_prom_script_set_path_file_var(t_prom_script *prom_script, char *path_file_var);
 int		promnet_prom_script_set_path_file_dev(t_prom_script *prom_script, char *path_file_dev);
 int		promnet_prom_script_set_path_file_prt(t_prom_script *prom_script, char *path_file_prt);
 int		promnet_prom_script_set_path_file_gcd(t_prom_script *prom_script, char *path_file_gcd);
@@ -193,6 +197,7 @@ char		*promnet_prom_script_get_path_file_draw(t_prom_script *prom_script);
 char		*promnet_prom_script_get_path_file_res(t_prom_script *prom_script);
 char		*promnet_prom_script_get_path_file_config(t_prom_script *prom_script);
 char		*promnet_prom_script_get_path_file_bus(t_prom_script *prom_script);
+char		*promnet_prom_script_get_path_file_var(t_prom_script *prom_script);
 char		*promnet_prom_script_get_path_file_dev(t_prom_script *prom_script);
 char		*promnet_prom_script_get_path_file_prt(t_prom_script *prom_script);
 char		*promnet_prom_script_get_path_file_gcd(t_prom_script *prom_script);

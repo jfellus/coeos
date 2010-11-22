@@ -246,6 +246,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
   GtkWidget		*e_pres = NULL;
   GtkWidget		*e_pconfig = NULL;
   GtkWidget		*e_pbus = NULL;
+  GtkWidget		*e_pvar = NULL;
   GtkWidget		*e_pdev = NULL;
   GtkWidget		*e_pprt = NULL;
   GtkWidget		*e_pgcd = NULL;
@@ -351,6 +352,16 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pbus, "Path to .bus :");
 
+  e_pvar = gtk_entry_new_with_max_length(MAX_PATH_FILE_VAR - 1);
+  if (pscript != NULL)
+    {
+      val = promnet_prom_script_get_path_file_var(pscript->prom_script);
+      gtk_entry_set_text(GTK_ENTRY(e_pvar), val);
+      if (val != NULL)
+	free(val);
+    }
+  OpenFile_control_browse(gen->gui->NewScriptDialog, e_pvar, "Path to .var :");
+
   e_pdev = gtk_entry_new_with_max_length(MAX_PATH_FILE_DEV - 1);
   if (pscript != NULL)
     {
@@ -454,6 +465,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
 	promnet_prom_script_set_path_file_res(script->prom_script, (char *)gtk_entry_get_text(GTK_ENTRY(e_pres)));
 	promnet_prom_script_set_path_file_config(script->prom_script, (char *)gtk_entry_get_text(GTK_ENTRY(e_pconfig)));
 	promnet_prom_script_set_path_file_bus(script->prom_script, (char *)gtk_entry_get_text(GTK_ENTRY(e_pbus)));
+	promnet_prom_script_set_path_file_var(script->prom_script, (char *)gtk_entry_get_text(GTK_ENTRY(e_pvar)));
 	promnet_prom_script_set_path_file_dev(script->prom_script, (char *)gtk_entry_get_text(GTK_ENTRY(e_pdev)));
 	promnet_prom_script_set_path_file_prt(script->prom_script, (char *)gtk_entry_get_text(GTK_ENTRY(e_pprt)));
 	promnet_prom_script_set_path_file_gcd(script->prom_script, (char *)gtk_entry_get_text(GTK_ENTRY(e_pgcd)));

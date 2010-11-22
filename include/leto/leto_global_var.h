@@ -92,7 +92,7 @@ typedef struct donnees_script
   type_vecteur_entier n;   /* nbre de neurones dans un groupe    */
   type_vecteur_entier ngc; /* nbre de groupes par couche         */
 
-  char nomfich1[LONGUEUR_NOM], freseau[LONGUEUR_NOM], draw[LONGUEUR_NOM];
+   char nomfich1[LONGUEUR_NOM], freseau[LONGUEUR_NOM], draw[LONGUEUR_NOM], fvar[LONGUEUR_NOM];
 
   int nbre_groupe, nbre_liaison;
 
@@ -106,6 +106,7 @@ typedef struct donnees_script
   int nbre_macro_lues;
   int nbre_groupes_lus;
 
+  long int seed;
 } donnees_script;
 
 

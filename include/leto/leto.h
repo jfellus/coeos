@@ -25,6 +25,8 @@ extern void select_plane(int plane,TxDonneesFenetre *onglet_leto);
 
 extern int gere_modification_lien(TxPoint point,TxDonneesFenetre *onglet_leto);
 
+extern void automatic_group_rename(TxDonneesFenetre *onglet_leto);
+
 extern void fonction_reverse( /*w, rien, c */ );
 
 extern void creation_groupe(GtkWidget * widget, gpointer data);
@@ -61,5 +63,5 @@ extern void swap_links_group(type_groupe *m,type_groupe *n);
 extern void create_dir_point_leto(); /* creation du repertoire .leto */
 
 /* mes fonctions a moi */
-extern void run_leto(char *fichier_script, char *fichier_draw,TxDonneesFenetre *onglet_leto,int idx, int numPage, long seed);
+extern void run_leto(char *fichier_script, char *fichier_draw, char *fichier_res, char *fichier_var, TxDonneesFenetre *onglet_leto,int idx, int numPage, long seed);
 #endif

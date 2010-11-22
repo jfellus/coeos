@@ -509,6 +509,8 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
   int 			i,nPage,idx;
   char			*nom_script = NULL;
   char			*nom_script_draw = NULL;
+  char			*nom_script_var = NULL;
+  char 			*nom_script_res = NULL;
   char			*nom_script_script = NULL;
   char			*copie_script_script = NULL;
   char			*pt = NULL;
@@ -621,6 +623,12 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
       if(copie_script_script != NULL)
 	free(copie_script_script);
     }
+
+  /* On memorise le chemin du reseau */
+  nom_script_res = promnet_prom_script_get_path_file_res(pscript->prom_script);
+
+  /* On memorise le chemin du .var */
+  nom_script_var = promnet_prom_script_get_path_file_var(pscript->prom_script);
   
   /*** Controle si le script n'est pas deja ouvert, cela est utile uniquement 
    *** si le nombre d'onglet genere par gtk est superieur a 1 
@@ -724,7 +732,7 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
       pscript->onglet_leto->gc = gdk_gc_new(pscript->onglet_leto->window->window);
       
       /* lancement de leto avec les nom de fichier.script et . draw et l'indice de script disponible et l'indice de l'onglet */
-      run_leto( nom_script_script, nom_script_draw, pscript->onglet_leto, idx, nPage, gen->seed);
+      run_leto( nom_script_script, nom_script_draw, nom_script_res, nom_script_var, pscript->onglet_leto, idx, nPage, gen->seed);
       pscript->sc=sc;
       sc = NULL;
 
@@ -2239,7 +2247,7 @@ void		writeDeploy(t_gennet *data, FILE *frun)
 	    fprintf(f_launch, "%s ", val+tmpi);
 	    if (val != NULL)
 	      free(val);
-	    
+
 	    val = promnet_prom_script_get_path_file_dev(scriptlist->script->prom_script);
 	    tmpi=get_filename_from_path(val);
 	    fprintf(f_launch, "%s ", val+tmpi);

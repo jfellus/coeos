@@ -122,7 +122,8 @@ static GtkActionEntry menu_items[] = {
 
     {"/_Group", NULL, "_Group", NULL, NULL, NULL },
     {"/Group/_New", GTK_STOCK_ADD, "_New group", "<Release>G", "New", G_CALLBACK(creation_groupe) },
-    {"/Group/_Modify", NULL, "_Modify", "M", NULL, G_CALLBACK(modify_callback) },
+    {"/Group/_Modify", NULL, "_Modify", "<Release>M", NULL, G_CALLBACK(modify_callback) },
+    {"/Group/_Automatic rename", NULL, "_Automatic rename", "<Control>A", NULL, G_CALLBACK(automatic_rename_callback) },
     {"/Group/_Delete", GTK_STOCK_DELETE, "_Delete", "<Release>Delete", "Delete", G_CALLBACK(delete_callback) },
     {"/Group/_Reverse", GTK_STOCK_REDO, "_Reverse", "<Release>R", "Reverse", G_CALLBACK(fonction_reverse) },
     {"/_Link", NULL, "_Link", NULL, NULL, NULL },

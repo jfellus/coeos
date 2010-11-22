@@ -61,6 +61,7 @@
 #include <stdlib.h>
 #include <locale.h>
 
+#include "block_create.h"
 #include "outils_script.h"
 #include "leto_global_var.h"
 #include "creation.h"
@@ -282,69 +283,39 @@ void renumeroter()
     }
 }
 
-
-/**
- * Renumber group m in group n, and update links accordingly.
- */
-void renumber_group(int m, int n)
+void automatic_group_rename(TxDonneesFenetre *onglet_leto)
 {
-    type_groupe *group;
-    type_liaison *link;
+   selected_group *sel_group;
+   void *x;
+   char temp_name[255] = "";
+   int index = 0;
 
-    group = trouver_groupe(m);
-    group->no = n;
-    link = sc->deb_liaison;
-    while (link != NULL)
-    {
-        if (link->depart == m)
-            link->depart = n;
-        if (link->arrivee == m)
-            link->arrivee = n;
-        link = link->s;
-    }
-}
+   for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
+   {
+      do 
+      {
+	 sprintf(temp_name, "TEMP[%i]", index);	 
+	 index++;
+      } while (rename_group(sel_group->group, temp_name, onglet_leto) == 0);
+   }
 
-
-/**
- * Renumber group m in group n, and group n in group m, and update links.
- * Used in callback to save provisoire goup in m
- */
-void swap_group_numbers(int m, int n)
-{
-    int temp;
-
-    if (m == n)  return;
-
-    temp = sc->nbre_groupe;
-
-    renumber_group(m, temp);
-    renumber_group(n, m);
-    renumber_group(temp, n);
-}
-
-/* generalisation de swap_group_numbers aux noms symboliques */
-void swap_links_group(type_groupe *m,type_groupe *n)
-{
-    type_liaison *link;
-
-    if (m == n)
-        return;
-
-    link = sc->deb_liaison;
-    while (link != NULL)
-    {
-        if (link->depart == m->no)
-	  {  
-	    link->depart = n->no; 
-	    memcpy(link->depart_name, n->no_name, (strlen(n->no_name)+1) * sizeof(char));
-	  }
-        if (link->arrivee == m->no)
-          {  
-	    link->arrivee = n->no; 
-	    memcpy( link->arrivee_name, n->no_name, (strlen(n->no_name)+1) * sizeof(char));
-	  } 
-        link = link->s;
-    }
+   index = 1;
+   for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
+   {
+      do
+      {
+	 sprintf(temp_name, "%i", index);	 
+	 index++;
+	 x = lookup_hash_table((void **)&(onglet_leto->hashtab), temp_name);
+      } while (x != NULL);
+      rename_group_and_associated_links(sel_group->group, temp_name, onglet_leto);
+   }
+   
+   if (sc->modified == 0)
+   {
+      sc->modified = 1;
+      set_title(onglet_leto);
+   }
 }
 
 
@@ -1261,7 +1232,7 @@ void init_target_table()
 }
 
 /* fonction de lancement de leto via metaleto */
-void run_leto(char *fichier_script, char *fichier_draw,TxDonneesFenetre *onglet_leto,int idx,int numPage, long seed)
+void run_leto(char *fichier_script, char *fichier_draw, char *fichier_res, char *fichier_var, TxDonneesFenetre *onglet_leto,int idx,int numPage, long seed)
 {
 #ifndef LETO
   char *ext;
@@ -1277,7 +1248,8 @@ void run_leto(char *fichier_script, char *fichier_draw,TxDonneesFenetre *onglet_
        seed = time(NULL);
     }
     srand48(seed);
-
+    sc->seed = seed;
+    
     if (sc->draw == NULL || strlen(sc->draw) == 0)
            sc->draw[0]='\0';
 
@@ -1312,6 +1284,18 @@ void run_leto(char *fichier_script, char *fichier_draw,TxDonneesFenetre *onglet_
       fprintf(stderr, "WARNING: file name extension "
 	      "should be '.draw'\n");
     memcpy(sc->draw, fichier_draw, (strlen(fichier_draw) + 1) * sizeof(char));
+
+    /* load the res file */
+    if (fichier_res != NULL && strlen(fichier_res) > 0)
+    {
+       ext = get_file_extension(fichier_res);
+       if (strcmp(ext, "res") != 0)
+	  fprintf(stderr, "WARNING: file name extension should be '.res'\n");
+       memcpy(sc->freseau, fichier_res, (strlen(fichier_res) + 1) * sizeof(char));
+    }
+
+    /* load the var file */
+    memcpy(sc->fvar, fichier_var, (strlen(fichier_var) + 1) * sizeof(char));
 #endif
     /* lecture recursive du script par defaut, definie dans script.c */
     lecture(1,onglet_leto);
@@ -1522,7 +1506,7 @@ int main(int argc, char *argv[])
 	 * et l'indice de l'onglet,
 	 * les .scripts et .draw sont deja definie avant donc inutile de les mettres en arguments,
 	 * comme leto est un unique onglet, l'indice d'onglet et de script sont egal a zero */
-	run_leto("", "", pscript->onglet_leto, 0, 0, seed);
+	run_leto("", "", "", "", pscript->onglet_leto, 0, 0, seed);
 	pscript->sc=sc;
 
 	set_title(pscript->onglet_leto);

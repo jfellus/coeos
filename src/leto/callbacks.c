@@ -1696,6 +1696,7 @@ void set_random_gen(GtkWidget * widget, gpointer data)
     {
         sscanf(gtk_entry_get_text(GTK_ENTRY(entry)), "%d", &val);
         srand48((long) val);
+	sc->seed = val;
         snprintf(buf, 80, "Pseudo random generator value set to : %d", val);
         show_status(((t_gennet_script *) data)->onglet_leto,buf);
     }
@@ -1916,6 +1917,29 @@ void modify_callback(GtkWidget * widget, gpointer data)
        formulaire_lien(sc->liaison_courante, ((t_gennet_script *) data)->onglet_leto);
     }
     
+    regenerer_test(((t_gennet_script *) data)->onglet_leto);
+}
+
+/**
+ * Callback to automatically rename groups
+ */
+void automatic_rename_callback(GtkWidget * widget, gpointer data)
+{
+   TxDonneesFenetre *onglet_leto = ((t_gennet_script *) data)->onglet_leto;
+
+#ifndef LETO
+    /* controle si on est dans un onglet Leto
+    * ( l'onglet Metaleto etant le numero 0 )
+    */
+   if(tab_is_Metaleto(onglet_leto) == 0) return;
+#endif
+
+    if (sc->groupes_courants != NULL)
+    {
+       automatic_group_rename(onglet_leto);
+       show_status(onglet_leto, "Group(s) renamed");
+    }    
+
     regenerer_test(((t_gennet_script *) data)->onglet_leto);
 }
 
@@ -2406,9 +2430,13 @@ void slide_groups_right(GtkWidget * widget, gpointer data)
 void creation_cb(GtkWidget * widget, gpointer data)
 {
   gboolean res = TRUE;
-  donnees_script sc_tmp, *sc_save;
-  char script[MAX_PATH],file_res[MAX_PATH],draw[MAX_PATH];
-  TxDonneesFenetre *onglet_leto_tmp;
+  /* donnees_script sc_tmp, *sc_save; */
+  /* char script[MAX_PATH],file_res[MAX_PATH],draw[MAX_PATH]; */
+  /* TxDonneesFenetre *onglet_leto_tmp; */
+  char file_script[MAX_PATH],chemin_env[MAX_PATH];
+  
+  memset(file_script,0,sizeof(char)*MAX_PATH); /* initialise le tableau */
+  memcpy(file_script,sc->nomfich1, (strlen(sc->nomfich1) + 1) * sizeof(char));	
 
 #ifndef LETO
   /* controle si on est dans un onglet Leto
@@ -2417,7 +2445,6 @@ void creation_cb(GtkWidget * widget, gpointer data)
   if(tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto)==0) return;
 #endif
 
-  memset(&sc_tmp, 0,sizeof(donnees_script));
   
   /**************************************************************
    *                                                            *
@@ -2442,63 +2469,49 @@ void creation_cb(GtkWidget * widget, gpointer data)
 #else
     Winmain = ((t_gennet_script *) data)->onglet_leto->window;
 #endif
+
+    if (strlen(sc->fvar) == 0)  
+    {
+     
+       dialog = gtk_file_chooser_dialog_new("Open a file.var",
+					    GTK_WINDOW(Winmain),
+					    GTK_FILE_CHOOSER_ACTION_OPEN,
+					    GTK_STOCK_CANCEL,
+					    GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN,
+					    GTK_RESPONSE_ACCEPT, NULL);
+       
+       filter = gtk_file_filter_new();
+       gtk_file_filter_set_name(GTK_FILE_FILTER(filter), "Variable");
+       gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter), "*.var");
+       gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),
+				   GTK_FILE_FILTER(filter));
     
-    dialog = gtk_file_chooser_dialog_new("Open a file.var",
-					 GTK_WINDOW(Winmain),
-					 GTK_FILE_CHOOSER_ACTION_OPEN,
-					 GTK_STOCK_CANCEL,
-					 GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN,
-					 GTK_RESPONSE_ACCEPT, NULL);
+       result = gtk_dialog_run(GTK_DIALOG(dialog));
+       
+       switch (result)
+       {
+	  case GTK_RESPONSE_ACCEPT :
+	     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
+	     break;
+	  case GTK_RESPONSE_REJECT :
+	     gtk_widget_destroy(dialog);
+	     return;
+	  default :
+	     gtk_widget_destroy(dialog);
+	     return;
+       }
+       gtk_widget_destroy(dialog);
+       memcpy(sc->fvar, filename, (strlen(filename) + 1) * sizeof(char));
+    }
+
+    get_base_path_name(file_script);
+    strcat(file_script,".script");
     
-    filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(GTK_FILE_FILTER(filter), "Variable");
-    gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter), "*.var");
-    gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),
-				GTK_FILE_FILTER(filter));
-    
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
-    
-    switch (result)
-      {
-      case GTK_RESPONSE_ACCEPT :
-	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
-	break;
-      case GTK_RESPONSE_REJECT :
-	gtk_widget_destroy(dialog);
-	return;
-      default :
-	gtk_widget_destroy(dialog);
-	return;
-      }
-    gtk_widget_destroy(dialog);
-    
+    /* le script lpreprocess demande en argument le fichier.symb le fichier.var et le fichier.script */
+    sprintf(chemin_env,"lpreprocess.sh %s %s %s", sc->nomfich1, sc->fvar, file_script);
     /* on cree un processus qui va executer le lpprocess
      * car exec ecrase le processus courant */
-      {
-	/* le script lpreprocess demande en argument le fichier.symb le fichier.var et le fichier.script */
-	char script[MAX_PATH],file_script[MAX_PATH],chemin_env[MAX_PATH],bash[MAX_PATH];
-	char *env;
- 	memset(script,0,sizeof(char)*MAX_PATH); /* initialise le tableau */
- 	memset(file_script,0,sizeof(char)*MAX_PATH); /* initialise le tableau */
-	
-
-	memcpy(file_script,sc->nomfich1, (strlen(sc->nomfich1) + 1) * sizeof(char));
-	get_base_path_name(file_script);
-	strcat(file_script,".script");
-	
-	/* lancement du script :
-	 * on recupere le chemin maison (HOME) puis on construit le chemin vers
-	 * le pre process avant de l'executer */
-	env=getenv("HOME");
-	if(env==NULL){
-	  fprintf(stderr,"Erreur : la variable d'environnement HOME est indefinie\n");
-	  return;
-	}
-	sprintf(chemin_env,"%s/bin_leto_prom/lpreprocess.sh %s %s %s",env, sc->nomfich1,filename,file_script);
-	sprintf(bash, "%s", "/bin/bash");
-	system(chemin_env);
-      }
-
+    system(chemin_env);
   }
   
   save_file(widget, data);
@@ -2507,10 +2520,16 @@ void creation_cb(GtkWidget * widget, gpointer data)
   
   if (strlen(sc->freseau) == 0)  
     res = set_binary_file(widget, data);
-  
+ 
+ 
   if (res == FALSE || strlen(sc->freseau) == 0) 
     return;
   
+
+  sprintf(chemin_env,"echo %li | cc_leto %s %s", sc->seed, file_script, sc->freseau);
+  system(chemin_env);
+
+
   /*******************************************************************
    * Dans le cas de la version symbolique et donc d'un .symb         *
    * on utilise un sc temporaire, on memorise le script courant (sc) *
@@ -2518,54 +2537,56 @@ void creation_cb(GtkWidget * widget, gpointer data)
    * puis on effectue la creation du .res                            *
    * pour finir on reprend l'ancien sc                               *
    *******************************************************************/
+
+  /* memset(&sc_tmp, 0,sizeof(donnees_script)); */
   
-  if(sc->flag_symb==1)
-    {
-    if ((onglet_leto_tmp = malloc(sizeof(TxDonneesFenetre))) == NULL)
-      {
-	g_critical("creation_cb : Memory error");
-	/* fermer ce qu'il faut */
-	return ;			
-      }
-    memset(onglet_leto_tmp, 0, sizeof(TxDonneesFenetre));
-    /* initialise la table de hachage d'un onglet */
-    init_hash_table((void **)&onglet_leto_tmp->hashtab);
+  /* if(sc->flag_symb==1) */
+  /*   { */
+  /*   if ((onglet_leto_tmp = malloc(sizeof(TxDonneesFenetre))) == NULL) */
+  /*     { */
+  /* 	g_critical("creation_cb : Memory error"); */
+  /* 	/\* fermer ce qu'il faut *\/ */
+  /* 	return ;			 */
+  /*     } */
+  /*   memset(onglet_leto_tmp, 0, sizeof(TxDonneesFenetre)); */
+  /*   /\* initialise la table de hachage d'un onglet *\/ */
+  /*   init_hash_table((void **)&onglet_leto_tmp->hashtab); */
 
-    memset(script,0,sizeof(char)*MAX_PATH); /* initialise le tableau */
-    memcpy(script,sc->nomfich1, (strlen(sc->nomfich1) + 1) * sizeof(char));
-    get_base_path_name(script);
-    strcat(script,".script");
+  /*   memset(script,0,sizeof(char)*MAX_PATH); /\* initialise le tableau *\/ */
+  /*   memcpy(script,sc->nomfich1, (strlen(sc->nomfich1) + 1) * sizeof(char)); */
+  /*   get_base_path_name(script); */
+  /*   strcat(script,".script"); */
 
-    memset(file_res,0,sizeof(char)*MAX_PATH); /* initialise le tableau */
-    memcpy(file_res,sc->freseau, (strlen(sc->freseau) + 1) * sizeof(char));
+  /*   memset(file_res,0,sizeof(char)*MAX_PATH); /\* initialise le tableau *\/ */
+  /*   memcpy(file_res,sc->freseau, (strlen(sc->freseau) + 1) * sizeof(char)); */
 
-    memset(draw,0,sizeof(char)*MAX_PATH); /* initialise le tableau */
-    memcpy(draw,sc->draw, (strlen(sc->draw) + 1) * sizeof(char));
+  /*   memset(draw,0,sizeof(char)*MAX_PATH); /\* initialise le tableau *\/ */
+  /*   memcpy(draw,sc->draw, (strlen(sc->draw) + 1) * sizeof(char)); */
         
-    sc_save = sc;
-    sc=&sc_tmp;
+  /*   sc_save = sc; */
+  /*   sc=&sc_tmp; */
 
-    init_global_var_un_script(sc);
-    cree_lien_micro_macro();   /* pour pouvoir avoir dans le script les info 
-                                   sur les liens dans le macro neurone */ 
-    /*init_display_planes(); */
-    init_target_table();
+  /*   init_global_var_un_script(sc); */
+  /*   cree_lien_micro_macro();   /\* pour pouvoir avoir dans le script les info  */
+  /*                                  sur les liens dans le macro neurone *\/  */
+  /*   /\*init_display_planes(); *\/ */
+  /*   init_target_table(); */
 
-    memcpy(sc->nomfich1,script,(strlen(script)+1) * sizeof(char));
-    memcpy(sc->freseau,file_res,(strlen(file_res)+1) * sizeof(char));
-    memcpy(sc->draw,draw,(strlen(draw)+1) * sizeof(char));
+  /*   memcpy(sc->nomfich1,script,(strlen(script)+1) * sizeof(char)); */
+  /*   memcpy(sc->freseau,file_res,(strlen(file_res)+1) * sizeof(char)); */
+  /*   memcpy(sc->draw,draw,(strlen(draw)+1) * sizeof(char)); */
 
-    onglet_leto_tmp->window=NULL;
-    lecture(1,onglet_leto_tmp);
+  /*   onglet_leto_tmp->window=NULL; */
+  /*   lecture(1,onglet_leto_tmp); */
 
-    creation(((t_gennet_script *) data)->onglet_leto);
+  /*   creation(((t_gennet_script *) data)->onglet_leto); */
 
-    free(onglet_leto_tmp);
+  /*   free(onglet_leto_tmp); */
 
-    sc = sc_save;
-  }
-  else
-    creation(((t_gennet_script *) data)->onglet_leto);
+  /*   sc = sc_save; */
+  /* } */
+  /* else */
+  /*   creation(((t_gennet_script *) data)->onglet_leto); */
   
   show_status(((t_gennet_script *) data)->onglet_leto,"Compiled to binary file : %s", sc->freseau);
 }

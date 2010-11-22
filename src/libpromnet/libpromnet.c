@@ -638,6 +638,12 @@ void		promnet_prom_script_set_all_path(t_prom_script *prom_script, char *path, c
       sprintf(all_path, "%s/%s%s", path, prom_script->logical_name, EXT_SCRIPT_BUS);
       promnet_prom_script_set_path_file_bus(prom_script, all_path);
     }
+  if (strlen(prom_script->path_file_var) <= 0)
+    {
+      memset(all_path, 0, MAX_ALL_PATH * sizeof(char));
+      sprintf(all_path, "%s/%s%s", path, prom_script->logical_name, EXT_SCRIPT_VAR);
+      promnet_prom_script_set_path_file_var(prom_script, all_path);
+    }
   if (strlen(prom_script->path_file_dev) <= 0)
     {
       memset(all_path, 0, MAX_ALL_PATH * sizeof(char));
@@ -797,6 +803,30 @@ int		promnet_prom_script_set_path_file_bus(t_prom_script *prom_script, char *pat
     {
       memcpy(prom_script->path_file_bus, path_file_bus, len + 1);
       setBus(prom_script->data, path_file_bus);
+      return 0;
+    }
+  return -1;
+}
+
+int		promnet_prom_script_set_path_file_var(t_prom_script *prom_script, char *path_file_var)
+{
+  int		len = -1;
+
+  if (prom_script == NULL)
+    {
+      fprintf(stderr, "promnet_prom_script_set_path_file_var : invalid prom_script pointer\n");
+      return -1;
+    }
+  if (path_file_var == NULL)
+    {
+      fprintf(stderr, "promnet_prom_script_set_path_file_var : invalid path_file_var pointer\n");
+      return -1;
+    }
+  len = strlen(path_file_var);
+  if ((len >= 0) && (len < MAX_PATH_FILE_VAR))
+    {
+      memcpy(prom_script->path_file_var, path_file_var, len + 1);
+      setVar(prom_script->data, path_file_var);
       return 0;
     }
   return -1;
@@ -1073,6 +1103,23 @@ char		*promnet_prom_script_get_path_file_bus(t_prom_script *prom_script)
       return NULL;
     }    
   return path_file_bus;
+}
+
+char		*promnet_prom_script_get_path_file_var(t_prom_script *prom_script)
+{
+  char		*path_file_var = NULL;
+
+  if (prom_script == NULL)
+    {
+      fprintf(stderr, "promnet_prom_script_get_path_file_var : invalid prom_script pointer\n");
+      return NULL;
+    }
+  if ((path_file_var = strdup((void *)prom_script->path_file_var)) == NULL)
+    {
+      perror("promnet_prom_script_get_path_file_var : error");
+      return NULL;
+    }    
+  return path_file_var;
 }
 
 char		*promnet_prom_script_get_path_file_dev(t_prom_script *prom_script)
@@ -1556,6 +1603,10 @@ int		promnet_load_prom_script(t_promnet *promnet)
 
       val = getBus(prom_script->data);
       promnet_prom_script_set_path_file_bus(prom_script, val);
+      free(val);
+
+      val = getVar(prom_script->data);
+      promnet_prom_script_set_path_file_var(prom_script, val);
       free(val);
 
       val = getDev(prom_script->data);
