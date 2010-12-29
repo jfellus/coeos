@@ -10,6 +10,11 @@
 ####################################################
 #Definition des chemins d'acces, options de compile etc...
 ####################################################
+####################################################
+#definition de $CFLAGS $FLAGS_OPTIM $FLAGS_DEBUG $INCLUDE2 (pour specif mac)
+####################################################
+source ../../scripts/COMPILE_FLAG
+
 # Nom du programme
 PROG_NAME="coeos"
 
