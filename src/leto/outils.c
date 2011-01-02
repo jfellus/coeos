@@ -2,6 +2,15 @@
 #include "outils_script.h"
 #include "gere_coudes.h"
 
+
+void kprints(const char *fmt, ...) /* version simplifiee du kernel pour permettre la compilation des librairies*/
+{
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(stdout,fmt, ap);
+  va_end(ap);
+}
+
 /* Fonction qui retire l'extension .script */
 void get_base_path_name(char *filename)
 {
