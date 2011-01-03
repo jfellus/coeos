@@ -23,7 +23,7 @@ GRAPHICLIBPATH="$HOME/bin_leto_prom/Libraries"
 GRAPHICLIB="graphique"
 
 SCRIPTLIBPATH="$PWD/../lib/$SYSTEM/script"
-SCRIPTLIB="script_symb_polyline"
+SCRIPTLIB="script_symb"
 
 GTKINCLUDES="`pkg-config --cflags gtk+-2.0 gthread-2.0`"
 GTKLIB=`pkg-config --libs gtk+-2.0 gthread-2.0`
@@ -46,7 +46,7 @@ fi
 #Version finale des libs, includes et flags
 FINALINCLUDES="$INCLUDES"
 FINALLIBS="$LIBS -L$SCRIPTLIBPATH -l$SCRIPTLIB -L$GRAPHICLIBPATH -l$GRAPHICLIB"
-FINALCFLAGS="$CFLAGS -DLETO -DSYMBOLIQUE_VERSION -DCOUDES_POLYLINE"
+FINALCFLAGS="$CFLAGS -DLETO -DSYMBOLIQUE_VERSION"
 
 #Les repertoires de destination des fichiers compiles
 BINDIR=$PWD/../bin/$SYSTEM

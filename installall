@@ -1,3 +1,3 @@
-bash Create_All_Makefile.sh -enable-polyline-leto
+bash Create_All_Makefile.sh
 make reset 
 make

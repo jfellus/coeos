@@ -23,7 +23,7 @@ GRAPHICLIBPATH="$HOME/bin_leto_prom/Libraries"
 GRAPHICLIB="graphique"
 
 SCRIPTLIBPATH="$PWD/../lib/$SYSTEM/script"
-SCRIPTLIB="script_polyline"
+SCRIPTLIB="script"
 
 MATHLIB=" -lm"
 
@@ -38,7 +38,7 @@ CFLAGS=" -O2  -Wall  -D_REENTRANT -D_GNU_SOURCE -DDAEMON_COM -D`uname` -DAVEUGLE
 #Version finale des libs, includes et flags
 FINALINCLUDES="$INCLUDES"
 FINALLIBS="-L$SCRIPTLIBPATH -l$SCRIPTLIB $LIBS"
-FINALCFLAGS="$CFLAGS -DCOUDES_POLYLINE"
+FINALCFLAGS="$CFLAGS"
 
 #Les repertoires de destination des fichiers compiles
 BINDIR=$PWD/../bin/$SYSTEM

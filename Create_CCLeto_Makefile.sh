@@ -19,7 +19,7 @@ PROG_NAME="cc_leto"
 GRAPHICLIBPATH="$HOME/bin_leto_prom/Libraries"
 
 SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
-SCRIPTLIB="script_polyline"
+SCRIPTLIB="script"
 
 # Initialisation des libs, includes et flags
 LIBS="$GTKLIB $MATHLIB -pthread -lmxml -L$GRAPHICLIBPATH $GRAPHICLIB"
@@ -29,7 +29,7 @@ INCLUDES="$GTKINCLUDES -I$PWD/../../shared/include/ -I$PWD/include/ -I$PWD/inclu
 CFLAGS="$CFLAGS -O2 -DAVEUGLE "
 FINALINCLUDES="$INCLUDES"
 FINALLIBS="-L$SCRIPTLIBPATH -l$SCRIPTLIB $LIBS"
-FINALCFLAGS="$CFLAGS -DCOUDES_POLYLINE"
+FINALCFLAGS="$CFLAGS"
 
 #Les repertoires de destination des fichiers compiles
 BINDIR=$PWD/../../bin/$SYSTEM

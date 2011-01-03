@@ -1,3 +1,3 @@
-bash Create_All_Makefile_eclipse.sh -enable-polyline-leto
+bash Create_All_Makefile_eclipse.sh
 make reset 
 make

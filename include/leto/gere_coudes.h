@@ -1,19 +1,6 @@
 #ifndef GERE_COUDES_H
 #define GERE_COUDES_H
 
-#ifdef COUDES_POLYLINE
-#else
-extern type_coude *creer_coude();
-extern void ajouter_coude(type_liaison *liaison, type_coude *coude);
-
-void free_coude(type_coude *coude);
-
-extern int test_coude_position(TxPoint point, TxDonneesFenetre *onglet_leto);
-extern void inserer_coude(type_coude * coude1, type_coude * coude);
-
-
-#endif
-
 extern int test_link_position(TxPoint point);
 
 extern int get_link_points(type_liaison *liaison, TxPoint tab[]);
