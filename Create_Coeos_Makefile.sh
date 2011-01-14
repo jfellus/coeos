@@ -24,11 +24,9 @@ SYSTEM=`uname`
 PWD=`pwd`
 
 #les bibliotheques et leurs chemins d'acces
-GRAPHICLIBPATH="$HOME/bin_leto_prom/Libraries"
-GRAPHICLIB="graphique"
-
+GRAPHICLIBPATH="$PWD/../../lib/$SYSTEM/graphique"
 SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
-SCRIPTLIB="script_symb"
+
 
 GTKINCLUDES="`pkg-config --cflags gtk+-2.0 gthread-2.0`"
 GTKLIB=`pkg-config --libs gtk+-2.0 gthread-2.0`
@@ -50,7 +48,7 @@ fi
 
 #Version finale des libs, includes et flags
 FINALINCLUDES="$INCLUDES"
-FINALLIBS="$LIBS -L$SCRIPTLIBPATH -l$SCRIPTLIB -L$GRAPHICLIBPATH -l$GRAPHICLIB"
+FINALLIBS="$LIBS -L$SCRIPTLIBPATH $SCRIPTLIB -L$GRAPHICLIBPATH $GRAPHICLIB"
 FINALCFLAGS="$CFLAGS -DSYMBOLIQUE_VERSION"
 
 #Les repertoires de destination des fichiers compiles

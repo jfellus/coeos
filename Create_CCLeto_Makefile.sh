@@ -16,10 +16,8 @@ source ../../scripts/COMPILE_FLAG
 PROG_NAME="cc_leto"
 
 #les bibliotheques et leurs chemins d'acces
-GRAPHICLIBPATH="$HOME/bin_leto_prom/Libraries"
-
+GRAPHICLIBPATH="$PWD/../../lib/$SYSTEM/graphique"
 SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
-SCRIPTLIB="script"
 
 # Initialisation des libs, includes et flags
 LIBS="$GTKLIB $MATHLIB -pthread -lmxml -L$GRAPHICLIBPATH $GRAPHICLIB"
@@ -28,7 +26,7 @@ INCLUDES="$GTKINCLUDES -I$PWD/../../shared/include/ -I$PWD/include/ -I$PWD/inclu
 #Version finale des libs, includes et flags
 CFLAGS="$CFLAGS -O2 -DAVEUGLE "
 FINALINCLUDES="$INCLUDES"
-FINALLIBS="-L$SCRIPTLIBPATH -l$SCRIPTLIB $LIBS"
+FINALLIBS="-L$SCRIPTLIBPATH $SCRIPTLIB $LIBS"
 FINALCFLAGS="$CFLAGS"
 
 #Les repertoires de destination des fichiers compiles
