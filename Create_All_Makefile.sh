@@ -9,9 +9,9 @@ SYSTEM=$(uname)
 PWD=$(pwd)
 OBJDIR="$PWD/obj/$SYSTEM"
 
-bash Create_Coeos_Makefile.sh -enable-cairo $*
-bash Create_Leto_Makefile.sh -enable-cairo $*
-bash Create_Sleto_Makefile.sh -enable-cairo $*
+bash Create_Coeos_Makefile.sh $*
+bash Create_Leto_Makefile.sh $*
+bash Create_Sleto_Makefile.sh  $*
 bash Create_CCLeto_Makefile.sh $*
 
 # Resets the previous Makefile

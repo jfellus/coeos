@@ -326,19 +326,17 @@ void		DrawingArea_expose_event_comlink(GtkWidget *widget, GdkEventExpose *event,
   t_gennet				*gen = (t_gennet *)data;
   t_gennet_comlink			*comlink = NULL;
   t_polyline				*polyline = NULL;
-#ifdef USE_CAIRO
+
   GdkColor				*color = NULL;
   cairo_t 				*cr = NULL;
-#else
-  GdkPoint				arrow[3];
-#endif
+
   double 				angle, dy;
 
   debug_printf("expose_event_comlink\n");
 
-#ifdef USE_CAIRO
+
   cr = gdk_cairo_create(GTK_LAYOUT(widget)->bin_window);
-#endif
+
 
   for (comlink = gen->comlinks; comlink != NULL; comlink = comlink->next)
     {
@@ -346,7 +344,7 @@ void		DrawingArea_expose_event_comlink(GtkWidget *widget, GdkEventExpose *event,
       if ((comlink->in == NULL) || (comlink->out == NULL))
 	continue;
 
-#ifdef USE_CAIRO
+
       comlink->color = cairo_pattern_create_linear(comlink->in->pos_x, comlink->in->pos_y, comlink->out->pos_x, comlink->out->pos_y);
 	  
       color = &couleurs[comlink->in->color_index];       
@@ -355,44 +353,29 @@ void		DrawingArea_expose_event_comlink(GtkWidget *widget, GdkEventExpose *event,
       cairo_pattern_add_color_stop_rgb(comlink->color, 1., color->red/65535., color->green/65535., color->blue/65535.);
 
       cairo_set_source(cr, comlink->color);
-#endif
+
       for(polyline = comlink->polyline_list.first; polyline != NULL; polyline = polyline->next)
 	{
 
-#ifdef USE_CAIRO
+
 	  cairo_move_to (cr, (double) polyline->x_b, (double) polyline->y_b);
 	  cairo_line_to (cr, (double) polyline->x_e, (double) polyline->y_e); 
 	  cairo_stroke(cr);
-#else
-	  gdk_draw_line(
-			GTK_LAYOUT(widget)->bin_window,
-			widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
-			polyline->x_b, polyline->y_b, polyline->x_e, polyline->y_e
-			);
-#endif
+
 	  if (polyline->next != NULL)
 	    {
-#ifdef USE_CAIRO
+
 	       cairo_rectangle(cr, 
 			       polyline->x_e - (BEND_SIZE_X/2),
 			       polyline->y_e - (BEND_SIZE_Y/2),
 			       BEND_SIZE_X,
 			       BEND_SIZE_Y);
 	       cairo_fill(cr);
-#else
-	      gdk_draw_rectangle(GTK_LAYOUT(widget)->bin_window,
-				 widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
-				 TRUE,
-				 polyline->x_e - (BEND_SIZE_X/2),
-				 polyline->y_e - (BEND_SIZE_Y/2),
-				 BEND_SIZE_X,
-				 BEND_SIZE_Y
-				 );
-#endif
+
 	    }
 	  else
 	    {
-#ifdef USE_CAIRO
+
 	      cairo_move_to(cr, (double) polyline->x_e, (double) polyline->y_e);
 	      if (polyline->x > 0)
 		{
@@ -419,62 +402,14 @@ void		DrawingArea_expose_event_comlink(GtkWidget *widget, GdkEventExpose *event,
 	      
 	      cairo_close_path(cr);
 	      cairo_fill(cr);
-#else
-	      if (polyline->x > 0)
-		{
-		  if (polyline->y_b < polyline->y_e)
-		    dy = -20.;
-		  else 
-		    dy = 20.;
 
-		  arrow[0].x = polyline->x_e;
-		  arrow[0].y = polyline->y_e;
-
-		  arrow[1].x = polyline->x_e + 20 * cos(7 * M_PI / 12);
-		  arrow[1].y = polyline->y_e + dy;
-
-		  arrow[2].x = polyline->x_e + 20 * cos(5 * M_PI / 12);
-		  arrow[2].y = polyline->y_e + dy;
-
-		  gdk_draw_polygon(
-				   GTK_LAYOUT(widget)->bin_window,
-				   widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
-				   TRUE,
-				   arrow,
-				   3
-				   );
-		}
-	      else
-	      {
-		 angle = atan(polyline->a);
-		 if (polyline->x_b > polyline->x_e)
-		    angle += M_PI;
-	      
-		 arrow[0].x = polyline->x_e;
-		 arrow[0].y = polyline->y_e;
-		 
-		 arrow[1].x = polyline->x_e + 20 * cos(11 * M_PI / 12 + angle);
-		 arrow[1].y = polyline->y_e + 20 * sin(11 * M_PI / 12 + angle);
-		 
-		 arrow[2].x = polyline->x_e + 20 * cos(13 * M_PI / 12 + angle);
-		 arrow[2].y = polyline->y_e + 20 * sin(13 * M_PI / 12 + angle);
-	      
-		 gdk_draw_polygon(
-		    GTK_LAYOUT(widget)->bin_window,
-		    widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
-		    TRUE,
-		    arrow,
-		    3
-		    );	      
-	      }
-#endif
 	    }
 	}
     }
 
-#ifdef USE_CAIRO
+
   cairo_destroy(cr);
-#endif
+
 }
 
 void		DrawingArea_expose_event_script(GtkWidget *widget, GdkEventExpose *event, t_gennet *data)

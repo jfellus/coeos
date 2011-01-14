@@ -141,9 +141,9 @@ typedef	struct				s_gennet_comlink
   PangoLayout				*pango;
   char					name[LETO_LIAISON_NAME_SIZE];
   char					hold;
-#ifdef USE_CAIRO
+
   cairo_pattern_t 			*color;
-#endif /* USE_CAIRO */
+
   t_gennet_script			*in;
   t_gennet_script			*out;
   t_polyline_list			polyline_list;

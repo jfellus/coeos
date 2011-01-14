@@ -1312,9 +1312,8 @@ void run_leto(char *fichier_script, char *fichier_draw, char *fichier_res, char 
     gtk_signal_connect(GTK_OBJECT(onglet_leto->window), "drag_data_get",
                        GTK_SIGNAL_FUNC(source_drag_data_get), onglet_leto);
 
-#ifdef USE_CAIRO
     onglet_leto->cr=NULL;
-#endif
+
 
 }
 
@@ -1425,9 +1424,9 @@ int main(int argc, char *argv[])
 
 /********************************************************************************************************************/
 
-	#ifdef USE_CAIRO
+
     	pscript->onglet_leto->cr=NULL;
-	#endif
+
 
 /******************************************************* Lancement de Leto ****************************************/
 	for(i=1;i<argc;i++)
@@ -1528,9 +1527,9 @@ int main(int argc, char *argv[])
     gtk_signal_connect(GTK_OBJECT(pscript->onglet_leto->window), "drag_data_get",
                        GTK_SIGNAL_FUNC(source_drag_data_get), NULL);
 
-#ifdef USE_CAIRO
+
     pscript->onglet_leto->cr=NULL;
-#endif
+
     gdk_threads_enter();
 
     gtk_main();

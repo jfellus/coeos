@@ -36,15 +36,7 @@ LIBS="$GTKLIB -lmxml"
 INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$PWD/../../shared/include -I$PWD/include -I$PWD/include/shared -I."
 CFLAGS="-g3 -Wall -pedantic -D_REENTRANT -D_GNU_SOURCE -DDAEMON_COM -D`uname` -Wno-variadic-macros"
 
-# Gestion des parametres passes au Create_Makefile
-echo "$*" | grep -q "-enable-cairo"
-if [ $? -eq 0 ]
-    then echo "Create $PROG_NAME cairo version"
-    CFLAGS="$CFLAGS -DUSE_CAIRO"
-    GRAPHICLIB="${GRAPHICLIB}_cairo"
-else
-    echo "Create $PROG_NAME gtk seul"
-fi
+
 
 #Version finale des libs, includes et flags
 FINALINCLUDES="$INCLUDES"

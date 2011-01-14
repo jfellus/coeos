@@ -1769,9 +1769,8 @@ gboolean scribble_configure_event(GtkWidget * widget,
                            widget->allocation.height, -1);
         ((TxDonneesFenetre *) data)->window_pixmap = widget->window;
         ((TxDonneesFenetre *) data)->widget_pixmap = widget;
-#ifdef USE_CAIRO
 	((TxDonneesFenetre *) data)->cr = NULL;
-#endif
+
     }
     
 

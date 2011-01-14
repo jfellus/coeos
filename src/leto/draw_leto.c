@@ -424,9 +424,9 @@ void regenerer_test(TxDonneesFenetre *onglet_leto)
   }
 
   debug_printf("regenerer_test 2\n");
-#ifdef USE_CAIRO
+
   init_cairo(onglet_leto);
-#endif   
+
 
   groupe = sc->deb_groupe;
   liaison = sc->deb_liaison;
