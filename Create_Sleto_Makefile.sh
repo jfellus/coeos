@@ -23,8 +23,12 @@ CC="gcc"
 SYSTEM=`uname`
 PWD=`pwd`
 
+SIMULATOR_PATH=$PWD/../..
+
 #les bibliotheques et leurs chemins d'acces
 GRAPHICLIBPATH="$PWD/../../lib/$SYSTEM/graphique"
+GRAPHICLIB="graphique"
+
 SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
 
 GTKINCLUDES="`pkg-config --cflags gtk+-2.0 gthread-2.0`"
@@ -35,6 +39,8 @@ LIBS="$GTKLIB -lmxml"
 INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$PWD/../../shared/include -I$PWD/include -I$PWD/include/shared -I."
 CFLAGS="-g3 -Wall -pedantic -D_REENTRANT -D_GNU_SOURCE -DDAEMON_COM -D`uname` -Wno-variadic-macros"
 
+# Gestion des parametres passes au Create_Makefile
+CFLAGS="$CFLAGS -DUSE_CAIRO"
 
 #Version finale des libs, includes et flags
 FINALINCLUDES="$INCLUDES"

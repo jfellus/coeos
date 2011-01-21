@@ -15,12 +15,16 @@ source ../../scripts/COMPILE_FLAG
 # Nom du programme*
 PROG_NAME="cc_leto"
 
+SIMULATOR_PATH=$PWD/../..
+
 #les bibliotheques et leurs chemins d'acces
 GRAPHICLIBPATH="$PWD/../../lib/$SYSTEM/graphique"
+GRAPHICLIB="graphique"
+
 SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
 
 # Initialisation des libs, includes et flags
-LIBS="$GTKLIB $MATHLIB -pthread -lmxml -L$GRAPHICLIBPATH $GRAPHICLIB"
+LIBS="$GTKLIB $MATHLIB -pthread -lmxml -L$GRAPHICLIBPATH -l$GRAPHICLIB"
 INCLUDES="$GTKINCLUDES -I$PWD/../../shared/include/ -I$PWD/include/ -I$PWD/include/leto/ -I$PWD/include/shared -I$PWD/"
 
 #Version finale des libs, includes et flags
