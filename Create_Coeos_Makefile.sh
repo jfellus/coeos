@@ -27,8 +27,9 @@ PWD=`pwd`
 GRAPHICLIBPATH="$PWD/../../lib/$SYSTEM/graphique"
 GRAPHICLIB="graphique"
 
-SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
 
+SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
+SCRIPTLIB="script_symb"
 
 GTKINCLUDES="`pkg-config --cflags gtk+-2.0 gthread-2.0`"
 GTKLIB=`pkg-config --libs gtk+-2.0 gthread-2.0`
@@ -45,7 +46,7 @@ CFLAGS="-g3 -Wall -pedantic -D_REENTRANT -D_GNU_SOURCE -DDAEMON_COM -D`uname` -W
 
 #Version finale des libs, includes et flags
 FINALINCLUDES="$INCLUDES"
-FINALLIBS="$LIBS -L$SCRIPTLIBPATH $SCRIPTLIB -L$GRAPHICLIBPATH $GRAPHICLIB"
+FINALLIBS="$LIBS -L$SCRIPTLIBPATH -l$SCRIPTLIB -L$GRAPHICLIBPATH -l$GRAPHICLIB"
 FINALCFLAGS="$CFLAGS -DSYMBOLIQUE_VERSION"
 
 #Les repertoires de destination des fichiers compiles
