@@ -514,7 +514,7 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
   char			*nom_script_script = NULL;
   char			*copie_script_script = NULL;
   char			*pt = NULL;
-  char			*tab_name = NULL;
+  const char			*tab_name = NULL;
   gchar			*sMenuLabel = NULL;
   GtkWidget		*NomOnglet = NULL;
   GtkWidget 		*pMenuLabel = NULL;

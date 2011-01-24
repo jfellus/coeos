@@ -39,11 +39,6 @@ LIBS="$GTKLIB -lmxml"
 INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$PWD/../../shared/include -I$PWD/include -I$PWD/include/shared -I."
 CFLAGS="-g3 -Wall -pedantic -D_REENTRANT -D_GNU_SOURCE -DDAEMON_COM -D`uname` -Wno-variadic-macros"
 
-# Gestion des parametres passes au Create_Makefile
-
-    CFLAGS="$CFLAGS -DUSE_CAIRO"
-
-
 #Version finale des libs, includes et flags
 FINALINCLUDES="$INCLUDES"
 FINALLIBS="$LIBS -L$SCRIPTLIBPATH -l$SCRIPTLIB -L$GRAPHICLIBPATH -l$GRAPHICLIB"

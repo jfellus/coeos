@@ -3,3 +3,4 @@ rm -f log/*.log
 bash Create_All_Makefile.sh > log/Create_All_Makefile.log
 make clean reset > log/clean_reset.log
 make > log/make.log
+
