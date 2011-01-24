@@ -668,25 +668,25 @@ GtkWidget *entry_taille_x;
 
 
 TxChampsFormulaire formulaire_group[Number_of_items_total] = {
-    {0, 0, "group", "-10", entry_group_callback_no_name, NULL, NULL, NULL, NULL},
-    {4, 0, "name", "xxx", entry_group_callback_nom, NULL, NULL, NULL, NULL},
-    {0, 1, "x size", "1", entry_group_callback_taillex, NULL, NULL, NULL, NULL},
-    {2, 1, "y size", "1", entry_group_callback_tailley, NULL, NULL, NULL, NULL},
-    {4, 1, "number of neurons", "-4", entry_group_callback, NULL, NULL, NULL, NULL},
-    {0, 2, "threshold", "0.", entry_group_callback_seuil, NULL, NULL, NULL, NULL},
-    {2, 2, "learning rate", "0.1", entry_group_callback_learning_rate, NULL, NULL, NULL, NULL},
-    {4, 2, "simul. speed", "1.", entry_group_callback_simulation_speed, NULL, NULL, NULL, NULL},
-    {0, 3, "type2", "-6", entry_group_callback_type2, NULL, NULL, NULL, NULL},
-    {2, 3, "time scale", "-7", entry_group_callback_ech_temps, NULL, NULL, NULL, NULL},
-    {4, 3, "noise level", "0.", entry_group_callback_noise_level, NULL, NULL, NULL, NULL},
-    {0, 6, "tolerance", "0.", entry_group_callback_tolerance, NULL, NULL, NULL, NULL},
-    {2, 6, "alpha", "0.", entry_group_callback_alpha, NULL, NULL, NULL, NULL},
-    {4, 6, "nb of 1", "0", entry_group_callback_nbre_de_1, NULL, NULL, NULL, NULL},
-    {0, 7, "dpn", "0", entry_group_callback_dvp, NULL, NULL, NULL, NULL},
-    {2, 7, "dnn", "0", entry_group_callback_dvn, NULL, NULL, NULL, NULL},
-    {4, 7, "sigma f", "0.", entry_group_callback_sigma_f, NULL, NULL, NULL, NULL},
-    {4, 4, "plan", "0", entry_group_callback_plan, NULL, NULL, NULL, NULL},
-    {0, 9, "comment","entrer vos commentaires ici ...",entry_group_callback_comment,  NULL, NULL, NULL, NULL}
+    {0, 0, "group", "-10", entry_group_callback_no_name, "", NULL, NULL, NULL},
+    {4, 0, "name", "xxx", entry_group_callback_nom, "", NULL, NULL, NULL},
+    {0, 1, "x size", "1", entry_group_callback_taillex, "", NULL, NULL, NULL},
+    {2, 1, "y size", "1", entry_group_callback_tailley, "", NULL, NULL, NULL},
+    {4, 1, "number of neurons", "-4", entry_group_callback, "", NULL, NULL, NULL},
+    {0, 2, "threshold", "0.", entry_group_callback_seuil, "", NULL, NULL, NULL},
+    {2, 2, "learning rate", "0.1", entry_group_callback_learning_rate, "", NULL, NULL, NULL},
+    {4, 2, "simul. speed", "1.", entry_group_callback_simulation_speed, "", NULL, NULL, NULL},
+    {0, 3, "type2", "-6", entry_group_callback_type2, "", NULL, NULL, NULL},
+    {2, 3, "time scale", "-7", entry_group_callback_ech_temps, "", NULL, NULL, NULL},
+    {4, 3, "noise level", "0.", entry_group_callback_noise_level, "", NULL, NULL, NULL},
+    {0, 6, "tolerance", "0.", entry_group_callback_tolerance, "", NULL, NULL, NULL},
+    {2, 6, "alpha", "0.", entry_group_callback_alpha, "", NULL, NULL, NULL},
+    {4, 6, "nb of 1", "0", entry_group_callback_nbre_de_1, "", NULL, NULL, NULL},
+    {0, 7, "dpn", "0", entry_group_callback_dvp, "", NULL, NULL, NULL},
+    {2, 7, "dnn", "0", entry_group_callback_dvn, "", NULL, NULL, NULL},
+    {4, 7, "sigma f", "0.", entry_group_callback_sigma_f, "", NULL, NULL, NULL},
+    {4, 4, "plan", "0", entry_group_callback_plan, "", NULL, NULL, NULL},
+    {0, 9, "comment","entrer vos commentaires ici ...",entry_group_callback_comment,  "", NULL, NULL, NULL}
 };
 
 /* Create a new hbox with an image and a label packed into it
@@ -875,20 +875,20 @@ GtkWidget* create_read_group(TxDonneesFenetre *onglet_leto)
 /************************************************************************/
 
 TxChampsFormulaire formulaire_link[ Number_of_link_items_total ] = {
-    {0, 0, "input group", "-1", entry_link_callback_input, NULL, NULL, NULL, NULL},
-    {2, 0, "output group", "-1", entry_link_callback_output, NULL, NULL, NULL, NULL},
-    {0, 2, "temps", "-5", entry_link_callback_temps, NULL, NULL, NULL, NULL},
-    {2, 2, "stemps", "-6", entry_link_callback_stemps, NULL, NULL, NULL, NULL},
-    {4, 2, "nbre", "-20", entry_link_callback_nbre, NULL, NULL, NULL, NULL},
-    {0, 3, "secondaire", "-6", entry_link_callback_secondaire, NULL, NULL, NULL, NULL},
-    {2, 3, "mode", "-7", entry_link_callback_mode, NULL, NULL, NULL, NULL},
-    {0, 4, "Norm", "-5", entry_link_callback_norme, NULL, NULL, NULL, NULL},
-    {0, 6, "dvx", "-5", entry_link_callback_dvx, NULL, NULL, NULL, NULL},
-    {2, 6, "dvy", "-6", entry_link_callback_dvy, NULL, NULL, NULL, NULL},
-    {4, 6, "proba", "-20", entry_link_callback_proba, NULL, NULL, NULL, NULL},
-    {4, 7, "name", "-20", entry_link_callback_name, NULL, NULL, NULL, NULL},
-    {0, 7, "style (0:line,1:bezier)", "0", entry_link_callback_style, NULL, NULL, NULL, NULL},
-    {0, 9, "comment","entrer vos commentaires ici ...",entry_link_callback_comment,  NULL, NULL, NULL, NULL}
+    {0, 0, "input group", "-1", entry_link_callback_input, "", NULL, NULL, NULL},
+    {2, 0, "output group", "-1", entry_link_callback_output, "", NULL, NULL, NULL},
+    {0, 2, "temps", "-5", entry_link_callback_temps, "", NULL, NULL, NULL},
+    {2, 2, "stemps", "-6", entry_link_callback_stemps, "", NULL, NULL, NULL},
+    {4, 2, "nbre", "-20", entry_link_callback_nbre, "", NULL, NULL, NULL},
+    {0, 3, "secondaire", "-6", entry_link_callback_secondaire, "", NULL, NULL, NULL},
+    {2, 3, "mode", "-7", entry_link_callback_mode, "", NULL, NULL, NULL},
+    {0, 4, "Norm", "-5", entry_link_callback_norme, "", NULL, NULL, NULL},
+    {0, 6, "dvx", "-5", entry_link_callback_dvx, "", NULL, NULL, NULL},
+    {2, 6, "dvy", "-6", entry_link_callback_dvy, "", NULL, NULL, NULL},
+    {4, 6, "proba", "-20", entry_link_callback_proba, "", NULL, NULL, NULL},
+    {4, 7, "name", "-20", entry_link_callback_name, "", NULL, NULL, NULL},
+    {0, 7, "style (0:line,1:bezier)", "0", entry_link_callback_style, "", NULL, NULL, NULL},
+    {0, 9, "comment","entrer vos commentaires ici ...",entry_link_callback_comment,  "", NULL, NULL, NULL}
 };
 
 type_lien_no_nom lien_no_nom_type_link[nbre_type_links] = {
