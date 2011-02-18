@@ -11,6 +11,14 @@ void kprints(const char *fmt, ...) /* version simplifiee du kernel pour permettr
   va_end(ap);
 }
 
+void true_dprints(const char *fmt, ...) /* version simplifiee du kernel pour permettre la compilation des librairies*/
+{
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(stdout,fmt, ap);
+  va_end(ap);
+}
+
 /* Fonction qui retire l'extension .script */
 void get_base_path_name(char *filename)
 {

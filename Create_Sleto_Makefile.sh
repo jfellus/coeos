@@ -18,10 +18,6 @@ source ../../scripts/COMPILE_FLAG
 # Nom du programme*
 PROG_NAME="sleto"
 
-#DIVERS
-CC="gcc"
-SYSTEM=`uname`
-PWD=`pwd`
 
 SIMULATOR_PATH=$PWD/../..
 
@@ -38,10 +34,11 @@ LIBS="$GTKLIB -lmxml"
 INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$PWD/../../shared/include -I$PWD/include -I$PWD/include/shared -I."
 CFLAGS="-g3 -Wall -pedantic -D_REENTRANT -D_GNU_SOURCE -DDAEMON_COM -D`uname` -Wno-variadic-macros"
 
+SCRIPTLIB_SYMB="$SCRIPTLIB"_symb
 
 #Version finale des libs, includes et flags
 FINALINCLUDES="$INCLUDES"
-FINALLIBS="$LIBS -L$SCRIPTLIBPATH $SCRIPTLIB -L$GRAPHICLIBPATH $GRAPHICLIB"
+FINALLIBS="$LIBS -L$SCRIPTLIBPATH $SCRIPTLIB_SYMB -L$GRAPHICLIBPATH $GRAPHICLIB"
 FINALCFLAGS="$CFLAGS -DLETO -DSYMBOLIQUE_VERSION"
 
 #Les repertoires de destination des fichiers compiles
