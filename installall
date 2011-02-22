@@ -1,6 +1,6 @@
-echo "Creation of leto, s_leton cc_leto, coeos. See log/ for details of creation."
-rm -f log/*.log
-bash Create_All_Makefile.sh > log/Create_All_Makefile.log
-make clean reset > log/clean_reset.log
-make > log/make.log
+echo "Creation of leto, s_leton cc_leto, coeos. See logs/ for details of creation."
+rm -f logs/*.log
+bash Create_All_Makefile.sh > logs/Create_All_Makefile.log
+make clean reset > logs/clean_reset.log
+make > logs/make.log
 

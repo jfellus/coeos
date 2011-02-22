@@ -27,6 +27,7 @@ SIMULATOR_PATH=$PWD/../..
 
 #les bibliotheques et leurs chemins d'acces
 GRAPHICLIBPATH="$PWD/../../lib/$SYSTEM/graphique" 
+GRAPHICLIB="-lgraphique" 
 
 SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
 
