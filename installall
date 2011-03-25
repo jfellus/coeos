@@ -1,6 +1,21 @@
-echo "Creation of leto, s_leton cc_leto, coeos. See logs/ for details of creation."
+#!/bin/bash
+echo "*** Install coeos (leto, s_leton cc_leto, coeos) ***" 
+echo "See logs/ for details of creation."
 rm -f logs/*.log
+echo "Creating makefile"
 bash Create_All_Makefile.sh > logs/Create_All_Makefile.log
+echo "Cleaning ..."
 make clean reset > logs/clean_reset.log
-make > logs/make.log
+echo "Compiling ..."
+if make > logs/make.log
+then
+	echo -e "Success installing coeos\n"
+	exit 0
+else
+	echo -e "\nFail to install coeos !\n"
+	exit 1
+fi
+
+
+
 
