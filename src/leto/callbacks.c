@@ -16,6 +16,8 @@
 
 #include "gennet.h"
 
+char bin_leto_prom_path[]="~/bin_leto_prom";
+
 /*****************************************************************************/
 /* Saisie ou mise a jour des donnees sur un groupe                           */
 /* Nouvelle version Aout 2005                                                */
@@ -2507,7 +2509,7 @@ void creation_cb(GtkWidget * widget, gpointer data)
     strcat(file_script,".script");
     
     /* le script lpreprocess demande en argument le fichier.symb le fichier.var et le fichier.script */
-    sprintf(chemin_env,"lpreprocess.sh %s %s %s", sc->nomfich1, sc->fvar, file_script);
+    sprintf(chemin_env,"%s/lpreprocess.sh %s %s %s", bin_leto_prom_path, sc->nomfich1, sc->fvar, file_script);
     /* on cree un processus qui va executer le lpprocess
      * car exec ecrase le processus courant */
     system(chemin_env);
@@ -2525,7 +2527,7 @@ void creation_cb(GtkWidget * widget, gpointer data)
     return;
   
 
-  sprintf(chemin_env,"echo %li | cc_leto %s %s", sc->seed, file_script, sc->freseau);
+  sprintf(chemin_env,"echo %li | %s/cc_leto %s %s", sc->seed, bin_leto_prom_path, file_script, sc->freseau);
   system(chemin_env);
 
 
