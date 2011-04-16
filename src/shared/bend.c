@@ -6,6 +6,21 @@
 #include "bend.h"
 #include "public_leto.h"
 
+float bound(float value, float min, float max)
+{
+   if (value < min)
+   {
+      return min;
+   }
+   else if (value > max)
+   {
+      return max;
+   }
+
+   return value;
+}
+
+
 int get_all_polyline_list_coordinates(t_polyline_list *polyline_list, int tab[][2])
 {   
    int nb_points = 0;
@@ -131,7 +146,7 @@ int coordinates_on_polyline(t_polyline *polyline, int x, int y)
 {
    float res = 0;
    
-   if (polyline->a == 0 && polyline->b == 0)
+   if (fabs(polyline->a) <1e-30 && fabs(polyline->b)<1e-30 )
    {
       if (x > polyline->x - LINE_CLICK_ZONE && x < polyline->x + LINE_CLICK_ZONE)
       {

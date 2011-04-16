@@ -50,6 +50,6 @@ void initialise_liaisons();
 /* fonction a moi */
 extern void get_base_path_name(char *filename);
 extern void get_base_name(char *filename);
-extern float bound(float value, float min, float max);
+
 
 #endif
