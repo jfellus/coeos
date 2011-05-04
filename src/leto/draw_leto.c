@@ -79,7 +79,7 @@ void affiche_groupe(TxPoint point, type_groupe * groupe,TxDonneesFenetre *onglet
    if (is_selected(groupe) != NULL)
    {
       font_weight = "bold";
-      text_color = blanc;
+      text_color = noir;
       TxDessinerRectangle(onglet_leto, lut_g[type], TRUE, point, 2 * deltax + 1, 2 * deltay, 1);
    }
    else
