@@ -216,14 +216,19 @@ void entry_group_callback_taillex(GtkWidget * widget, GtkWidget * entry, TxDonne
    selected_group *sel_group;
 
    if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
+   {
       return;
+   }
 
    entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
 
-   for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
+   if (strlen(entry_text) > 0 && entry_text[0] != 'X')
    {
-      Str2MY_Int(sel_group->group->taillex, (char *) entry_text);
-      debug_printf("Entry group x size : %s\n", entry_text);
+      for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
+      {
+	 Str2MY_Int(sel_group->group->taillex, (char *) entry_text);
+	 debug_printf("Entry group time scale : %d\n", sel_group->group->ech_temps);
+      }
    }
 }
 
@@ -237,10 +242,13 @@ void entry_group_callback_tailley(GtkWidget * widget, GtkWidget * entry, TxDonne
 
    entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
 
-   for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
+   if (strlen(entry_text) > 0 && entry_text[0] != 'X')
    {
-      Str2MY_Int(sel_group->group->tailley, (char *) entry_text);
-      debug_printf("Entry group y size : %s\n", entry_text);
+      for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
+      {
+	 Str2MY_Int(sel_group->group->tailley, (char *) entry_text);
+	 debug_printf("Entry group y size : %s\n", entry_text);
+      }
    }
 }
 

@@ -1108,7 +1108,7 @@ void fill_group_dialog(int type)
    {
       selected_group *sel_group = NULL;
       int plane = -1, ech_temps = -1, type2 = -1;
-      char plane_text[256], ech_temps_text[256], type2_text[256];
+      char plane_text[256], ech_temps_text[256], type2_text[256], taillex_text[256], tailley_text[256];
       int first = 1;
       int field_editable;
 
@@ -1123,6 +1123,8 @@ void fill_group_dialog(int type)
 	    sprintf(ech_temps_text, "%i", ech_temps);
 	    type2 = MY_Int2Int(group->type2);
 	    sprintf(type2_text, "%i", type2);
+	    sprintf(taillex_text, "%s", MY_Int2Str(group->taillex));
+	    sprintf(tailley_text, "%s", MY_Int2Str(group->tailley));
 	    first = 0;
 	 }
 	 else
@@ -1138,6 +1140,14 @@ void fill_group_dialog(int type)
 	    if (type2 != MY_Int2Int(group->type2))
 	    {
 	       strcpy(type2_text, "X");
+	    }
+	    if (strcmp(taillex_text, MY_Int2Str(group->taillex)) != 0)
+	    {
+	       strcpy(taillex_text, "X");
+	    }
+	    if (strcmp(tailley_text, MY_Int2Str(group->tailley)) != 0)
+	    {
+	       strcpy(tailley_text, "X");
 	    }
 	 }
       }
@@ -1155,6 +1165,12 @@ void fill_group_dialog(int type)
 	       break;
 	    case No_item_plan:
 	       entry_text = plane_text;
+	       break;
+	    case No_item_taillex:
+	       entry_text = taillex_text;
+	       break;
+	    case No_item_tailley:
+	       entry_text = tailley_text;
 	       break;
 	    default:
 	       field_editable = 0;
