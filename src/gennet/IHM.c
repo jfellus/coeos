@@ -202,7 +202,7 @@ int tab_is_Free()
 	int i;
 	for(i=0;i<NB_MAX_SCRIPTS;i++)
 	  {
-	    /* un script vide est equivalent a  ce que
+	    /* un script vide est equivalent aï¿½ ce que
 	     * le numero d'onglet soit egal a zero */
 	    if(les_scripts[i].num_onglet == 0)
 	      {
@@ -724,7 +724,7 @@ void		Edit_Computer(t_gennet *gen, t_gennet_computer *pcomputer)
   gtk_box_pack_start(GTK_BOX(hBox), glabel, FALSE, TRUE, 0);
   gtk_widget_show(glabel);
 
-  gen->gui->gname = gtk_entry_new_with_max_length(MAX_NAME - 1);
+  gen->gui->gname = gtk_entry_new_with_max_length(SIZE_OF_COMPUTER_NAME - 1);
   if (pcomputer != NULL)
     {
       val = promnet_computer_get_name(pcomputer->computer);

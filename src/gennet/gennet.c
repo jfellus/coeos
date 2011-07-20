@@ -6,7 +6,6 @@
 #include "public_leto.h"
 #include "gennet.h"
 #include "creation.h"
-#include <outils_script.h>
 #include "leto_global_var.h"
 #include <search.h>
 #include "gere_coudes.h"
@@ -528,7 +527,7 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
       return ;
     }
 
-  /* Tout d'abord on regarde a  quel indice peut-on creer l'onglet, si il reste encore de la place */
+  /* Tout d'abord on regarde aï¿½ quel indice peut-on creer l'onglet, si il reste encore de la place */
   idx=tab_is_Free();
   if(idx == -1)
     {
@@ -649,7 +648,7 @@ void	Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 	}
     }
   
-  /* si le script n'est pas deja  ouvert alors on creer un nouvel onglet */
+  /* si le script n'est pas dejaï¿½ ouvert alors on creer un nouvel onglet */
   if(i >= nPage)
     {
       /********************************************** Creation de l'onglet ***********************************************/

@@ -62,7 +62,6 @@
 #include <locale.h>
 
 #include "block_create.h"
-#include "outils_script.h"
 #include "leto_global_var.h"
 #include "creation.h"
 #include <search.h>

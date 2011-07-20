@@ -9,7 +9,6 @@
 
 /*#define DEBUG*/
 #include "public_leto.h"
-#include "outils_script.h"
 #include "gere_coudes.h"
 
 #include <search.h>  /* pour la table de hachage */
