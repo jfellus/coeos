@@ -1946,7 +1946,7 @@ void	GenerateNetwork(GtkWidget *widget, gpointer data)
 								GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, 
 								GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
 
-  e_path = gtk_entry_new_with_max_length(MAX_PATH_FILE_PRT - 1);
+  e_path = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
   SaveFile_control_browse(gen->gui->PathDialog, e_path, "path :");
 
   result = gtk_dialog_run(GTK_DIALOG(gen->gui->PathDialog));
@@ -2054,7 +2054,7 @@ void	GenerateDeploySh(GtkWidget *widget, gpointer data)
 								GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, 
 								GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
 
-  e_path = gtk_entry_new_with_max_length(MAX_PATH_FILE_PRT - 1);
+  e_path = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
   SaveFile_control_browse(gen->gui->PathDialog, e_path, "path :");
 
   result = gtk_dialog_run(GTK_DIALOG(gen->gui->PathDialog));

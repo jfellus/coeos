@@ -335,7 +335,7 @@ int choix_liaisons_voisinage_core(type_liaison * liaison, int neurone_deb,  /* n
     }
 
 
-    if (dvx == 0 && dvy == 0)
+    if (isequal(dvx,0) && isequal(dvy,0))
     {
         offset_x = 0.;
         offset_y = 0.;

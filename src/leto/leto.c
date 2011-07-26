@@ -1364,7 +1364,7 @@ void create_dir_point_leto()
 int main(int argc, char *argv[])
 {
 	t_gennet_script	*pscript;
-	GtkWidget	*parent;
+	GtkWidget	*parent = NULL;
 	GtkWidget	*vbox;
 	GtkWidget	*vbox_menu;
 	int             i;
