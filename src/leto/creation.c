@@ -89,7 +89,8 @@ void creation(TxDonneesFenetre *onglet_leto)
                 || groupe->type == No_Sigma_PI
                 || groupe->type == No_Macro_Colonne
 		|| groupe->type == No_KO_Discret
-		|| groupe->type == No_KO_Continu))
+		|| groupe->type == No_KO_Continu
+        || groupe->type == No_Selverston))
             pas = groupe->nbre_voie + 1;
         else
 	  pas = 1;
@@ -159,7 +160,8 @@ void creation(TxDonneesFenetre *onglet_leto)
                 || groupe->type == No_Sigma_PI
                 || groupe->type == No_Macro_Colonne
 		|| groupe->type == No_KO_Discret
-		|| groupe->type == No_KO_Continu))
+		|| groupe->type == No_KO_Continu
+        || groupe->type == No_Selverston))
 	  {
             if (groupe->type == No_But || groupe->type == No_Ou)
 	      val = 1.;

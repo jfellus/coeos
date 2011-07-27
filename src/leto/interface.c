@@ -52,9 +52,10 @@ type_lien_no_nom lien_no_nom_type_groupe[nbre_type_groupes] = {  /* par defaut t
   {No_Sub_Network, "Sub_network",                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 39 */
   {No_LMS_delayed, "LMS_delayed",                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 40 */
   {No_Winner_Macro, "Winner_Macro",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 41 */
-  {No_NLMS, "NLMS",                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 42 */
+  {No_NLMS, "NLMS",            				        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 42 */
   {No_Sutton_Barto, "Sutton_Barto",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 43 */
-  {No_PCR, "PCR",                                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}  /* 44 */
+  {No_PCR, "PCR",                                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}},  /* 44 */
+  {No_Selverston, "Selverston",                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}  /* 45 */
 };
 
 static GtkToggleActionEntry menu_toggle_items[] = {
@@ -467,6 +468,20 @@ void init_group_visibility_properties()
     t = lien_no_nom_type_groupe[No_LMS_delayed].editable;    /* fait */
     t[No_item_tolerance] = t[No_item_alpha] = -1;
     t[No_item_simulation_speed] = -1;
+
+    t = lien_no_nom_type_groupe[No_Selverston].editable;    /* fait */
+    t[No_item_seuil] = -1;
+    t[No_item_learning_rate] = -1;
+    t[No_item_simulation_speed] = -1;
+    t[No_item_type2] = -1;
+    t[No_item_noise_level] = -1;
+    t[No_item_noise_level] = -1;
+    t[No_item_dvp] = -1;
+    t[No_item_dvn] = -1;
+    t[No_item_tolerance] = -1;
+    t[No_item_alpha] = -1;
+    t[No_item_nbre_de_1] = -1;
+    t[No_item_sigma_f] = 1;
 }
 
 

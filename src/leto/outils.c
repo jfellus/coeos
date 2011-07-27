@@ -427,7 +427,9 @@ int compte_neurone()
              || groupe->type == No_Sigma_PI
              || groupe->type == No_Macro_Colonne
 		|| groupe->type == No_KO_Discret
-		|| groupe->type == No_KO_Continu))
+		|| groupe->type == No_KO_Continu
+        || groupe->type == No_Selverston
+))
         {
 /* #ifndef SYMBOLIQUE_VERSION */
 /*             groupe->nbre = */

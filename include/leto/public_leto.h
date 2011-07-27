@@ -24,8 +24,7 @@
 #include "leto_global_var.h"
 #include "leto.h"
 /*#include "graphic_sun.h"*/
- /*#include "graphique.h" */
-
+/*#include "graphique.h" */
 
 #include "outils.h"
 
