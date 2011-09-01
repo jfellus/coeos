@@ -724,7 +724,7 @@ void		Edit_Computer(t_gennet *gen, t_gennet_computer *pcomputer)
   gtk_box_pack_start(GTK_BOX(hBox), glabel, FALSE, TRUE, 0);
   gtk_widget_show(glabel);
 
-  gen->gui->gname = gtk_entry_new_with_max_length(SIZE_OF_COMPUTER - 1);
+  gen->gui->gname = gtk_entry_new_with_max_length(MAX_COMPUTER - 1);
   if (pcomputer != NULL)
     {
       val = promnet_computer_get_name(pcomputer->computer);
