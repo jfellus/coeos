@@ -94,7 +94,6 @@ int compte_nbre_groupe_propre_au_script(int selection)
 {
   int nbre_groupe_propre_au_script = 0;
   type_groupe *groupe;
-
 #ifndef AVEUGLE
   selected_group *sel_group = NULL;
 
@@ -110,6 +109,8 @@ int compte_nbre_groupe_propre_au_script(int selection)
      return nbre_groupe_propre_au_script;
   }     
 #endif
+
+  (void)selection;
 
   groupe = sc->deb_groupe;
   while (groupe != NULL)
@@ -178,8 +179,6 @@ void lecture(int recursive_load,TxDonneesFenetre *onglet_leto)
     else 
        sc->flag_symb=0;
 
-    liaison = sc->deb_liaison = sc->fin_liaison =NULL;
-    groupe = sc->deb_groupe = sc->fin_groupe =NULL;
 
     debug_printf("(lecture) load script = %s \n", sc->nomfich1);
     f1 = fopen(sc->nomfich1, "r");
@@ -190,6 +189,9 @@ void lecture(int recursive_load,TxDonneesFenetre *onglet_leto)
        fprintf(stderr, "\n Leto supposes it is a new script file \n");
        return;
     }
+
+    liaison = sc->deb_liaison = sc->fin_liaison =NULL;
+    groupe = sc->deb_groupe = sc->fin_groupe =NULL;
 
     sc->nbre_neurone = 0; 
     sc->nbre_liaison = 0; 
@@ -639,5 +641,9 @@ void save_script_selected(int comment,int save_sub_networks, char *nom, TxDonnee
    fclose(f1);
    debug_printf("fin sauvegarde selection %s\n",nom_du_script);
 #endif
+   (void)comment;
+   (void)save_sub_networks;
+   (void)nom;
+   (void)onglet_leto;
 }
 
