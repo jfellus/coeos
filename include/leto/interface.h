@@ -11,10 +11,11 @@
 #define POPUP_MENU_BEND 3
 
 extern void create_fenetre1(TxDonneesFenetre * onglet_leto);
-extern GtkWidget* create_read_link(TxDonneesFenetre *onglet_leto);
+extern GtkWidget* create_read_link(TxDonneesFenetre *onglet_leto,type_liaison *link);
 extern GtkWidget* create_read_group(TxDonneesFenetre *onglet_leto);
-
 extern void create_fenetre_dialogue(TxDonneesFenetre * fenetre, TxDonneesFenetre *onglet_leto);
+extern type_groupe* get_groupOut(type_liaison *link);
+extern void init_group_mode_link_tab(void);
 
 GtkWidget *entry_group;
 GtkWidget *entry_taille_x;
@@ -29,13 +30,8 @@ extern GtkWidget *combo_reverse_groupe;
 extern GtkWidget *combo_debug_groupe;
 /*-------------------------------------------------------------*/
 
-typedef struct type_lien_no_nom
-{
-    int no;
-    char nom[256];
-    int editable[256];          /* nombre max d'item que les liens ou les groupes peuvent avoir ... */
-
-} type_lien_no_nom;
+/** definition de type_lien_no_nom : cf. mode_link_def.h dans
+ * prom_kernel/include/ */
 
 
 /*-------------------------------------------------------------*/
@@ -89,12 +85,7 @@ typedef struct type_lien_no_nom
 /*------------------------------------------------------------*/
 /* gestion du champs mode des liens entre groupes de neurones */
 
-#define No_mode_link_product_compet 0   /* value obtained after compet */
-#define No_mode_link_distance_compet 1
-#define No_mode_link_product_analog 2   /* direct analog value */
-#define No_mode_link_distance_analog 3
-
-#define Number_of_mode_links 4
+/** cf. mode_link_def.h dans prom_kernel/include/ */
 
 
 /*----------------------------------------*/
@@ -106,7 +97,6 @@ extern TxChampsFormulaire formulaire_link[Number_of_link_items_total];
 
 extern type_lien_no_nom lien_no_nom_type_groupe[nbre_type_groupes];
 extern type_lien_no_nom lien_no_nom_type_link[nbre_type_links];
-extern type_lien_no_nom lien_no_nom_mode_link[Number_of_mode_links];
 
 GtkWidget *get_menubar_menu(TxDonneesFenetre * onglet_leto);
 void show_popup_menu(int popup_menu_type, GdkEventButton *event, TxDonneesFenetre *onglet_leto);

@@ -41,6 +41,10 @@ void creation(TxDonneesFenetre *onglet_leto)
     int x, y, dx;
     type_groupe *groupe;
     type_liaison *liaison;
+    type_liaison *neuromod_deb=NULL;
+    type_liaison *neuromod_ptr=NULL;
+    type_liaison *prec_liaison=NULL;
+    int neuromod_list_tested=0;
     int nbre_voie;
     int pas;                    /* taille du macro neurones pour trouver */
     /* les micron neurones par modulo        */
@@ -49,6 +53,7 @@ void creation(TxDonneesFenetre *onglet_leto)
 
     int groupe_nbre,taillex;
 
+    /** TODO : il faudrait ajouter le test sur neuromod pour determiner si on doit creer le neurone ou pas */
     sc->nbre_neurone = compte_neurone();
     printf("\nLe reseau comprend %d neurones \n", sc->nbre_neurone);
     sc->neurone = creer_reseau(sc->nbre_neurone);
@@ -123,36 +128,84 @@ void creation(TxDonneesFenetre *onglet_leto)
 	  }
         s_fin = j - 1;
 	debug_printf("s_deb = %d , s_fin = %d \n", s_deb, s_fin);
-        liaison = sc->deb_liaison;
+        liaison = sc->deb_liaison;		   
         no_gpe_liaison = 1;     /* le 0 correspond aux liens entre micro et macro neurones */
         while (liaison != NULL)
 	  {
-            if (liaison->arrivee == i && liaison->type != No_l_algorithmique
-                && liaison->type != No_l_neuro_mod)
-	      {
-                k = liaison->depart;
-                nbre_voie++;
-                for (j = 0; j < sc->nbre_neurone; j++)
-		  {
-		    if (sc->neurone[j].groupe == k)
-		      break;
-		  }
-		e_deb = j;
-		for (j = e_deb; j < sc->nbre_neurone; j++)
-		  {
-		    if (sc->neurone[j].groupe != k)
-		      break;
-		  }
-                e_fin = j - 1;
-	        debug_printf("e_deb = %d ,e_fin = %d \n", e_deb, e_fin);
-                creer_liaisons_entre_groupe(e_deb, e_fin, s_deb, s_fin, i, k,
-                                            liaison, nbre_voie - 1, pas,
-                                            no_gpe_liaison - 1);
-	      }
-            liaison = liaison->s;
-            no_gpe_liaison++;
+/*  	     printf("liaison (A) [%p] : type %d - mode : %d - liaison suivant : %p\n",(void*)liaison,liaison->type, liaison->mode, (void*)liaison->s); */
+
+	     /** creation des liens classique et tri des liens de
+	      * neuro modulation */
+	     if(liaison->mode<NEUROMOD) {
+		if (liaison->arrivee == i && liaison->type != No_l_algorithmique
+		    && liaison->type != No_l_neuro_mod)
+		{
+		   printf("Liaisons classiques created [%p] : type %d - mode : %d - output : %s [%d]\n",(void*)liaison,liaison->type, liaison->mode,groupe->no_name,groupe->type);
+		   k = liaison->depart;
+		   nbre_voie++;
+		   for (j = 0; j < sc->nbre_neurone; j++)
+		   {
+		      if (sc->neurone[j].groupe == k)
+			 break;
+		   }
+		   e_deb = j;
+		   for (j = e_deb; j < sc->nbre_neurone; j++)
+		   {
+		      if (sc->neurone[j].groupe != k)
+			 break;
+		   }
+		   e_fin = j - 1;
+		   debug_printf("e_deb = %d ,e_fin = %d \n", e_deb, e_fin);
+		   creer_liaisons_entre_groupe(e_deb, e_fin, s_deb, s_fin, i, k,
+					       liaison, nbre_voie - 1, pas,
+					       no_gpe_liaison - 1);
+		}
+		no_gpe_liaison++;
+		prec_liaison=liaison; /* only if not a NM link*/
+	     }
+	     else if(!neuromod_list_tested) { /** on ne remplit la
+					       * liste de neuromod que
+					       * la premiere fois */
+		/** ajouter les liens de neuromod dans la liste de neuromod*/
+		if(neuromod_deb==NULL) {
+		   neuromod_deb=liaison;
+		   neuromod_ptr=liaison;
+		}
+		else {
+		   neuromod_ptr->s=liaison;
+		   neuromod_ptr=liaison;
+		}
+		/* enlever les liens de neuromod dans la liste des
+		 * lien classique */
+		if(prec_liaison==NULL)
+		   sc->deb_liaison=liaison->s;
+		else
+		   prec_liaison->s=liaison->s;
+		
+		printf("Liaison added in NM list [%p] : type %d - mode : %d - liaison suivant : %p\n",(void*)liaison,liaison->type, liaison->mode, (void*) liaison->s);
+/*  		printf("prec_liaison : %p / liaison %p \n",(void*)prec_liaison,(void*)liaison); */
+/* 		printf("neuromodptr = %p\n",(void*)neuromod_ptr); */
+	     }
+/*  	     printf("liaison (Fin A) [%p] : type %d - mode : %d - liaison suivant : %p\n",(void*)liaison,liaison->type, liaison->mode, (void*)liaison->s); */ 
+	     liaison = liaison->s;
+/*  	     printf("liaison : %p\n",(void*)liaison);  */
 	  }
-        if (nbre_voie > 1
+	/** concatenation de la liste des neuromods a la suite de la
+	 * liste des liens si elle existe */
+	if(prec_liaison!=NULL)
+	   prec_liaison->s=neuromod_deb;
+
+	/**fermeture de la liste des neuromods si elle existe*/
+	if(neuromod_ptr!=NULL) 
+	   neuromod_ptr->s=NULL;
+
+	/**liste deja parcourue - set corresponding flag*/
+	neuromod_list_tested = 1;
+	
+
+	/** creation des micro liens entre le macro neurone et les
+	 * micro neurones */
+	if (nbre_voie > 1
             && (groupe->type == No_PTM || groupe->type == No_Winner_Macro
                 || groupe->type == No_PLG || groupe->type == No_Winner_Colonne
                 || groupe->type == No_But || groupe->type == No_Pyramidal
@@ -169,6 +222,40 @@ void creation(TxDonneesFenetre *onglet_leto)
 	      val = 1. / ((float) nbre_voie);
             debug_printf("creation w=%f %d \n", val, nbre_voie);
             creer_micro_liens(s_deb, s_fin, i, nbre_voie, val);
+	  }
+
+
+	/** parcours de liens de neuromod - ne pas prendre des
+	 * liaisons algo ni des liens de neuromod globale ! */
+	liaison=neuromod_deb;
+        while (liaison != NULL)
+	  {
+/*  	     printf("liaison (NM) [%p] : type %d - mode : %d - liaison suivant : %p\n",(void*)liaison,liaison->type, liaison->mode, (void*)liaison->s); */
+	     if (liaison->arrivee == i && liaison->type != No_l_algorithmique
+		 && liaison->type != No_l_neuro_mod)
+	     {
+		printf("Liaison NM created [%p] : type %d - mode : %d - output : %s [%d]\n",(void*)liaison,liaison->type, liaison->mode,groupe->no_name,groupe->type);
+		k = liaison->depart;
+		nbre_voie++;
+		for (j = 0; j < sc->nbre_neurone; j++)
+		{
+		   if (sc->neurone[j].groupe == k)
+		      break;
+		}
+		e_deb = j;
+		for (j = e_deb; j < sc->nbre_neurone; j++)
+		{
+		   if (sc->neurone[j].groupe != k)
+		      break;
+		}
+		e_fin = j - 1;
+		debug_printf("e_deb = %d ,e_fin = %d \n", e_deb, e_fin);
+		creer_liaisons_entre_groupe(e_deb, e_fin, s_deb, s_fin, i, k,
+					    liaison, nbre_voie - 1, 1/* pas=1*/,
+					    no_gpe_liaison - 1); 
+	     }
+	     no_gpe_liaison++;
+	     liaison = liaison->s;
 	  }
 	groupe = groupe->s;
       }                           /*       etude du groupe suivant       */

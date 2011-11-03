@@ -830,7 +830,9 @@ void combo_type_link_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFe
 void combo_mode_link_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
 {
     const gchar *entry_text;
+    type_groupe *groupe;
     int i;
+    mode_lien mode_link;
 
     if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
     {
@@ -846,11 +848,13 @@ void combo_mode_link_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFe
 
     debug_printf("Entry link mode: %s\n", entry_text);
 
-    for (i = 0; i < Number_of_mode_links; i++)
+    groupe=get_groupOut(sc->liaison_courante);
+    for (i = 0; i < group_mode_link_tab[groupe->type].nb_mode; i++)
     {
-       if (strncmp(lien_no_nom_mode_link[i].nom, entry_text, 100) == 0)
+       mode_link=group_mode_link_tab[groupe->type].mode_tab[i];
+       if (strncmp(mode_link.type_lien.nom, entry_text, 100) == 0)
        {
-	  sc->liaison_courante->mode = lien_no_nom_mode_link[i].no;
+	  sc->liaison_courante->mode = mode_link.type_lien.no;
 	  break;
        }
     }
@@ -861,6 +865,8 @@ void combo_mode_link_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFen
 {
     const gchar *entry_text;
     int i;
+    type_groupe *groupe;
+    mode_lien mode_link;
 
     if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
     {
@@ -876,11 +882,13 @@ void combo_mode_link_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFen
 
     debug_printf("Entry link mode: %s\n", entry_text);
 
-    for (i = 0; i < Number_of_mode_links; i++)
+    groupe=get_groupOut(sc->liaison_courante);
+    for (i = 0; i < group_mode_link_tab[groupe->type].nb_mode; i++)
     {
-       if (strncmp(lien_no_nom_mode_link[i].nom, entry_text, 100) == 0)
+       mode_link=group_mode_link_tab[groupe->type].mode_tab[i];
+       if (strncmp(mode_link.type_lien.nom, entry_text, 100) == 0)
        {
-	  gtk_entry_set_text(GTK_ENTRY(formulaire_link[No_item_link_mode].widget_entry), Int2Str(lien_no_nom_mode_link[i].no));
+	  gtk_entry_set_text(GTK_ENTRY(formulaire_link[No_item_link_mode].widget_entry), Int2Str(mode_link.type_lien.no));
 	  break;
        }
     }

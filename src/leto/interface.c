@@ -9,6 +9,7 @@
 #include "gere_coudes.h"
 #include "manage_comments.h"
 
+
 type_lien_no_nom lien_no_nom_type_groupe[nbre_type_groupes] = {  /* par defaut tous les champs sont editables dans l'IHM */
   {No_Hebb, "Hebb",                                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}},  /* 0 */
   {No_Winner, "Winner",                             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 1 */
@@ -922,16 +923,9 @@ type_lien_no_nom lien_no_nom_type_link[nbre_type_links] = {
   {No_l_algorithmique, "algorithmic link (virtual)",                  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} },
   {No_l_1_1_non_modif_bloqueur, "one to one blocking (vig. control)", {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} },
   {No_l_1_v_non_modif, "one to neighborhood (NON modifiable)",        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} },
-  {No_l_neuro_mod, "neuro modulation link (virtual)",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} }
+  {No_l_neuro_mod, "global neuro modulation link (virtual)",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} }
 };
 
-type_lien_no_nom lien_no_nom_mode_link[Number_of_mode_links] = {
-
-    {No_mode_link_product_compet, "product (after compet)", {1}},
-    {No_mode_link_distance_compet, "distance (after compet)", {1}},
-    {No_mode_link_product_analog, "product (before compet)", {1}},
-    {No_mode_link_distance_analog, "distance (before compet)", {1}}
-};
 
 void init_link_visibility_properties()
 {
@@ -978,11 +972,27 @@ GtkWidget *combo_type_link_entry;
 GtkWidget *combo_mode_link_entry;
 
 
+type_groupe *get_groupOut(type_liaison *link) {
+    type_groupe *groupe;
+    int groupe_not_found=1;
+    /** retrouve le type du groupe en sortie du lien */
+    groupe=sc->deb_groupe;
+    while(groupe!=NULL && groupe_not_found) {
+       if(groupe->no == link->arrivee) {
+	  groupe_not_found=0;
+       }
+       else 
+	  groupe=groupe->s;
+    }
+    return groupe;
+}
+
+
 
 /**
  * Creates a dialog to modify a link.
  */
-GtkWidget* create_read_link(TxDonneesFenetre *onglet_leto)
+GtkWidget* create_read_link(TxDonneesFenetre *onglet_leto, type_liaison *link)
 {
     GtkWidget *link_dialog;
     GtkWidget *Winmain;
@@ -993,6 +1003,8 @@ GtkWidget* create_read_link(TxDonneesFenetre *onglet_leto)
     GList *combo1_items = NULL;
     GList *combo2_items = NULL;
     GtkWidget *entry_comment;
+    type_groupe *groupe;
+    mode_lien *mode_link;
 
     init_link_visibility_properties();
 
@@ -1074,9 +1086,14 @@ GtkWidget* create_read_link(TxDonneesFenetre *onglet_leto)
                      (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                      (GtkAttachOptions) (0), 0, 0);
 
-    for (i = 0; i < Number_of_mode_links; i++)
-        combo2_items = g_list_append(combo2_items,
-                                     (gpointer) lien_no_nom_mode_link[i].nom);
+    /** get groupe out type */
+    groupe = get_groupOut(link);
+
+    for (i = 0; i < group_mode_link_tab[groupe->type].nb_mode; i++) {
+       mode_link=&(group_mode_link_tab[groupe->type].mode_tab[i]);
+       combo2_items = g_list_append(combo2_items,
+				    (gpointer) mode_link->type_lien.nom);
+    }
 
     gtk_combo_set_popdown_strings(GTK_COMBO(combo2), combo2_items);
     g_list_free(combo2_items);

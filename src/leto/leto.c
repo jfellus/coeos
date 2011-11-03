@@ -92,7 +92,6 @@ void cree_lien_micro_macro()
     MY_FloatAffect(liaison->norme, 0.);
     MY_IntAffect(liaison->nbre, 0);
     sprintf(liaison->nom, "lien micro/macro");
-
     sc->nbre_liaison++;
 }
 
@@ -613,6 +612,8 @@ void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, Tx
     type_groupe *groupe1, *groupe2;
     int ret;
 
+    printf("sc->deb_liaison : %p\n",(void*)sc->deb_liaison);
+
     debug_printf("creation_lien %s-> %s  nbre_liaison=%d \n",no_groupe_depart_name, no_groupe_arrivee_name, sc->nbre_liaison);
 
     if (sc->deb_liaison == NULL)  /* (nbre_liaison == 0) modif PG*/
@@ -853,9 +854,11 @@ static GtkTargetEntry target_table[1];
 
 void fill_link_dialog(type_liaison * link, int type)
 {
-   int i;
+   int i,updated;
    int *editable;
    char *entry_text;
+   type_groupe *groupe;
+   mode_lien mode_link;
 
    if (type >=0)
    {
@@ -924,14 +927,23 @@ void fill_link_dialog(type_liaison * link, int type)
       update_champs_comment(&formulaire_link[No_item_link_comment], link->comment);
       
       gtk_entry_set_text(GTK_ENTRY(combo_type_link_entry), lien_no_nom_type_link[link->type].nom);
-      if (link->mode < Number_of_mode_links)
-      {
-	 gtk_entry_set_text(GTK_ENTRY(combo_mode_link_entry), lien_no_nom_mode_link[link->mode].nom);
+
+      /** get groupe out type */
+      groupe=get_groupOut(link);
+
+      updated=0;
+      for(i=0; i<group_mode_link_tab[groupe->type].nb_mode && !updated;i++) {
+	 mode_link=group_mode_link_tab[groupe->type].mode_tab[i];
+	 if (link->mode == mode_link.type_lien.no)
+	 {
+	    gtk_entry_set_text(GTK_ENTRY(combo_mode_link_entry), mode_link.type_lien.nom);
+	    updated=1;
+	 }
       }
-      else
+      if(!updated)
       {
 	 TxUpdateChampsdansFormulaire(&formulaire_link[No_item_link_mode], Int2Str(link->mode), editable[No_item_link_mode]);
-	 gtk_entry_set_text(GTK_ENTRY(combo_mode_link_entry), "");
+	 gtk_entry_set_text(GTK_ENTRY(combo_mode_link_entry), "unknown for this group");
       }
    }
 }
@@ -941,7 +953,7 @@ int formulaire_lien(type_liaison * link,TxDonneesFenetre *onglet_leto)
    static GtkWidget *link_dialog = NULL;
    gint result;
 
-   link_dialog = create_read_link(onglet_leto);
+   link_dialog = create_read_link(onglet_leto,link);
 
    fill_link_dialog(link, -1);
 
@@ -1378,6 +1390,8 @@ int main(int argc, char *argv[])
 	setlocale(LC_NUMERIC, "C");
 	gtk_disable_setlocale();
 	gtk_init(&argc, &argv);
+
+
 
 /********************************* Creation de la fenetre ***********************************************************/
 

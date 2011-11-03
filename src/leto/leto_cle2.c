@@ -401,8 +401,7 @@ int choix_liaisons_voisinage(type_liaison * liaison, int neurone_deb,   /* numer
 /*--------------------------------------------------------------------------*/
 
 void conditionne_liaison(type_groupe * groupe, type_liaison * liaison,
-			 type_coeff * pt, int no_voie, int nbre_liaisons,
-			 int no_gpe_liaison)
+			 type_coeff * pt, int no_voie, int no_gpe_liaison)
 {
   float norme;
 
@@ -538,7 +537,7 @@ void init_seuils_alea_gauss(int numero, float moyenne, float ecart_type)
 }
 
 /*----------------------------------------------------------------*/
-void init_corps_neurone(type_groupe * groupe, int j, int s_deb)
+void init_corps_neurone(type_groupe * groupe, int j)
 {
   float seuil,tolerance;
 
@@ -585,7 +584,7 @@ void init_corps_neurone(type_groupe * groupe, int j, int s_deb)
 /* e_deb numero du premier neurone du groupe d'entree */
 void creer_liaison_1_vers_tous_neurone(type_groupe * groupe, type_liaison * liaison, int j,
 				       int pas_entree, int no_voie,
-				       int no_gpe_liaison, int s_deb, int e_deb, int e_fin)
+				       int no_gpe_liaison, int e_deb, int e_fin)
 {
   type_coeff *pt, *pt1;
   int i;
@@ -831,7 +830,7 @@ void creer_liaison_1_vers_voisinage_neurone(type_groupe * groupe, type_liaison *
 	  pt1->s = pt;
         }
 
-      conditionne_liaison(groupe, liaison, pt, no_voie, nbre_liaisons, no_gpe_liaison);
+      conditionne_liaison(groupe, liaison, pt, no_voie, no_gpe_liaison);
       pt->entree = liste[0];
 
       for (i = 1; i < nbre_liaisons; i++) /*autres liaisons      */
@@ -842,8 +841,7 @@ void creer_liaison_1_vers_voisinage_neurone(type_groupe * groupe, type_liaison *
 	  pt = creer_coeff();
 	  pt->val = 1e-10;
 	  pt1->s = pt;
-	  conditionne_liaison(groupe, liaison, pt, no_voie, nbre_liaisons,
-			      no_gpe_liaison);
+	  conditionne_liaison(groupe, liaison, pt, no_voie, no_gpe_liaison);
 	  pt->entree = liste[i];  /* pointe vers entree couche -1  */
         }
 
@@ -918,15 +916,19 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
     decalage = no_voie / 2;
   else decalage = 0;
 
+  /** neuromod -> pas de micro neurone */
+  if(liaison->mode>=NEUROMOD)
+     decalage=0;
+
   if (pas > 1)
      debug_printf("creation d'un lien pour une categorie de micro neurones %d\n", decalage);
 
   x = y = z = 0;
   for (j = s_deb + decalage; j <= s_fin; j += pas)
     {
-      init_corps_neurone(groupe, j, s_deb);
+      init_corps_neurone(groupe, j);
 
-      if (liaison->type == No_l_1_t)	creer_liaison_1_vers_tous_neurone(groupe, liaison, j, pas_entree, no_voie, no_gpe_liaison, s_deb, e_deb, e_fin);
+      if (liaison->type == No_l_1_t)	creer_liaison_1_vers_tous_neurone(groupe, liaison, j, pas_entree, no_voie, no_gpe_liaison, e_deb, e_fin);
 
       if (liaison->type == No_l_1_1_modif || liaison->type == No_l_1_1_non_modif || liaison->type == No_l_1_1_non_modif_bloqueur)
 	creer_liaison_1_vers_1_neurone(groupe, liaison, &j, pas_entree, no_voie, no_gpe_liaison, s_deb, s_fin, e_deb, e_fin, &pos1);

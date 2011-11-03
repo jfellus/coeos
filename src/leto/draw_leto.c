@@ -247,6 +247,17 @@ void  affiche_parametres_liaison(type_liaison *liaison, TxPoint point2,TxDonnees
    char nom[256];
    char *font_weight = NULL;
    int type = liaison->type;
+   int type2= liaison->type;
+   int updated,i;
+   type_groupe *groupe;
+   mode_lien mode_link;
+
+
+   /** correction de la couleur en fonction du mode du lien */
+   if(liaison->mode>=NEUROMOD) {/*if neuromod mode**/
+      type2=No_l_neuro_mod;      /*recognize its type as neuromod to get*/
+                                /*correct color*/
+   }
 
    point1.x = point2.x;
    point1.y = point2.y;
@@ -266,14 +277,35 @@ void  affiche_parametres_liaison(type_liaison *liaison, TxPoint point2,TxDonnees
 
    if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod)
    {
-      if (liaison->mode == 0 || liaison->mode == 2)
-      {
-	 TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point1, "X", font_weight);
+      /** get groupe out type */
+      groupe = get_groupOut(liaison);
+
+      /** recuperation de l'abbreviation correspondant au mode du lien */
+      updated=0;
+      for(i=0; i<group_mode_link_tab[groupe->type].nb_mode && !updated;i++) {
+	 mode_link=group_mode_link_tab[groupe->type].mode_tab[i];
+	 if (liaison->mode == mode_link.type_lien.no)
+	 {
+	    TxEcrireChaine(onglet_leto, lut_l[type2], point1, mode_link.abbrev, font_weight); 
+	    updated=1;
+	 }
       }
-      else
-      {
-	 TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point1, "d", font_weight);
+      if(!updated) {
+	 TxEcrireChaine(onglet_leto, lut_l[type2], point1, "?", font_weight);    
       }
+/* !!      switch(liaison->mode) { */
+/* 	 case 0: */
+/* 	 case 2: */
+/* 	    TxEcrireChaine(onglet_leto, lut_l[type]*sc->couleur_texte/, point1, "X", font_weight); */
+/* 	    break; */
+/* 	 case 1: */
+/* 	 case 3: */
+/* 	    TxEcrireChaine(onglet_leto, lut_l[type]*sc->couleur_texte/, point1, "d", font_weight); */
+/* 	    break; */
+/* 	 default: */
+/* 	    TxEcrireChaine(onglet_leto, lut_l[type]*sc->couleur_texte/, point1, "S", font_weight); */
+/* 	    break; */
+/*       } */
       point1.x = point1.x + 5;
    }
 
@@ -320,6 +352,12 @@ void affiche_liaison(type_liaison *liaison, type_groupe * groupe1, type_groupe *
   style = liaison->style;
 	
   nbPoint = get_link_points(liaison, TxTabPoint);
+
+  /** correction de la couleur en fonction du mode du lien */
+/*  if(liaison->mode>=NEUROMOD) {  *if neuromod mode*
+     type=No_l_neuro_mod;  *recognize its type as neuromod to get*
+                           *correct color*
+  }*/
 
   if (liaison == sc->liaison_courante)
   {
