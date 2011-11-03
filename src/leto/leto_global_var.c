@@ -3,10 +3,15 @@
 #include "public_leto.h"
 
 /*
-#include "reseau.h"
-#include "outils.h"
+#include "reseau.h" 
+#include "outils.h" 
 #include "leto_global_var.h"
 */
+
+
+/** insertion de la structure utilisee pour connaitre les modes possibles */
+#include "mode_link_data_def.h"
+
 
 donnees_script les_scripts[NB_MAX_SCRIPTS];
 donnees_script *sc=&les_scripts[0]; /* le script courant : celui a l'affichage */
@@ -23,6 +28,9 @@ void init_global_var_un_script(donnees_script *le_script)
   /* init de la partie IHM */
 
   le_script->premiere_lecture = 0;
+
+  /** Init tab of mode link depending on group type */
+  init_group_mode_link_tab();
 
 #ifndef AVEUGLE
   le_script->first_time = 1;

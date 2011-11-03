@@ -34,6 +34,7 @@ void start_group_get_link_pos(type_groupe *group, type_liaison *link, int *x, in
 void end_group_get_link_pos(type_groupe *group, type_liaison *link, int *x, int *y)
 {
    int sens;
+   (void)link;
 
    if (group->reverse <= 0)
    {
@@ -147,6 +148,7 @@ void rescale_coudes(type_liaison *liaison, int new_start_x, int new_start_y, int
 void gere_coude(TxPoint point,TxDonneesFenetre *onglet_leto)
 {
    t_polyline *polyline;
+   (void) onglet_leto;
    debug_printf("gere_coude\n");
    
    if (sc->liaison_courante != NULL)

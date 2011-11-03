@@ -415,7 +415,7 @@ int compte_neurone()
         {
             if (liaison->arrivee == groupe->no
                 && liaison->type != No_l_algorithmique
-                && liaison->type != No_l_neuro_mod)
+                && liaison->type != No_l_neuro_mod && liaison->mode<NEUROMOD)
                 nbre_voie++;
             liaison = liaison->s;
         }
@@ -612,6 +612,8 @@ int selected_link(type_liaison *liaison, TxDonneesFenetre *onglet_leto)
   if(is_selected(groupe_arrivee) == NULL) return 0;
   return 1;
 #else
+   (void)liaison;
+   (void)onglet_leto;
   return 0;
 #endif
 }
