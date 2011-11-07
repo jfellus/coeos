@@ -1257,16 +1257,16 @@ void open_file(GtkWidget * widget, gpointer data)
 
     if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
     {
-	char		filename1[MAX_PATH];
+	char		filename1[PATH_MAX];
 	char		*basename = NULL;
 #ifndef LETO
-	char		filename2[MAX_PATH];
+	char		filename2[PATH_MAX];
 	GtkWidget	*pNotebook;
 	GtkWidget	*page;
 	int		num_page;
 #endif
 
-	memset(filename1, 0, MAX_PATH * sizeof(char));
+	memset(filename1, 0, PATH_MAX * sizeof(char));
         filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
         if (strlen(filename) == 0)
             return;
@@ -1288,7 +1288,7 @@ void open_file(GtkWidget * widget, gpointer data)
 	for(i=0;i<NB_MAX_SCRIPTS;i++){
 
 		/* a chaque iteration on enleve l'extension .script au nomfich1 de chaque script pour faire la comparaison */
-		memset(filename2,0,sizeof(char)*MAX_PATH); /* reinitialise le tableau */
+		memset(filename2,0,sizeof(char)*PATH_MAX); /* reinitialise le tableau */
 		memcpy(filename2,les_scripts[i].nomfich1, (strlen(les_scripts[i].nomfich1) + 1) * sizeof(char));
 		get_base_name(filename2);
 
@@ -2450,9 +2450,9 @@ void creation_cb(GtkWidget * widget, gpointer data)
   /* donnees_script sc_tmp, *sc_save; */
   /* char script[MAX_PATH],file_res[MAX_PATH],draw[MAX_PATH]; */
   /* TxDonneesFenetre *onglet_leto_tmp; */
-  char file_script[MAX_PATH],chemin_env[MAX_PATH];
+  char file_script[PATH_MAX],chemin_env[PATH_MAX];
   
-  memset(file_script,0,sizeof(char)*MAX_PATH); /* initialise le tableau */
+  memset(file_script,0,sizeof(char)*PATH_MAX); /* initialise le tableau */
   memcpy(file_script,sc->nomfich1, (strlen(sc->nomfich1) + 1) * sizeof(char));	
 
 #ifndef LETO

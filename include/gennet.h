@@ -162,7 +162,7 @@ typedef	struct		s_gennet
 {
   int			ac;
   char			**av;
-  char			prt_path[MAX_PATH];
+  char			prt_path[PATH_MAX];
   long			seed;
   t_gui			*gui;
   t_promnet		*promnet;

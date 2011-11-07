@@ -489,12 +489,12 @@ char		*get_leto_binary()
 	}
       promethe_path = PROMETHE_DIR;
     }
-  if ((leto_path = malloc(MAX_PATH * sizeof(char))) == NULL)
+  if ((leto_path = malloc(PATH_MAX * sizeof(char))) == NULL)
     {
       perror("get_leto_binary : malloc");
       return NULL;
     }
-  memset(leto_path, 0, MAX_PATH * sizeof(char));
+  memset(leto_path, 0, PATH_MAX * sizeof(char));
   sprintf(leto_path, "%s/%s/%s", home_path, promethe_path, "bin/Linux/leto");
   return leto_path;
 }
@@ -1946,7 +1946,7 @@ void	GenerateNetwork(GtkWidget *widget, gpointer data)
 								GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, 
 								GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
 
-  e_path = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_path = gtk_entry_new_with_max_length(PATH_MAX - 1);
   SaveFile_control_browse(gen->gui->PathDialog, e_path, "path :");
 
   result = gtk_dialog_run(GTK_DIALOG(gen->gui->PathDialog));
@@ -2054,7 +2054,7 @@ void	GenerateDeploySh(GtkWidget *widget, gpointer data)
 								GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, 
 								GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
 
-  e_path = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_path = gtk_entry_new_with_max_length(PATH_MAX - 1);
   SaveFile_control_browse(gen->gui->PathDialog, e_path, "path :");
 
   result = gtk_dialog_run(GTK_DIALOG(gen->gui->PathDialog));

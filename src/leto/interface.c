@@ -633,7 +633,7 @@ void create_menubar_leto(t_gennet_script *pscript, GtkWidget *vbox, int nPage)
   GtkWidget		*WinMain;
   GtkActionGroup	*actionGroup;
   char			*env = NULL;
-  char			menu_path[MAX_PATH];
+  char			menu_path[PATH_MAX];
   char			id_ag[1024];
 
 #ifndef LETO

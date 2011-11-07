@@ -161,8 +161,8 @@ void		edit_with_leto_event(GtkSocket *socket, gpointer user_data)
 int		Write_WindowID(unsigned long wID)
 {
   char		*home_path = "\0";
-  char		dotgennetpath[MAX_PATH];
-  char		widfile[MAX_PATH];
+  char		dotgennetpath[PATH_MAX];
+  char		widfile[PATH_MAX];
   int		fd;
   FILE		*metaleto_fd = NULL;
 
@@ -292,7 +292,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
   gtk_container_add(GTK_CONTAINER(GTK_DIALOG(gen->gui->NewScriptDialog)->vbox), separator);
   gtk_widget_show(separator);
 
-  e_pscript = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pscript = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_file_script(pscript->prom_script);
@@ -302,7 +302,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pscript, "Path to .script :");
 
-  e_pscript_non_symb = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pscript_non_symb = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_file_script_non_symb(pscript->prom_script);
@@ -312,7 +312,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pscript_non_symb, "Path to .script_o :");
 
-  e_pdraw = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pdraw = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_file_draw(pscript->prom_script);
@@ -322,7 +322,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pdraw, "Path to .draw :");
 
-  e_pres = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pres = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_file_res(pscript->prom_script);
@@ -332,7 +332,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pres, "Path to .res :");
 
-  e_pconfig = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pconfig = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_file_config(pscript->prom_script);
@@ -342,7 +342,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pconfig, "Path to .config :");
 
-  e_pbus = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pbus = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_file_bus(pscript->prom_script);
@@ -352,7 +352,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pbus, "Path to .bus :");
 
-  e_pvar = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pvar = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_file_var(pscript->prom_script);
@@ -362,7 +362,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pvar, "Path to .var :");
 
-  e_pdev = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pdev = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_file_dev(pscript->prom_script);
@@ -372,7 +372,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pdev, "Path to .dev :");
 
-  e_pprt = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pprt = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_file_prt(pscript->prom_script);
@@ -382,7 +382,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pprt, "Path to .prt :");
 
-  e_pgcd = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pgcd = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_file_gcd(pscript->prom_script);
@@ -409,7 +409,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
   gtk_widget_show(separator);
 
 
-  e_pdeploypath = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pdeploypath = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_prom_deploy(pscript->prom_script);
@@ -419,7 +419,7 @@ void		Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     }
   OpenFile_control_browse(gen->gui->NewScriptDialog, e_pdeploypath, "Path to deploy the application:");
 
-  e_pbinary = gtk_entry_new_with_max_length(SIZE_OF_PATHNAME - 1);
+  e_pbinary = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pscript != NULL)
     {
       val = promnet_prom_script_get_path_prom_binary(pscript->prom_script);
@@ -575,7 +575,7 @@ void		Computer_Edit_Computer(t_gennet *gen, t_gennet_computer *pcomputer)
     }
   new_control(gen->gui->AddComputerDialog, glogin, "Login : ");
 
-  gpath = gtk_entry_new_with_max_length(MAX_PATH - 1);
+  gpath = gtk_entry_new_with_max_length(PATH_MAX - 1);
   if (pcomputer != NULL)
     {
       val = promnet_computer_get_path(pcomputer->computer);
