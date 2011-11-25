@@ -330,12 +330,12 @@ void  affiche_parametres_liaison(type_liaison *liaison, TxPoint point2,TxDonnees
    
    point1.x = point1.x - 40;
    point1.y = point1.y + 10;
-   if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod)
-   {
+   /*if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod)
+   {*/
       strcpy(nom, MY_Float2Str(liaison->norme));
       simplifie_nom(nom);
       TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point1, nom, font_weight);
-   }
+   /*}*/
 }
 
 void affiche_liaison(type_liaison *liaison, type_groupe * groupe1, type_groupe * groupe2,TxDonneesFenetre *onglet_leto)
