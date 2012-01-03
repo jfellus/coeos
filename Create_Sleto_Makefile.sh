@@ -13,39 +13,29 @@
 ####################################################
 #definition de $CFLAGS $FLAGS_OPTIM $FLAGS_DEBUG $INCLUDE2 (pour specif mac)
 ####################################################
-source ../../scripts/COMPILE_FLAG
+source ../scripts/COMPILE_FLAG
 
 # Nom du programme*
 PROG_NAME="sleto"
 
-
-SIMULATOR_PATH=$PWD/../..
-
-#les bibliotheques et leurs chemins d'acces
-GRAPHICLIBPATH="$PWD/../../lib/$SYSTEM/graphique"
-GRAPHICLIB="-lgraphique"
-
-SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
 
 GTKINCLUDES="`pkg-config --cflags gtk+-2.0 gthread-2.0`"
 GTKLIB=`pkg-config --libs gtk+-2.0 gthread-2.0`
 
 # Initialisation des libs, includes et flags
 LIBS="$GTKLIB -lmxml"
-INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$PWD/../../shared/include -I$PWD/include -I$PWD/include/shared -I."
+INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$SIMULATOR_PATH/shared/include -I$PWD/include -I$PWD/include/shared -I."
 CFLAGS="-g3 -Wall -pedantic -D_REENTRANT -D_GNU_SOURCE -DDAEMON_COM -D`uname` -Wno-variadic-macros"
 
 SCRIPTLIB_SYMB="$SCRIPTLIB"_symb
 
 #Version finale des libs, includes et flags
 FINALINCLUDES="$INCLUDES"
-FINALLIBS="$LIBS -L$SCRIPTLIBPATH $SCRIPTLIB_SYMB -L$GRAPHICLIBPATH $GRAPHICLIB"
+FINALLIBS="$LIBS -L$SCRIPTLIBPATH $SCRIPTLIB_SYMB -L$GRAPHICLIBPATH -l$GRAPHICLIB"
 FINALCFLAGS="$CFLAGS -DLETO -DSYMBOLIQUE_VERSION"
 
 #Les repertoires de destination des fichiers compiles
-BINDIR=$PWD/../../bin/$SYSTEM
-HOMEBINDIR=$HOME/bin_leto_prom/.
-OBJDIR="$PWD/obj/$SYSTEM/$PROG_NAME"
+OBJDIR=$OBJPATH/$PROGNAME
 mkdir -p $OBJDIR
 
 #le fichier xml pour le menu de leto
@@ -90,13 +80,14 @@ echo -e "\t@cp $XML $BINDIR/. " >> $MAKEFILE
 echo -e "\t@cp $BINDIR/$PROG_NAME $XML $HOMEBINDIR " >> $MAKEFILE
 echo "" >> $MAKEFILE
 
-#regles additionnelles
-echo "reset:" >> $MAKEFILE
-echo -e "\trm -f  $OBJDIR/*.o $BINDIR/$PROG_NAME $HOMEBINDIR/$PROG_NAME" >> $MAKEFILE
-echo "" >> $MAKEFILE
 
+#regles additionnelles
 echo "clean:" >> $MAKEFILE
 echo -e "\trm -f  $OBJDIR/*.o " >> $MAKEFILE
+echo "" >> $MAKEFILE
+
+echo "reset:clean" >> $MAKEFILE
+echo -e "\trm -f  $OBJDIR/*.o $BINDIR/$PROG_NAME $HOMEBINDIR/$PROG_NAME" >> $MAKEFILE
 echo "" >> $MAKEFILE
 
 echo "install:" >> $MAKEFILE

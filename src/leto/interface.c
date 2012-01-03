@@ -21,7 +21,7 @@ type_lien_no_nom lien_no_nom_type_groupe[nbre_type_groupes] = {  /* par defaut t
   {No_Entree, "Input",                              {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 7 */
   {No_Sortie, "Output",                             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 8 */
   {No_PTM, "PTM",                                   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 9 */
-  {No_Hebb_Seuil, "Hebb_Threshold",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 10 */
+  {No_Hebb/*_Seuil*/, "Hebb_Threshold",                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 10 */
   {No_Winner_Special, "Winner_Special",             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 11 */
   {No_Hopfield, "Hopfield",                         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 12 */
   {No_Winner_Colonne, "Winner_Column",              {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}, /* 13 */
@@ -69,7 +69,7 @@ static GtkToggleActionEntry menu_toggle_items[] = {
     {"/View/Unselect plane/Plane 6", NULL, "Plane 6", NULL, NULL, G_CALLBACK(print_selected) }
 };
 
-/* Our menu, an array of GtkActionEntry structures that defines each menu item 
+/* Our menu, an array of GtkActionEntry structures that defines each menu item
  * { NomAction, image predefinie, label, raccourci clavier, tooltip, callback } */
 static GtkActionEntry menu_items[] = {
     {"/_File", NULL, "_File", NULL, NULL, NULL },
@@ -84,8 +84,8 @@ static GtkActionEntry menu_items[] = {
     {"/File/_Save _selection", GTK_STOCK_SAVE_AS, "_Save _selection", NULL, "Save selection", G_CALLBACK(sauve_selection) },
     {"/File/_Save _selection _flat", GTK_STOCK_SAVE_AS, "_Save _selection _flat", NULL, "Save selection flat", G_CALLBACK(sauve_selection_a_plat) },
     {"/File/_Block _transfo", NULL, "_Block _transfo","<Release>B", "Block transfo", G_CALLBACK(block_transfo) },
-   	
-    /*si libg2 on compile en incluant le menu export 
+
+    /*si libg2 on compile en incluant le menu export
      * actuellement non implementee dans le fichier xml */
 #ifdef EXPORT
     {"/File/_Export...", GTK_STOCK_CONVERT, "_Export...", "<Control>E", "Export", G_CALLBACK(export_cb) },
@@ -184,7 +184,7 @@ void init_group_visibility_properties()
     t[No_item_tolerance] = t[No_item_alpha] = -1;
     t[No_item_simulation_speed] = -1;
 
-    t = lien_no_nom_type_groupe[No_Winner_Macro].editable;    
+    t = lien_no_nom_type_groupe[No_Winner_Macro].editable;
     t[No_item_tolerance] = t[No_item_alpha] = -1;
     t[No_item_simulation_speed] = -1;
 
@@ -203,7 +203,7 @@ void init_group_visibility_properties()
     t[No_item_tolerance] = t[No_item_alpha] = t[No_item_nbre_de_1] = t[No_item_sigma_f] = -1;
     t[No_item_simulation_speed] = -1;
 
-   
+
     t = lien_no_nom_type_groupe[No_Winner_Selectif].editable;   /* fait */
     t[No_item_noise_level] = -1;
     t[No_item_tolerance] = t[No_item_alpha] = -1;
@@ -389,7 +389,7 @@ void init_group_visibility_properties()
     t[No_item_noise_level] = -1;
     t[No_item_dvp] = -1;
     t[No_item_dvn] = -1;
-    t[No_item_tolerance] = t[No_item_sigma_f]=-1; 
+    t[No_item_tolerance] = t[No_item_sigma_f]=-1;
 
 
     t = lien_no_nom_type_groupe[No_Sigma_PI].editable;  /* fait */
@@ -521,7 +521,7 @@ void create_fenetre_dialogue(TxDonneesFenetre * fenetre, TxDonneesFenetre *ongle
 						  NULL);
     gtk_window_set_default_size (GTK_WINDOW(fenetre->window), 250, 100);
 
-    content_area = ((GtkDialog *) fenetre->window)->vbox;				  
+    content_area = ((GtkDialog *) fenetre->window)->vbox;
     g_signal_connect(GTK_OBJECT(fenetre->window), "delete_event",
                      GTK_SIGNAL_FUNC(callback_hide_find_group), NULL);  /* definie dans find_and_manage.c */
 
@@ -649,7 +649,7 @@ void create_menubar_leto(t_gennet_script *pscript, GtkWidget *vbox, int nPage)
 #else
   WinMain = pscript->onglet_leto->window;
 #endif
-  
+
   /* creation du menubar */
   menubar = gtk_ui_manager_new ();
 
@@ -664,17 +664,17 @@ void create_menubar_leto(t_gennet_script *pscript, GtkWidget *vbox, int nPage)
   /* creation des accelerateurs */
   accel_group = gtk_ui_manager_get_accel_group (menubar);
   gtk_window_add_accel_group (GTK_WINDOW (WinMain), accel_group);
-      
+
   /* tout le contenu du menubar est repertorie dans un fichier xml que l'on charge */
   env = getenv("HOME");
 #ifdef LETO
   sprintf(menu_path, "%s/bin_leto_prom/menu_leto.xml", env);
 #else
   sprintf(menu_path, "%s/bin_leto_prom/menu_leto_coeos.xml", env);
-#endif 
+#endif
 
   gtk_ui_manager_add_ui_from_file( menubar, menu_path, NULL );
-  
+
   g_signal_connect ( menubar, "add_widget", G_CALLBACK( menu_addLeto ), vbox);
 
   /* on memorise le menubar pour y avoir acces facilement */
@@ -945,7 +945,7 @@ void init_link_visibility_properties()
         (lien_no_nom_type_link[i].editable)[No_item_link_dvy] = -1;
         (lien_no_nom_type_link[i].editable)[No_item_link_proba] = -1;
         (lien_no_nom_type_link[i].editable)[No_item_link_name] = -1;
-        (lien_no_nom_type_link[i].editable)[No_item_link_mode] = 0; /* le mode est change uniquemenet par le combo, 
+        (lien_no_nom_type_link[i].editable)[No_item_link_mode] = 0; /* le mode est change uniquemenet par le combo,
                                                                        l'affichage numerique n'est la que pour le debug des vieux scripts */
     }
 
@@ -967,8 +967,8 @@ void init_link_visibility_properties()
     lien_no_nom_type_link[No_l_neuro_mod].editable[No_item_link_name] = 1;
     lien_no_nom_type_link[No_l_1_1_non_modif_bloqueur].editable[No_item_link_name] = 1;
 
-    /*J'interdis l'utilisation de temps et de stemps : 
-      ca pourra etre changee mais pour le moment ils sont pas utilises : 
+    /*J'interdis l'utilisation de temps et de stemps :
+      ca pourra etre changee mais pour le moment ils sont pas utilises :
       on a rien defini dessus M.Maillard */
     lien_no_nom_type_link[No_l_neuro_mod].editable[No_item_link_temps] = 0;
     lien_no_nom_type_link[No_l_neuro_mod].editable[No_item_link_stemps] = 0;
@@ -989,7 +989,7 @@ type_groupe *get_groupOut(type_liaison *link) {
        if(groupe->no == link->arrivee) {
 	  groupe_not_found=0;
        }
-       else 
+       else
 	  groupe=groupe->s;
     }
     return groupe;
@@ -1046,7 +1046,7 @@ GtkWidget* create_read_link(TxDonneesFenetre *onglet_leto, type_liaison *link)
     for (i = 0; i < Number_of_link_items; i++)
         TxInsereChampsdansFormulaire(link_dialog, table1, &formulaire_link[i]);
 
-    entry_comment=InsereCommentdansFormulaire(link_dialog, table1, &formulaire_link[No_item_link_comment]); 
+    entry_comment=InsereCommentdansFormulaire(link_dialog, table1, &formulaire_link[No_item_link_comment]);
 
     /***************** types combo list ***************/
 
@@ -1153,7 +1153,7 @@ void show_popup_menu(int popup_menu_type, GdkEventButton *event,TxDonneesFenetre
        case POPUP_MENU_LINK:
 	  menu = gtk_ui_manager_get_widget(menubar, "/popupLink");
 	  break;
-	  
+
        case POPUP_MENU_BEND:
 	  menu = gtk_ui_manager_get_widget(menubar, "/popupCoude");
 	  break;
@@ -1222,9 +1222,9 @@ void set_title(TxDonneesFenetre *onglet_leto)
 {
 #ifdef LETO
    char title[255];
-   
+
    if (strlen(sc->nomfich1) == 0)
-   { 
+   {
       memcpy(title, "Untitled script", strlen("Untitled script")+1 * sizeof(char));
    }
    else
@@ -1246,7 +1246,7 @@ void set_title(TxDonneesFenetre *onglet_leto)
    char		title[255];
 
    if (strlen(sc->nomfich1) == 0)
-   { 
+   {
       memcpy(title, "Untitled script", strlen("Untitled script")+1 * sizeof(char));
    }
    else
@@ -1263,9 +1263,9 @@ void set_title(TxDonneesFenetre *onglet_leto)
 
    /* changement du nom de l'onglet */
    pNotebook = lookup_widget(onglet_leto->window ,"Notebook");
-   
+
    num_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(pNotebook));
-   
+
    page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(pNotebook), num_page);
    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(pNotebook), page, title);
 #endif
@@ -1333,7 +1333,7 @@ void scroll(TxPoint point, TxDonneesFenetre *onglet_leto)
    {
       scroll_window(40, 0, onglet_leto);
    }
-   
+
    if (point.y - 20 < sc->ymin)
    {
       scroll_window(0, -40, onglet_leto);

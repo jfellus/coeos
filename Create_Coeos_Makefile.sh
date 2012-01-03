@@ -13,7 +13,7 @@
 ####################################################
 #definition de $CFLAGS $FLAGS_OPTIM $FLAGS_DEBUG $INCLUDE2 (pour specif mac)
 ####################################################
-source ../../scripts/COMPILE_FLAG
+source ../scripts/COMPILE_FLAG
 
 # Nom du programme
 PROG_NAME="coeos"
@@ -23,31 +23,21 @@ CC="gcc"
 SYSTEM=`uname`
 PWD=`pwd`
 
-#les bibliotheques et leurs chemins d'acces
-GRAPHICLIBPATH="$PWD/../../lib/$SYSTEM/graphique"
-GRAPHICLIB="graphique"
-
-
-SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
-SCRIPTLIB="script_symb"
 
 GTKINCLUDES="`pkg-config --cflags gtk+-2.0 gthread-2.0`"
 GTKLIB=`pkg-config --libs gtk+-2.0 gthread-2.0`
 
 # Initialisation des libs, includes et flags
 LIBS="$GTKLIB -lmxml"
-INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$PWD/../../shared/include -I$PWD/include -I$PWD/include/shared -I."
+INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$SIMULATOR_PATH/shared/include -I$PWD/include -I$PWD/include/shared -I."
 CFLAGS="-g3 -Wall -pedantic -D_REENTRANT -D_GNU_SOURCE -DDAEMON_COM -D`uname` -Wno-variadic-macros"
 
 #Version finale des libs, includes et flags
 FINALINCLUDES="$INCLUDES"
-FINALLIBS="$LIBS -L$SCRIPTLIBPATH -l$SCRIPTLIB -L$GRAPHICLIBPATH -l$GRAPHICLIB"
+FINALLIBS="$LIBS -L$SCRIPTLIBPATH $SCRIPTLIB -L$GRAPHICLIBPATH -l$GRAPHICLIB"
 FINALCFLAGS="$CFLAGS -DSYMBOLIQUE_VERSION"
 
-#Les repertoires de destination des fichiers compiles
-BINDIR=$PWD/../../bin/$SYSTEM
-HOMEBINDIR=$HOME/bin_leto_prom/.
-OBJDIR="$PWD/obj/$SYSTEM/$PROG_NAME"
+OBJDIR=$OBJPATH/$PROGNAME
 mkdir -p $OBJDIR
 
 #le fichier xml pour le menu de leto

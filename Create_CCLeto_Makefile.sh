@@ -10,22 +10,14 @@
 ####################################################
 #Definition des chemins d'acces, options de compile etc...
 ####################################################
-source ../../scripts/COMPILE_FLAG
+source ../scripts/COMPILE_FLAG
 
 # Nom du programme*
 PROG_NAME="cc_leto"
 
-SIMULATOR_PATH=$PWD/../..
-
-#les bibliotheques et leurs chemins d'acces
-GRAPHICLIBPATH="$PWD/../../lib/$SYSTEM/graphique"
-GRAPHICLIB="graphique"
-
-SCRIPTLIBPATH="$PWD/../../lib/$SYSTEM/script"
-
 # Initialisation des libs, includes et flags
 LIBS="$GTKLIB $MATHLIB -pthread -lmxml -L$GRAPHICLIBPATH -l$GRAPHICLIB"
-INCLUDES="$GTKINCLUDES -I$PWD/../../shared/include/ -I$PWD/include/ -I$PWD/include/leto/ -I$PWD/include/shared -I$PWD/"
+INCLUDES="$GTKINCLUDES -I$SIMULATOR_PATH/shared/include/ -I$PWD/include/ -I$PWD/include/leto/ -I$PWD/include/shared -I$PWD/"
 
 #Version finale des libs, includes et flags
 CFLAGS="$CFLAGS -O2 -DAVEUGLE "
@@ -33,11 +25,8 @@ FINALINCLUDES="$INCLUDES"
 FINALLIBS="-L$SCRIPTLIBPATH $SCRIPTLIB $LIBS"
 FINALCFLAGS="$CFLAGS"
 
-#Les repertoires de destination des fichiers compiles
-BINDIR=$PWD/../../bin/$SYSTEM
-OBJPATH="$OBJPATH/$PROG_NAME_SHORT"
-
-mkdir -p $OBJPATH
+OBJDIR=$OBJPATH/$PROG_NAME
+mkdir -p $OBJDIR
 
 #Gestion des fichiers a compiler
 SOURCES="src/leto/cc_leto/cc_leto.c ./src/leto/leto_global_var.c ./src/leto/script.c ./src/leto/creation.c ./src/leto/ecrit_res8.3.c ./src/leto/export.c ./src/leto/leto_cle2.c ./src/leto/outils.c ./src/leto/gere_coudes.c src/shared/bend.c"
@@ -65,11 +54,11 @@ do
   # Correction BUG : devrait fonction sur tous les chemins
   CHEMIN=`dirname $i`
 
-  echo "$OBJPATH/$FICHIER.o:$i" >> $MAKEFILE
+  echo "$OBJDIR/$FICHIER.o:$i" >> $MAKEFILE
   echo -e "\t@echo \"[processing $i...]\"">> $MAKEFILE
-  echo -e "\t@(cd $CHEMIN; $CC $FINALCFLAGS $FINALINCLUDES -c -o $OBJPATH/$FICHIER.o $FICHIER.c)" >> $MAKEFILE
+  echo -e "\t@(cd $CHEMIN; $CC $FINALCFLAGS $FINALINCLUDES -c -o $OBJDIR/$FICHIER.o $FICHIER.c)" >> $MAKEFILE
   echo "" >> $MAKEFILE
-  OBJECTS="$OBJECTS $OBJPATH/${FICHIER}.o"
+  OBJECTS="$OBJECTS $OBJDIR/${FICHIER}.o"
 done
 
 #pour l'edition de liens et le lien sur le binaire
@@ -82,11 +71,11 @@ echo "" >> $MAKEFILE
 
 #regles additionnelles
 echo "reset:" >> $MAKEFILE
-echo -e "\trm -f  $OBJPATH/*.o $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM/$PROG_NAME" >> $MAKEFILE
+echo -e "\trm -f  $OBJDIR/*.o $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM/$PROG_NAME" >> $MAKEFILE
 echo "" >> $MAKEFILE
 
 echo "clean:" >> $MAKEFILE
-echo -e "\trm -f  $OBJPATH/*.o " >> $MAKEFILE
+echo -e "\trm -f  $OBJDIR/*.o " >> $MAKEFILE
 echo "" >> $MAKEFILE
 
 echo "install:" >> $MAKEFILE

@@ -1,13 +1,14 @@
 #!/bin/bash
+
+source ../scripts/COMPILE_FLAG
 echo "*** Install coeos (leto, s_leton cc_leto, coeos) ***" 
-echo "See logs/ for details of creation."
-rm -f logs/*.log
+echo "See $LOGDIR/ for details of creation."
 echo "Creating makefile"
-bash Create_All_Makefile.sh > logs/Create_All_Makefile.log
+bash Create_All_Makefile.sh > $LOGDIR/coeos_create_All_Makefile.log
 echo "Cleaning ..."
-make clean reset > logs/clean_reset.log
+make clean reset > $LOGDIR/coeos_reset.log
 echo "Compiling ..."
-if make > logs/make.log
+if make > $LOGDIR/coeos_make.log
 then
 	echo -e "Success installing coeos\n"
 	exit 0
