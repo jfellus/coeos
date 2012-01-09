@@ -78,19 +78,19 @@ echo "$PROG_NAME: $OBJECTS" >> $MAKEFILE
 echo -e "\t@mkdir -p $BINDIR" >> $MAKEFILE
 echo -e "\t@echo \"[Link objects...] \"">> $MAKEFILE
 echo -e "\t@$CC $OBJECTS -o $BINDIR/$PROG_NAME $FINALLIBS " >> $MAKEFILE
-echo -e "\t@cp $XML $BINDIR/. " >> $MAKEFILE
-echo -e "\t@cp $BINDIR/$PROG_NAME $XML $HOMEBINDIR " >> $MAKEFILE
+echo -e "\t@cp $XML  $DIR_BIN_LETO_PROM/. " >> $MAKEFILE
+echo -e "\t@cp $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM " >> $MAKEFILE
+echo -e "\t@cp $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM " >> $MAKEFILE
 echo "" >> $MAKEFILE
 
 #regles additionnelles
-echo "reset:" >> $MAKEFILE
-echo -e "\trm -f  $OBJDIR/*.o $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM/$PROG_NAME" >> $MAKEFILE
-echo "" >> $MAKEFILE
-
 echo "clean:" >> $MAKEFILE
 echo -e "\trm -f  $OBJDIR/*.o " >> $MAKEFILE
 echo "" >> $MAKEFILE
 
-echo "install:" >> $MAKEFILE
-echo -e "\t@cp $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM " >> $MAKEFILE
+echo "reset:clean" >> $MAKEFILE
+echo -e "\trm -f  $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM/$PROG_NAME" >> $MAKEFILE
 echo "" >> $MAKEFILE
+
+
+
