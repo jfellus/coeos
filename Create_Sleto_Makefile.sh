@@ -87,9 +87,9 @@ echo -e "\trm -f  $OBJDIR/*.o " >> $MAKEFILE
 echo "" >> $MAKEFILE
 
 echo "reset:clean" >> $MAKEFILE
-echo -e "\trm -f  $OBJDIR/*.o $BINDIR/$PROG_NAME $HOMEBINDIR/$PROG_NAME" >> $MAKEFILE
+echo -e "\trm -f  $OBJDIR/*.o $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM/$PROG_NAME" >> $MAKEFILE
 echo "" >> $MAKEFILE
 
 echo "install:" >> $MAKEFILE
-echo -e "\t@cp $BINDIR/$PROG_NAME $HOMEBINDIR " >> $MAKEFILE
+echo -e "\t@cp $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM " >> $MAKEFILE
 echo "" >> $MAKEFILE
