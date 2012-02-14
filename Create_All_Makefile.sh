@@ -9,6 +9,8 @@ SYSTEM=$(uname)
 PWD=$(pwd)
 OBJDIR="$PWD/obj/$SYSTEM"
 
+source ../scripts/COMPILE_FLAG
+
 bash Create_Coeos_Makefile.sh $*
 bash Create_Leto_Makefile.sh $*
 bash Create_Sleto_Makefile.sh  $*
@@ -18,8 +20,8 @@ bash Create_CCLeto_Makefile.sh $*
 echo "" > Makefile
 
 #default rule: compile all projects
-echo "default: all" >> Makefile
-echo "" >> Makefile
+echo "default: " >> Makefile
+echo -e "\t\$(MAKE) all --jobs=$NUMBER_OF_CORES " >> Makefile
 
 echo "all: $PROJECTS" >> Makefile
 echo "" >> Makefile
@@ -27,27 +29,27 @@ echo "" >> Makefile
 for i in $PROJECTS
 do
     echo "$i:" >> Makefile
-    echo -e "\tmake -j 10 -f Makefile.$i" >> Makefile
+    echo -e "\t\$(MAKE) -f Makefile.$i" >> Makefile
     echo "" >> Makefile
 done
 
 echo "clean:" >> Makefile
 for i in $PROJECTS
 do
-    echo -e "\tmake -f Makefile.$i clean" >> Makefile
+    echo -e "\t\$(MAKE) -f Makefile.$i clean" >> Makefile
 done
 echo "" >> Makefile
 
 echo "reset:" >> Makefile
 for i in $PROJECTS
 do
-    echo -e "\tmake -f Makefile.$i reset" >> Makefile
+    echo -e "\t\$(MAKE) -f Makefile.$i reset" >> Makefile
 done
 echo "" >> Makefile
 
 echo "install:" >> Makefile
 for i in $PROJECTS
 do
-    echo -e "\tmake -f Makefile.$i install" >> Makefile
+    echo -e "\t\$(MAKE) -f Makefile.$i install" >> Makefile
 done
 echo "" >> Makefile
