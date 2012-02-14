@@ -2,12 +2,28 @@
 #include "gere_coudes.h"
 
 
+void vkprints(const char *fmt, va_list ap)
+{
+   vfprintf(stdout, fmt, ap);
+}
+
 void kprints(const char *fmt, ...) /* version simplifiee du kernel pour permettre la compilation des librairies*/
 {
   va_list ap;
   va_start(ap, fmt);
   vfprintf(stdout,fmt, ap);
   va_end(ap);
+}
+
+void fatal_error(const char *name_of_file, const char* name_of_function,  int numero_of_line, const char *message, ...)
+{
+	va_list arguments;
+	va_start(arguments, message);
+	kprints("\n\033[1;31m %s \t %s \t %i :\n \t Error: ", name_of_file, name_of_function, numero_of_line);
+	vkprints(message, arguments);
+	kprints("\033[0m\n\n");
+	va_end(arguments);
+	/* exit(EXIT_FAILURE);  On exit pas mais on devrait avoir une fenetre claire */
 }
 
 void true_dprints(const char *fmt, ...) /* version simplifiee du kernel pour permettre la compilation des librairies*/
@@ -22,10 +38,10 @@ void true_dprints(const char *fmt, ...) /* version simplifiee du kernel pour per
 void get_base_path_name(char *filename)
 {
 	char	*pt;
-	
+
 	/* recherche l'adr du debut de l'extension */
 	pt=rindex(filename,'.');
-	if(pt!=NULL) 
+	if(pt!=NULL)
 	  *pt='\0'; /* on oublie l'extension du fichier: on met fin de chaine au debut de l'extension*/
 }
 
@@ -33,10 +49,10 @@ void get_base_path_name(char *filename)
 void get_base_name(char *filename)
 {
 	char	*pt;
-	
+
 	/* recherche l'adr du debut de l'extension */
 	pt=rindex(filename,'.');
-	if(pt!=NULL) 
+	if(pt!=NULL)
 	  *pt='\0'; /* on oublie l'extension du fichier: on met fin de chaine au debut de l'extension*/
 	pt=rindex(filename,'/'); /* trouve le dernier '/' pour enlever le path du nom*/
 	if(pt!=NULL)
@@ -70,7 +86,7 @@ void free_reseau(type_tableau t2)
   printf("free neurons and coeff nbre_neurone=%d \n",sc->nbre_neurone);
   for(i=0;i<sc->nbre_neurone;i++)
     {
-      if(sc->neurone[i].coeff!=NULL) 
+      if(sc->neurone[i].coeff!=NULL)
 	{
 	  /*  printf("neurone %d: \n",i);*/
 	  free_coeff(sc->neurone[i].coeff);
@@ -95,7 +111,7 @@ type_noeud **creer_groupe(int n)    /*liste neurones du groupe  */
     return (t2);
 }
 
-void free_groupe(type_noeud** t2) 
+void free_groupe(type_noeud** t2)
 {
   /*attention faire un free des zones pointees par le tableau de pointeurs avant */
   free(t2);
@@ -369,7 +385,7 @@ void free_liaison(type_liaison * liaison)
 {
   if(liaison->s!=NULL) free_liaison(liaison->s);
   free(liaison);
-}  
+}
 
 
 /*--------------------------------------------------------------*/
@@ -634,7 +650,7 @@ int plane_used(int plan)
 }
 
 /* renvoie le no du prochain plan libre pour y mettre une macro */
-/* si no_macro_used est different de NULL alors on recupere aussi un no de macro propose par find_new_plane_for_new_macro */ 
+/* si no_macro_used est different de NULL alors on recupere aussi un no de macro propose par find_new_plane_for_new_macro */
 int find_new_plane_for_new_macro(int *no_macro_used)
 {
   int no_macro_used_2;
@@ -644,7 +660,7 @@ int find_new_plane_for_new_macro(int *no_macro_used)
 
   *no_macro_used=sc->nbre_macro_lues;
   selected_plane=(100+sc->nbre_macro_lues*7);
-  
+
   while(plane_used(selected_plane)==1)
     {
       printf("Attention plan %d deja utilise j'en cherche un autre \n",selected_plane);
