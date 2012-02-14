@@ -34,7 +34,7 @@ FINALLIBS="$LIBS -L$SCRIPTLIBPATH $SCRIPTLIB_SYMB -L$GRAPHICLIBPATH -l$GRAPHICLI
 FINALCFLAGS="$CFLAGS -DLETO -DSYMBOLIQUE_VERSION"
 
 #Les repertoires de destination des fichiers compiles
-OBJDIR=$OBJPATH/$PROGNAME
+OBJDIR=$OBJPATH/$PROG_NAME
 mkdir -p $OBJDIR
 
 #le fichier xml pour le menu de leto
