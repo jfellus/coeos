@@ -16,7 +16,7 @@ source ../scripts/COMPILE_FLAG
 PROG_NAME="cc_leto"
 
 # Initialisation des libs, includes et flags
-LIBS="$GTKLIB $MATHLIB -pthread -lmxml -L$GRAPHICLIBPATH -l$GRAPHICLIB"
+LIBS="$GTKLIB $MATHLIB -pthread -lmxml -ldl"
 INCLUDES="$GTKINCLUDES -I$SIMULATOR_PATH/shared/include/ -I$PWD/include/ -I$PWD/include/leto/ -I$PWD/include/shared -I$PWD/"
 
 #Version finale des libs, includes et flags
@@ -29,7 +29,7 @@ OBJDIR=$OBJPATH/$PROG_NAME
 mkdir -p $OBJDIR
 
 #Gestion des fichiers a compiler
-SOURCES="src/leto/cc_leto/cc_leto.c ./src/leto/leto_global_var.c ./src/leto/script.c ./src/leto/creation.c ./src/leto/ecrit_res8.3.c ./src/leto/export.c ./src/leto/leto_cle2.c ./src/leto/outils.c ./src/leto/gere_coudes.c src/shared/bend.c"
+SOURCES="src/leto/cc_leto/cc_leto.c ./src/leto/leto_global_var.c ./src/leto/script.c ./src/leto/creation.c ./src/leto/ecrit_res8.3.c ./src/leto/export.c ./src/leto/leto_cle2.c ./src/leto/outils.c src/shared/bend.c"
 OBJECTS=""
 
 ####################################################
