@@ -2480,6 +2480,8 @@ void creation_cb(GtkWidget * widget, gpointer data)
     gint result = -1;
     char *filename=NULL;
     GtkFileFilter *filter;
+    int ret=-1;
+    int preprocOK =0;
     
 #ifndef LETO
     Winmain = lookup_widget ( ((t_gennet_script *) data)->onglet_leto->window ,"Winmain");
@@ -2487,48 +2489,63 @@ void creation_cb(GtkWidget * widget, gpointer data)
     Winmain = ((t_gennet_script *) data)->onglet_leto->window;
 #endif
 
-    if (strlen(sc->fvar) == 0)  
-    {
-     
-       dialog = gtk_file_chooser_dialog_new("Open a file.var",
-					    GTK_WINDOW(Winmain),
-					    GTK_FILE_CHOOSER_ACTION_OPEN,
-					    GTK_STOCK_CANCEL,
-					    GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN,
-					    GTK_RESPONSE_ACCEPT, NULL);
-       
-       filter = gtk_file_filter_new();
-       gtk_file_filter_set_name(GTK_FILE_FILTER(filter), "Variable");
-       gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter), "*.var");
-       gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),
-				   GTK_FILE_FILTER(filter));
-    
-       result = gtk_dialog_run(GTK_DIALOG(dialog));
-       
-       switch (result)
-       {
-	  case GTK_RESPONSE_ACCEPT :
-	     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
-	     break;
-	  case GTK_RESPONSE_REJECT :
-	     gtk_widget_destroy(dialog);
-	     return;
-	  default :
-	     gtk_widget_destroy(dialog);
-	     return;
-       }
-       gtk_widget_destroy(dialog);
-       memcpy(sc->fvar, filename, (strlen(filename) + 1) * sizeof(char));
+    while(preprocOK!=1) { /* en fait juste test sur le .var */
+      if (strlen(sc->fvar) == 0)  
+      {
+	
+	
+	dialog = gtk_file_chooser_dialog_new("Open a file.var",
+					     GTK_WINDOW(Winmain),
+					     GTK_FILE_CHOOSER_ACTION_OPEN,
+					     GTK_STOCK_CANCEL,
+					     GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN,
+					     GTK_RESPONSE_ACCEPT, NULL);
+	
+	filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(GTK_FILE_FILTER(filter), "Variable");
+	gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter), "*.var");
+	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),
+				    GTK_FILE_FILTER(filter));
+	
+	result = gtk_dialog_run(GTK_DIALOG(dialog));
+	
+	switch (result)
+	{
+	case GTK_RESPONSE_ACCEPT :
+	  filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
+	  break;
+	case GTK_RESPONSE_REJECT :
+	  gtk_widget_destroy(dialog);
+	  return;
+	default :
+	  gtk_widget_destroy(dialog);
+	  return;
+	}
+	gtk_widget_destroy(dialog);
+	memcpy(sc->fvar, filename, (strlen(filename) + 1) * sizeof(char));
+      }
+      
+      get_base_path_name(file_script);
+      strcat(file_script,".script");
+      
+      /* le script lpreprocess demande en argument le fichier.symb le fichier.var et le fichier.script */
+      sprintf(chemin_env,"%s/lpreprocess.sh %s %s %s", bin_leto_prom_path, sc->nomfich1, sc->fvar, file_script);
+      /* on cree un processus qui va executer le lpprocess
+       * car exec ecrase le processus courant */
+      ret=system(chemin_env);
+      ret = ret>>8; /*code retour sur les 8bits de poids fort*/
+      
+      if(ret==3) { /* code .var missing. See lpreprocess.sh*/
+	/* le nom actuel n'est pas correcte */
+	memcpy(sc->fvar, "\0",1);
+	printf("File .var is missing: ASKING FOR .VAR\n"); 
+      }
+      else {
+	/* if .var ok alors preproc ok (?)*/
+	preprocOK=1;
+      }
     }
 
-    get_base_path_name(file_script);
-    strcat(file_script,".script");
-    
-    /* le script lpreprocess demande en argument le fichier.symb le fichier.var et le fichier.script */
-    sprintf(chemin_env,"%s/lpreprocess.sh %s %s %s", bin_leto_prom_path, sc->nomfich1, sc->fvar, file_script);
-    /* on cree un processus qui va executer le lpprocess
-     * car exec ecrase le processus courant */
-    system(chemin_env);
   }
   
   save_file(widget, data);
