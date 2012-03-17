@@ -15,6 +15,17 @@ void kprints(const char *fmt, ...) /* version simplifiee du kernel pour permettr
   va_end(ap);
 }
 
+void print_warning(const char *name_of_file, const char* name_of_function,  int numero_of_line, const char *message, ...)
+{
+	va_list arguments;
+	va_start(arguments, message);
+	kprints("\n\033[1;33m %s \t %s \t %i :\n \t Error: ", name_of_file, name_of_function, numero_of_line);
+	vkprints(message, arguments);
+	kprints("\033[0m\n\n");
+	va_end(arguments);
+	/* exit(EXIT_FAILURE);  On exit pas mais on devrait avoir une fenetre claire */
+}
+
 void fatal_error(const char *name_of_file, const char* name_of_function,  int numero_of_line, const char *message, ...)
 {
 	va_list arguments;
@@ -24,6 +35,23 @@ void fatal_error(const char *name_of_file, const char* name_of_function,  int nu
 	kprints("\033[0m\n\n");
 	va_end(arguments);
 	/* exit(EXIT_FAILURE);  On exit pas mais on devrait avoir une fenetre claire */
+}
+
+/*
+* Envoie un message d'erreur avec name_of_file, name_of_function, number_of_line et affiche le message formate avec les parametres variables.
+* Puis exit le programme avec le parametre EXIT_FAILURE.
+*/
+void fatal_system_error(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
+{
+	va_list arguments;
+	va_start(arguments, message);
+	kprints( "\n\033[1;31m %s \t %s \t %i :\n \t Error: ", name_of_file, name_of_function, numero_of_line);
+	vkprints(message, arguments);
+	kprints("System error: %s\n\n", strerror(errno));
+	kprints("\033[0m\n\n");
+
+	va_end(arguments);
+	/* exit(EXIT_FAILURE); On exit pas mais on devrait avoir une fenetre claire */
 }
 
 void true_dprints(const char *fmt, ...) /* version simplifiee du kernel pour permettre la compilation des librairies*/
