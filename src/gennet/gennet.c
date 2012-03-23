@@ -2584,7 +2584,7 @@ void		init_data(t_gennet *data)
 }
 
 #ifndef LETO
-int		main(int ac, char **av)
+int	main(int ac, char **av)
 {
   t_gennet	data;
 
@@ -2596,12 +2596,13 @@ int		main(int ac, char **av)
 
   init_data(&data);
   debug_printf("init data done\n");
+  gtk_set_locale();
+  setlocale(LC_NUMERIC, "C");
+  gtk_disable_setlocale();  
+  
   init_gui(&data);
   debug_printf("init gui done\n");
 
-
-  gtk_set_locale();
-  setlocale(LC_NUMERIC, "C");
 
   gdk_threads_enter();
 

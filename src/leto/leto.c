@@ -91,6 +91,9 @@ void cree_lien_micro_macro()
     liaison->mode = 0;
     MY_FloatAffect(liaison->norme, 0.);
     MY_IntAffect(liaison->nbre, 0);
+    MY_FloatAffect(liaison->temps, 0.);
+    MY_FloatAffect(liaison->stemps, 0.); 
+    MY_FloatAffect(liaison->proba, 1.);           
     sprintf(liaison->nom, "lien micro/macro");
     sc->nbre_liaison++;
 }
