@@ -1,0 +1,126 @@
+<ui>
+  <menubar name="menu">
+    <menu name="_File" action="/_File">
+      <menuitem name="_Insert script..." action="/File/_Insert script..." />
+      <separator />
+      <menuitem name="_Save" action="/File/_Save" />
+      <menuitem name="Save _As..." action="/File/Save _As..." />
+      <menuitem name="Reload script" action="/File/Reload script" />
+      <separator />
+      <menuitem name="_Save _selection" action="/File/_Save _selection" />
+      <menuitem name="_Save _selection _flat" action="/File/_Save _selection _flat" />
+      <menuitem name="_Block _transfo" action="/File/_Block _transfo" />
+      <separator />
+<!--
+	  <menuitem name="_Export..." action="/File/_Export..." />
+      <separator />
+-->
+      <menuitem name="_Quit" action="/File/_Quit" />
+    </menu>
+    <menu name="_Edit" action="/_Edit">
+      <menuitem name="Copy" action="/Edit/Copy" />
+      <menuitem name="Paste" action="/Edit/Paste" />
+      <menuitem name="Search group Name" action="/Edit/Search group Name" />
+      <menuitem name="Find group No" action="/Edit/Find group No" />
+      <separator />
+	  <menuitem name="Compile _NN" action="/Edit/Compile _NN" />
+      <separator />
+      <menuitem name="Binary file (.res)..." action="/Edit/Binary file (.res)..." />
+      <menuitem name="Random generator..." action="/Edit/Random generator..." />
+    </menu>
+    <menu name="_View" action="/_View">
+      <menuitem name="Refresh" action="/View/Refresh" />
+      <menuitem name="Invert colors" action="/View/Invert colors" />
+      <menuitem name="Show _Hidden sub_networks" action="/View/Show _Hidden sub_networks" />
+      <separator />
+      <menuitem name="Zoom In" action="/View/Zoom In" />
+      <menuitem name="Zoom Out" action="/View/Zoom Out" />
+      <separator />
+      <menu name="Unselect plane" action="/View/Unselect plane">
+	<menuitem name="Plane 1" action="/View/Unselect plane/Plane 1" />
+	<menuitem name="Plane 2" action="/View/Unselect plane/Plane 2" />
+	<menuitem name="Plane 3" action="/View/Unselect plane/Plane 3" />
+	<menuitem name="Plane 4" action="/View/Unselect plane/Plane 4" />
+	<menuitem name="Plane 5" action="/View/Unselect plane/Plane 5" />
+	<menuitem name="Plane 6" action="/View/Unselect plane/Plane 6" />
+      </menu>
+      <separator />
+      <menuitem name="Slide groups up" action="/View/Slide groups up" />
+      <menuitem name="Slide groups down" action="/View/Slide groups down" />
+      <menuitem name="Slide groups left" action="/View/Slide groups left" />
+      <menuitem name="Slide groups right" action="/View/Slide groups right" />
+    </menu>
+    <menu name="_Group" action="/_Group" >
+      <menuitem name="_New" action="/Group/_New" />
+      <menuitem name="_Modify" action="/Group/_Modify" />
+      <menuitem name="_Delete" action="/Group/_Delete" />
+      <separator />
+      <menuitem name="_Reverse" action="/Group/_Reverse" />
+      <menuitem name="_Automatic rename" action="/Group/_Automatic rename" />
+    </menu>
+    <menu name="_Link" action="/_Link">
+      <menuitem name="_New" action="/Link/_New" />
+      <menuitem name="_New one-to-one" action="/Link/_New one-to-one" />
+      <menuitem name="_Modify" action="/Link/_Modify" />
+      <menuitem name="_Delete" action="/Link/_Delete" />
+    </menu>
+    <menu name="_Coude" action="/_Coude">
+      <menuitem name="_Insert" action="/Coude/_Insert" />
+      <menuitem name="_Delete" action="/Coude/_Delete" />
+      <menuitem name="_Delete All" action="/Coude/_Delete All" />
+    </menu>
+    <menu name="_Help" action="/_Help">
+      <menuitem name="_About" action="/Help/_About" />
+    </menu>
+  </menubar>
+
+  <toolbar>
+	  <toolitem action="/File/_Save" />
+	  <separator />
+	  <toolitem action="/View/Zoom In" />
+	  <toolitem action="/View/Zoom Out" />
+	  <separator />
+	  <toolitem action="/Edit/Copy" />
+	  <toolitem action="/Edit/Paste" />
+	  <separator />
+	  <toolitem action="/Edit/Compile _NN" />
+	  <toolitem action="/Edit/Search group Name" />
+	  <toolitem action="/Edit/Find group No" />
+  </toolbar>
+
+  <popup name="popup">
+    <menuitem name="Add group" action="/Group/_New" />
+    <menuitem name="Add link" action="/Link/_New" />
+    <menuitem name="Add one-to-one link" action="/Link/_New one-to-one" />
+    <separator />
+    <menuitem name="Paste" action="/Edit/Paste" />
+  </popup>
+
+  <popup name="popupGroup">
+	  <menuitem name="_New" action="/Group/_New" />
+	  <menuitem name="_Modify" action="/Group/_Modify" />
+	  <menuitem name="_Delete" action="/Group/_Delete" />
+	  <separator />
+	  <menuitem name="_Copy" action="/Edit/Copy" />
+	  <separator />
+	  <menuitem name="_Reverse" action="/Group/_Reverse" /> 
+	  <menuitem name="_Automatic rename" action="/Group/_Automatic rename" />
+  </popup>
+
+  <popup name="popupLink">
+	  <menuitem name="_New" action="/Link/_New" />
+	  <menuitem name="_New one-to-one" action="/Link/_New one-to-one" />
+	  <menuitem name="_Modify" action="/Link/_Modify" />
+	  <menuitem name="_Delete" action="/Link/_Delete" />
+	  <menuitem name="_Insert Bend" action="/Coude/_Insert" />
+	  <menuitem name="_Delete All Bends" action="/Coude/_Delete All" />
+  </popup>
+
+  <popup name="popupCoude">
+	  <menuitem name="_Insert Bend" action="/Coude/_Insert" />
+	  <menuitem name="_Delete Bend" action="/Coude/_Delete" />
+	  <menuitem name="_Delete All Bends" action="/Coude/_Delete All" />
+	  <menuitem name="_Delete Link" action="/Link/_Delete" />
+	  <menuitem name="_Modify Link" action="/Link/_Modify" />
+  </popup>
+</ui>
