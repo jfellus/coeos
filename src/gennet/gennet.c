@@ -453,8 +453,10 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 	char *nom_script_var = NULL;
 	char *nom_script_res = NULL;
 	char *script_path_symb = NULL;
+	char *script_path_script = NULL;
 
 	char tmp_path[PATH_MAX];
+	char leto_first_argument[PATH_MAX];
 
 	char *copie_script_script = NULL;
 	char *pt = NULL;
@@ -491,6 +493,8 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 	/* On memorise le chemin du script */
 	script_path_symb = promnet_prom_script_get_argument(prom_script, prom_script->path_file_symb);
 
+	script_path_script = promnet_prom_script_get_argument(prom_script, prom_script->path_file_script);
+
 	/* cas ou il n'y a pas de chemin de definis */
 	if (script_path_symb == NULL || strlen(script_path_symb) == 0)
 	{
@@ -504,36 +508,42 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 			pscript->fenetre_dialogue = NULL;
 			return;
 		}
+
+		if (strlen(script_path_script) > 0) snprintf(leto_first_argument, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, script_path_script);
+
 		memset(script_path_symb, 0, sizeof(char) * (strlen(logical_name) + 8));
-		sprintf(script_path_symb, "%s.symb",  logical_name);
+		sprintf(script_path_symb, "%s.symb", logical_name);
 	}
-	else if (logical_name == NULL || strlen(logical_name) == 0) /* cas ou il y a un chemin mais pas de nom logique */
+	else
 	{
-		if (logical_name != NULL || strlen(logical_name) == 0) free(logical_name);
-
-		/* si le chemin existe et que le nom_script est null alors le nom_script sera
-		 * le nom du script fournit */
-
-		/* on alloue suffisament de memoire */
-		if ((logical_name = (char *) malloc((strlen(script_path_symb) + 1) * sizeof(char))) == NULL)
+		snprintf(leto_first_argument, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, script_path_script);
+		if (logical_name == NULL || strlen(logical_name) == 0) /* cas ou il y a un chemin mais pas de nom logique */
 		{
-			g_critical("Edit_Script_With_Leto : Memory error");
+			if (logical_name != NULL || strlen(logical_name) == 0) free(logical_name);
 
-			/* fermer ce qu'il faut */
-			pscript->onglet_leto = NULL;
-			pscript->fenetre_dialogue = NULL;
-			return;
+			/* si le chemin existe et que le nom_script est null alors le nom_script sera
+			 * le nom du script fournit */
+
+			/* on alloue suffisament de memoire */
+			if ((logical_name = (char *) malloc((strlen(script_path_symb) + 1) * sizeof(char))) == NULL)
+			{
+				g_critical("Edit_Script_With_Leto : Memory error");
+
+				/* fermer ce qu'il faut */
+				pscript->onglet_leto = NULL;
+				pscript->fenetre_dialogue = NULL;
+				return;
+			}
+			memset(logical_name, 0, (strlen(script_path_symb) + 1) * sizeof(char));
+			/* on copie le chemin dans le nom logique */
+
+			memcpy(logical_name, script_path_symb, (strlen(script_path_symb) + 1) * sizeof(char));
+			/* on recupere uniquement le nom du script pour le nom logique */
+			get_base_name(logical_name);
+			/* mise a jour du pscript */
+			promnet_prom_script_set_logical_name(prom_script, logical_name);
 		}
-		memset(logical_name, 0, (strlen(script_path_symb) + 1) * sizeof(char));
-		/* on copie le chemin dans le nom logique */
-
-		memcpy(logical_name, script_path_symb, (strlen(script_path_symb) + 1) * sizeof(char));
-		/* on recupere uniquement le nom du script pour le nom logique */
-		get_base_name(logical_name);
-		/* mise a jour du pscript */
-		promnet_prom_script_set_logical_name(prom_script, logical_name);
 	}
-
 
 	/* On memorise le chemin du script */
 	nom_script_draw = promnet_prom_script_get_argument(prom_script, prom_script->path_file_draw);
@@ -677,29 +687,24 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 		pscript->onglet_leto->gc = gdk_gc_new(pscript->onglet_leto->window->window);
 
 		/* On ajpoute le repertoire de travail */
-		snprintf(tmp_path, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, script_path_symb);
-		free(script_path_symb);
-		script_path_symb = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
-		strcpy(script_path_symb, tmp_path);
 
 		snprintf(tmp_path, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, nom_script_draw);
-			free(nom_script_draw);
-			nom_script_draw = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
-			strcpy(nom_script_draw, tmp_path);
+		free(nom_script_draw);
+		nom_script_draw = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
+		strcpy(nom_script_draw, tmp_path);
 
-			snprintf(tmp_path, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, nom_script_res);
-				free(nom_script_res);
-				nom_script_res = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
-				strcpy(nom_script_res, tmp_path);
+		snprintf(tmp_path, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, nom_script_res);
+		free(nom_script_res);
+		nom_script_res = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
+		strcpy(nom_script_res, tmp_path);
 
-				snprintf(tmp_path, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, nom_script_var);
-					free(nom_script_var);
-					nom_script_var = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
-					strcpy(nom_script_var, tmp_path);
-
+		snprintf(tmp_path, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, nom_script_var);
+		free(nom_script_var);
+		nom_script_var = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
+		strcpy(nom_script_var, tmp_path);
 
 		/* lancement de leto avec les nom de fichier.script et . draw et l'indice de script disponible et l'indice de l'onglet */
-		run_leto(script_path_symb, nom_script_draw, nom_script_res, nom_script_var, pscript->onglet_leto, idx, nPage, gen->seed);
+		run_leto(leto_first_argument, nom_script_draw, nom_script_res, nom_script_var, pscript->onglet_leto, idx, nPage, gen->seed);
 		pscript->sc = sc;
 		sc = NULL;
 
@@ -1888,7 +1893,6 @@ void GenerateNetwork(GtkWidget *widget, gpointer data)
 	}
 	gtk_widget_destroy(gen->gui->PathDialog);
 }
-
 
 void init_gui_arg_find_cpt(t_gennet *data)
 {
