@@ -14,6 +14,8 @@
 #include "export.h"
 #endif
 
+#define COMMAND_LINE_MAX 4096
+
 #include "gennet.h"
 
 char bin_leto_prom_path[]="~/bin_leto_prom";
@@ -2752,6 +2754,33 @@ void reload_script(GtkWidget * widget, gpointer data)
 
     lecture(1,((t_gennet_script *) data)->onglet_leto);
     show_status(((t_gennet_script *) data)->onglet_leto,"Reloaded script '%s'", sc->nomfich1);
+}
+
+void edit_variables(GtkWidget * widget, gpointer data)
+{
+  	char command_line[COMMAND_LINE_MAX];
+   const char *editor;
+   int error;
+	t_gennet_script *gennet_script = data;
+	t_prom_script *prom_script = gennet_script->prom_script;
+
+#ifndef LETO
+    /* controle si on est dans un onglet Leto
+    * ( l'onglet Metaleto etant le numero 0 )
+    */
+    if(tab_is_Metaleto(gennet_script->onglet_leto)==0) return;
+#endif
+
+    editor = getenv("EDITOR");
+    if (editor == NULL) editor = "gedit";
+
+    snprintf(command_line, COMMAND_LINE_MAX, "%s %s &", editor, prom_script->path_file_var);
+    error = system(command_line);
+
+    if (error != 0)
+    {
+      PRINT_WARNING("Error launching %s.\n\t Check that %s is correct.", editor, command_line);
+    }
 }
 
 

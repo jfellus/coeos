@@ -185,8 +185,8 @@ void lecture(int recursive_load,TxDonneesFenetre *onglet_leto)
 
     if (f1 == NULL)
     {
-       fprintf(stderr, "\n Error while opening the script file \n");
-       fprintf(stderr, "\n Leto supposes it is a new script file \n");
+       printf("Cannot open file %s\n", sc->nomfich1);
+       printf("We suppose it is a new script file \n");
        return;
     }
 

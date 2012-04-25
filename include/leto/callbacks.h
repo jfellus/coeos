@@ -143,6 +143,8 @@ void changedx(GtkWidget * widget, gpointer data);
 void changedy(GtkWidget * widget, gpointer data);
 void resized_cb(GtkWidget * widget, gpointer data);
 void reload_script(GtkWidget * widget, gpointer data);
+void edit_variables(GtkWidget * widget, gpointer data);
+
 
 void block_transfo(GtkWidget * widget, gpointer data);
 

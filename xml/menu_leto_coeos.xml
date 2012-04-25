@@ -9,6 +9,8 @@
       <separator />
       <menuitem name="_Save _selection" action="/File/_Save _selection" />
       <menuitem name="_Save _selection _flat" action="/File/_Save _selection _flat" />
+      <separator />
+      <menuitem name="Edit variables" action="/File/Edit variables" />
       <menuitem name="_Block _transfo" action="/File/_Block _transfo" />
       <separator />
 <!--

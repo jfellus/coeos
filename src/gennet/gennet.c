@@ -516,7 +516,8 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 	}
 	else
 	{
-		snprintf(leto_first_argument, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, script_path_script);
+		snprintf(leto_first_argument, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, script_path_symb);
+
 		if (logical_name == NULL || strlen(logical_name) == 0) /* cas ou il y a un chemin mais pas de nom logique */
 		{
 			if (logical_name != NULL || strlen(logical_name) == 0) free(logical_name);
@@ -1956,11 +1957,11 @@ void init_gui_arg_find_symb(t_gennet *data)
 				memset(basepath, 0, MAX_ALL_PATH);
 				memcpy(basepath, data->av[i], end_path - data->av[i]);
 				/* on ajoute le chemin du script */
-				promnet_prom_script_set_all_path(pscript->prom_script, basepath, nom, ext);
+				promnet_prom_script_set_all_path(pscript->prom_script, basepath, nom);
 			}
 			else
 			{
-				promnet_prom_script_set_all_path(pscript->prom_script, ".", nom, ext);
+				promnet_prom_script_set_all_path(pscript->prom_script, ".", nom);
 				/* 	      promnet_prom_script_set_path_file_script(pscript->prom_script, data->av[i]); */
 			}
 			pscript->pango = gtk_widget_create_pango_layout(GTK_WIDGET(data->gui->DrawingArea), nom);
@@ -2001,11 +2002,11 @@ void init_gui_arg_find_script(t_gennet *data)
 				memset(basepath, 0, MAX_ALL_PATH);
 				memcpy(basepath, data->av[i], end_path - data->av[i]);
 				/* on ajoute le chemin du script */
-				promnet_prom_script_set_all_path(pscript->prom_script, basepath, nom, ext);
+				promnet_prom_script_set_all_path(pscript->prom_script, basepath, nom);
 			}
 			else
 			{
-				promnet_prom_script_set_all_path(pscript->prom_script, ".", nom, ext);
+				promnet_prom_script_set_all_path(pscript->prom_script, ".", nom);
 				/* 	      promnet_prom_script_set_path_file_script(pscript->prom_script, data->av[i]); */
 			}
 			pscript->pango = gtk_widget_create_pango_layout(GTK_WIDGET(data->gui->DrawingArea), nom);
