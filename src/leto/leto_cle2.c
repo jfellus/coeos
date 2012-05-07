@@ -878,6 +878,9 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
 
   int taillex,tailley,entree_nbre,groupe_taillex,groupe_tailley;
 
+  int cluster_manage=0;
+  int vrai_pas=0;
+
   debug_printf("creation des liaisons\n");
   groupe_entree = trouver_groupe(gpe_entree);
 
@@ -923,15 +926,35 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin,
   if (pas > 1)
      debug_printf("creation d'un lien pour une categorie de micro neurones %d\n", decalage);
 
+  if(pas<0) {
+    cluster_manage=1;
+    pas=1;
+    vrai_pas = MY_Int2Int(groupe->nbre)/(dx*dy);
+  }
+
   x = y = z = 0;
   for (j = s_deb + decalage; j <= s_fin; j += pas)
     {
       init_corps_neurone(groupe, j);
 
+/*       printf("j: %d // %d \n",j-s_deb,pos1-e_deb); */
+
       if (liaison->type == No_l_1_t)	creer_liaison_1_vers_tous_neurone(groupe, liaison, j, pas_entree, no_voie, no_gpe_liaison, e_deb, e_fin);
 
-      if (liaison->type == No_l_1_1_modif || liaison->type == No_l_1_1_non_modif || liaison->type == No_l_1_1_non_modif_bloqueur)
+      if (liaison->type == No_l_1_1_modif || liaison->type == No_l_1_1_non_modif || liaison->type == No_l_1_1_non_modif_bloqueur) {
+	if(cluster_manage) {
+	  if((j-s_deb)%vrai_pas==vrai_pas-1) {
+/* 	    printf("modulo %d\n", j-s_deb+vrai_pas-1); */
+	    /** macro - dernier du cluster - on incremente */
 	creer_liaison_1_vers_1_neurone(groupe, liaison, &j, pas_entree, no_voie, no_gpe_liaison, s_deb, s_fin, e_deb, e_fin, &pos1);
+	  }
+	  else
+	    /** micro pas d'increment (pas_entree = 0) */
+	    creer_liaison_1_vers_1_neurone(groupe, liaison, &j, 0, no_voie, no_gpe_liaison, s_deb, s_fin, e_deb, e_fin, &pos1);
+	}
+	else
+	  creer_liaison_1_vers_1_neurone(groupe, liaison, &j, pas_entree, no_voie, no_gpe_liaison, s_deb, s_fin, e_deb, e_fin, &pos1);
+      }
 
       else if (liaison->type == No_l_1_a || liaison->type == No_l_1_v || liaison->type == No_l_1_v_non_modif)	creer_liaison_1_vers_voisinage_neurone(groupe, liaison, groupe_entree, j, x, y, pas_entree, no_voie, no_gpe_liaison, e_deb, e_fin);
       x++;

@@ -251,7 +251,7 @@ void creation(TxDonneesFenetre *onglet_leto)
 		e_fin = j - 1;
 		debug_printf("e_deb = %d ,e_fin = %d \n", e_deb, e_fin);
 		creer_liaisons_entre_groupe(e_deb, e_fin, s_deb, s_fin, i, k,
-					    liaison, nbre_voie - 1, 1/* pas=1*/,
+				    liaison, nbre_voie - 1, -1/* pas=-1 -> cluster management !*/,
 					    no_gpe_liaison - 1); 
 	     }
 	     no_gpe_liaison++;
