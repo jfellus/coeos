@@ -19,7 +19,7 @@ void print_warning(const char *name_of_file, const char* name_of_function,  int 
 {
 	va_list arguments;
 	va_start(arguments, message);
-	kprints("\n\033[1;33m %s \t %s \t %i :\n \t Error: ", name_of_file, name_of_function, numero_of_line);
+	kprints("\n\033[1;33m %s \t %s \t %i :\n \t Warning: ", name_of_file, name_of_function, numero_of_line);
 	vkprints(message, arguments);
 	kprints("\033[0m\n\n");
 	va_end(arguments);

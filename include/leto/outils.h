@@ -1,5 +1,9 @@
 #ifndef OUTILS_H
 #define OUTILS_H
+
+void fatal_error(const char *name_of_file, const char* name_of_function,  int numero_of_line, const char *message, ...);
+
+
 extern type_tableau creer_reseau(int );
 extern void free_reseau(type_tableau t2);
 

@@ -714,6 +714,8 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 		if (nom_script_draw != NULL) free(nom_script_draw);
 	}
 	if (logical_name != NULL) free(logical_name);
+
+
 }
 
 t_gennet_computer *add_gennet_computer(t_gennet *data)
@@ -1947,6 +1949,8 @@ void init_gui_arg_find_symb(t_gennet *data)
 			pscript->prom_script = promnet_add_new_prom_script(data->promnet);
 			if (pscript->prom_script != promnet_prom_script_get_next(data->promnet, NULL)) fprintf(stderr, "Probleme d'ajout du script %s a la liste des scripts\n", data->av[i]);
 
+			strcpy(pscript->prom_script->path_file_symb, data->av[i]);
+
 			/* on ajoute le nom logique du script */
 			memset(nom, 0, sizeof(char) * 1024);
 			memcpy(nom, data->av[i], (strlen(data->av[i]) + 1) * sizeof(char));
@@ -1991,6 +1995,9 @@ void init_gui_arg_find_script(t_gennet *data)
 			pscript = add_gennet_script(data);
 			pscript->prom_script = promnet_add_new_prom_script(data->promnet);
 			if (pscript->prom_script != promnet_prom_script_get_next(data->promnet, NULL)) fprintf(stderr, "Probleme d'ajout du script %s a la liste des scripts\n", data->av[i]);
+
+			strcpy(pscript->prom_script->path_file_script, data->av[i]);
+
 
 			/* on ajoute le nom logique du script */
 			memset(nom, 0, sizeof(char) * 1024);
@@ -2081,6 +2088,7 @@ void init_gui(t_gennet *data)
 	debug_printf("init_gui_drawing done\n");
 	init_gui_arg(data);
 	debug_printf("init_gui_arg done\n");
+
 
 }
 
