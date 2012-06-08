@@ -81,7 +81,7 @@ static GtkActionEntry menu_items[] = {
     {"/File/_Save", GTK_STOCK_SAVE, "_Save", "<Control>S", "Save", G_CALLBACK(save_file) },
     {"/File/Save _As...", GTK_STOCK_SAVE_AS, "Save _As...", "<Shift><Control>S", "Save As", G_CALLBACK(save_file_as) },
     {"/File/Reload script", GTK_STOCK_REVERT_TO_SAVED, "Reload script", NULL, "Reload script", G_CALLBACK(reload_script) },
-    {"/File/Edit variables", NULL, "Edit variables", "<Shilt><Control>V", "Edit variables", G_CALLBACK(edit_variables) },
+    {"/File/Edit variables", NULL, "Edit variables", "<Shift><Control>V", "Edit variables", G_CALLBACK(edit_variables) },
     {"/File/_Save _selection", GTK_STOCK_SAVE_AS, "_Save _selection", NULL, "Save selection", G_CALLBACK(sauve_selection) },
     {"/File/_Save _selection _flat", GTK_STOCK_SAVE_AS, "_Save _selection _flat", NULL, "Save selection flat", G_CALLBACK(sauve_selection_a_plat) },
     {"/File/_Block _transfo", NULL, "_Block _transfo","<Release>B", "Block transfo", G_CALLBACK(block_transfo) },
