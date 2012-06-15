@@ -489,8 +489,7 @@ void save_script(int comment, int save_sub_networks, TxDonneesFenetre *onglet_le
 	{
 		nbre_groupe_a_sauvegarder = sc->nbre_groupe;
 		nbre_liaison_a_sauvegarder = sc->nbre_liaison;
-		sprintf(nom_du_script, "%s_o", sc->nomfich1);
-		printf("Sauvegarde du script avec mise a plat des sous reseau dans %s \n", nom_du_script);
+		sprintf(nom_du_script, "%s", sc->nomfich1);
 	}
 	else
 	{
@@ -508,8 +507,7 @@ void save_script(int comment, int save_sub_networks, TxDonneesFenetre *onglet_le
 	f1 = fopen(nom_du_script, "w");
 	if (f1 == NULL)
 	{
-		fprintf(stderr, "\n Error while opening the network script \n");
-		exit(0);
+		EXIT_ON_ERROR(stderr, "\n Error while opening the network script \n");
 	}
 
 	if (save_sub_networks == 1) fprintf(f1, "%%!ignore_include \n"); /* lors de la relecture il ne faudra pas en plus relire les includes*/
