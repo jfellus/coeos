@@ -36,6 +36,10 @@ MAKEFILE="Makefile.coeos"
 #regle par defaut
 	echo "default: coeos coeos_debug" >> $MAKEFILE
 	echo "" >> $MAKEFILE
+	echo "clean: clean_release clean_debug" >> $MAKEFILE
+	echo "" >> $MAKEFILE
+	echo "reset: reset_release reset_debug" >> $MAKEFILE
+	echo "" >> $MAKEFILE
 
 
 for CONFIGURATION in ${ALL_CONFIGURATIONS[@]}
@@ -45,12 +49,12 @@ do
 
 	if [ $CONFIGURATION == "debug" ]
 	then
-		FINALCFLAGS="$CFLAGS -g"
+		FINALCFLAGS="$CFLAGS -g3"
 		POSTFIX="_debug"
 		
 	else
 		POSTFIX=""
-		FINALCFLAGS="$CFLAGS -g3"	
+		FINALCFLAGS="$CFLAGS -O2"	
 	fi
 	PROG_NAME="coeos$POSTFIX"
 	
@@ -100,19 +104,20 @@ do
 	echo -e "\t@$CC $OBJECTS -o $BINDIR/$PROG_NAME $FINALLIBS " >> $MAKEFILE
 	echo -e "\t@cp $XML  $DIR_BIN_LETO_PROM/. " >> $MAKEFILE
 	echo -e "\t@cp $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM " >> $MAKEFILE
-	echo -e "\t@cp $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM " >> $MAKEFILE
+	echo "" >> $MAKEFILE
+
+#regles additionnelles
+	echo "clean_$CONFIGURATION:" >> $MAKEFILE
+	echo -e "\trm -f  $OBJDIR/*.o " >> $MAKEFILE
+	echo "" >> $MAKEFILE
+
+	echo "reset_$CONFIGURATION:clean_$CONFIGURATION" >> $MAKEFILE
+	echo -e "\trm -f  $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM/$PROG_NAME" >> $MAKEFILE
 	echo "" >> $MAKEFILE
 	
 done
 
-#regles additionnelles
-echo "clean:" >> $MAKEFILE
-echo -e "\trm -f  $OBJDIR/*.o " >> $MAKEFILE
-echo "" >> $MAKEFILE
 
-echo "reset:clean" >> $MAKEFILE
-echo -e "\trm -f  $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM/$PROG_NAME" >> $MAKEFILE
-echo "" >> $MAKEFILE
 
 
 
