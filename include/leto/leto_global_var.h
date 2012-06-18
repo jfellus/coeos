@@ -93,6 +93,7 @@ typedef struct donnees_script
   type_vecteur_entier ngc; /* nbre de groupes par couche         */
 
    char nomfich1[LONGUEUR_NOM], freseau[LONGUEUR_NOM], draw[LONGUEUR_NOM], fvar[LONGUEUR_NOM];
+   char directory[PATH_MAX];
 
   int nbre_groupe, nbre_liaison;
 
