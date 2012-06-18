@@ -595,18 +595,6 @@ void zoom_out(GtkWidget * widget, gpointer data)
 }
 
 
-/*---------------------------------------------------------*/
-
-void zoom(GtkWidget * widget, gpointer data)
-{
-    float scale;
-    printf("scaling factor = ");
-    scanf("%f", &scale);
-
-    zoom_groups(scale, ((t_gennet_script *) data)->onglet_leto);
-}
-
-
 /*--------------------------------------------------*/
 
 void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, TxDonneesFenetre *onglet_leto, int link_type)
@@ -786,6 +774,7 @@ void creation_groupe(GtkWidget * widget, gpointer data)
 
 	 sc->nbre_groupes_lus = sc->last_groupe_number + 1;
 	 debug_printf("Lancement de la lecture de la macro %s \n", base_nom);
+
 	 nbre = read_macro(groupe2->no_name, groupe2->nom, groupe2->posx, groupe2->posy, 1, 1, &selected_plane, onglet_leto);
 	 /* le nbre de groupes a ete modifie dans read_macro */
 	 

@@ -306,6 +306,7 @@ int read_macro(char *base_base, char *nom, int px, int py, int relatif, int mode
 	type_groupe *groupe_local, *debut_macro;
 	type_liaison *liaison, *liaison1 = NULL;
 	FILE *f1;
+	char macro_script_path[PATH_MAX];
 	int reverse;
 	int mx, my;
 	float zoom;
@@ -316,10 +317,13 @@ int read_macro(char *base_base, char *nom, int px, int py, int relatif, int mode
 	nbre_groupe_macro = 0;
 	debug_printf("Lecture macro %s, base_base %s \n", nom, base_base);
 	debug_printf("Nombre total macros lues = %d \n", sc->nbre_macro_lues);
-	f1 = fopen(nom, "r");
+
+	snprintf(macro_script_path, PATH_MAX, "%s/%s", sc->directory, nom);
+
+	f1 = fopen(macro_script_path, "r");
 	if (f1 == NULL)
 	{
-		fprintf(stderr, "\n Error while opening the macro script file %s \n", nom);
+		fprintf(stderr, "\n Error while opening the macro script file %s \n", macro_script_path);
 		return (0);
 	}
 
@@ -388,8 +392,6 @@ int read_macro(char *base_base, char *nom, int px, int py, int relatif, int mode
 			if (groupe_local->reverse > 0) reverse = 1;
 			else reverse = -1;
 			groupe_local->reverse = reverse * (100 + sc->nbre_macro_lues * 7); /* plan >100 pour tout bouger ensemble */
-			/*  i=i+read_macro(base_nom_complet,groupe_local->nom,groupe_local->posx,groupe_local->posy,1,1);*/
-			/* le nbre de groupes a ete modifie dans read_macro */
 			nbre_gpes_inclus = nbre_gpes_inclus + read_macro(groupe_local->no_name, groupe_local->nom, groupe_local->posx, groupe_local->posy, 1, 1, selected_plane, onglet_leto);
 			debug_printf("read_macro index no groupe = %d \n", i);
 		}
@@ -502,12 +504,12 @@ void save_script(int comment, int save_sub_networks, TxDonneesFenetre *onglet_le
 
 	prepare_affichage();
 
-	fprintf(stdout, "SCRIPT %s\n", nom_du_script);
+	fprintf(stdout, "\nScript generated:  %s\n", nom_du_script);
 
 	f1 = fopen(nom_du_script, "w");
 	if (f1 == NULL)
 	{
-		EXIT_ON_ERROR(stderr, "\n Error while opening the network script \n");
+		EXIT_ON_ERROR("\n Error while opening the network script \n");
 	}
 
 	if (save_sub_networks == 1) fprintf(f1, "%%!ignore_include \n"); /* lors de la relecture il ne faudra pas en plus relire les includes*/

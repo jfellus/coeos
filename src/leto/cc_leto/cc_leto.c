@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
 
     memcpy(sc->nomfich1, argv[1], (strlen(argv[1])+1) * sizeof(char));
     memcpy(sc->freseau, argv[2], (strlen(argv[2])+1) * sizeof(char));
+    strcpy(sc->directory, "."); /* Il faudrait prendre le repertoire de monfich AB.*/
 
     /*gtk_set_locale (); */
     setlocale(LC_ALL, "C");

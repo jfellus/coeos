@@ -68,13 +68,8 @@ void creation(TxDonneesFenetre *onglet_leto)
 		}
 		groupe = groupe->s;
 	}
-	printf("fin initialisation des groupes pour chaque neurone\n");
 
 	/*Creation des liaisons entre les neurones des different groupes*/
-
-	/*    for (i = 0; i < sc->nbre_groupe; i++)
-	 {
-	 groupe = trouver_groupe(i);*/
 
 	groupe = sc->deb_groupe;
 	while (groupe != NULL)
@@ -194,7 +189,6 @@ void creation(TxDonneesFenetre *onglet_leto)
 		liaison = neuromod_deb;
 		while (liaison != NULL)
 		{
-			/*  	     printf("liaison (NM) [%p] : type %d - mode : %d - liaison suivant : %p\n",(void*)liaison,liaison->type, liaison->mode, (void*)liaison->s); */
 			if (liaison->arrivee == i && liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod)
 			{
 				k = liaison->depart;
@@ -217,10 +211,8 @@ void creation(TxDonneesFenetre *onglet_leto)
 		}
 		groupe = groupe->s;
 	} /*       etude du groupe suivant       */
-	printf("fin creation\n");
 	ecrit_reseau();
 	/*   save_script(1,0,onglet_leto);*/ /*CG: sauvegarde  le .script*/
-	save_script(1, 1, onglet_leto); /*PG: sauve le script et met a plat les sous reseau utile avec le .res mais pb denomination*//*sauvegarde(); */
-	/*     destruction(); */
+	save_script(1, 1, onglet_leto); /*PG: sauve le script et met a plat les sous reseau utile avec le .res mais pb denomination */
 }
 

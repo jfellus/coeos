@@ -1292,8 +1292,9 @@ char *get_file_extension(char *file)
 
 void set_file_with_ext(char *file, char *ext)
 {
+
     char *ptr;
-    char buf[255];
+    char buf[PATH_MAX];
 
     if (strlen(sc->nomfich1) == 0)
     {
@@ -1306,7 +1307,10 @@ void set_file_with_ext(char *file, char *ext)
 
     if (ptr == NULL) return;
 
-    if (strlen(ptr) == 0) strncat(buf, ext, sizeof(buf));
+
+
+
+    if (strlen(ptr) == 0) strncat(buf, ext, PATH_MAX-1);
     else  memcpy(ptr, &ext[1], (strlen(&ext[1])+1) * sizeof(char));
 
     memcpy(file, buf, (strlen(buf)+1) * sizeof(char));

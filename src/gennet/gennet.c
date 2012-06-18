@@ -704,6 +704,8 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 		nom_script_var = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
 		strcpy(nom_script_var, tmp_path);
 
+		strcpy(les_scripts[idx].directory, prom_script->path_prom_deploy);
+
 		/* lancement de leto avec les nom de fichier.script et . draw et l'indice de script disponible et l'indice de l'onglet */
 		run_leto(leto_first_argument, nom_script_draw, nom_script_res, nom_script_var, pscript->onglet_leto, idx, nPage, gen->seed);
 		pscript->sc = sc;
