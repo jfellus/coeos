@@ -311,21 +311,25 @@ int read_macro(char *base_base, char *nom, int px, int py, int relatif, int mode
 	int mx, my;
 	float zoom;
 	int no_macro_used;
-
-	/*printf("LISTE des groupes debut: \n"); affiche_liste_groupes();*/
+	int clipboard = 0;
 
 	nbre_groupe_macro = 0;
 	debug_printf("Lecture macro %s, base_base %s \n", nom, base_base);
 	debug_printf("Nombre total macros lues = %d \n", sc->nbre_macro_lues);
 
-	snprintf(macro_script_path, PATH_MAX, "%s/%s", sc->directory, nom);
+	memcpy(base_nom, nom, (strlen(nom) + 1) * sizeof(char));
+	get_base_name(base_nom);
+	if (strcmp(base_nom, "copy_buffer") == 0)
+	{
+		clipboard = 1;
+		snprintf(macro_script_path, PATH_MAX, "%s", nom);
+	}
+	else 	snprintf(macro_script_path, PATH_MAX, "%s/%s", sc->directory, nom);
+
 
 	f1 = fopen(macro_script_path, "r");
-	if (f1 == NULL)
-	{
-		fprintf(stderr, "\n Error while opening the macro script file %s \n", macro_script_path);
-		return (0);
-	}
+
+	if (f1 == NULL) PRINT_WARNING("\n Error while opening the macro script file %s \n", macro_script_path);
 
 	no_macro_used = sc->nbre_macro_lues;
 	*selected_plane = (100 + sc->nbre_macro_lues * 7);
@@ -340,25 +344,17 @@ int read_macro(char *base_base, char *nom, int px, int py, int relatif, int mode
 		}
 	}
 
-	memcpy(base_nom, nom, (strlen(nom) + 1) * sizeof(char));
-	get_base_name(base_nom);
 
-	if (strcmp(base_nom, "copy_buffer") == 0)
+
+	if (clipboard)
 	{
-		printf("PASTE \n");
 		memcpy(base_nom, "c", (strlen("c") + 1) * sizeof(char));
 	}
 
 	if (base_base == NULL) sprintf(base_nom_complet, "%s[%d]", base_nom, no_macro_used);
-	/* else sprintf(base_nom_complet,"%s_%s[%d]",base_base,base_nom,no_macro_used);*/
 	else memcpy(base_nom_complet, base_base, (strlen(base_base) + 1) * sizeof(char));
-
-	debug_printf("base = %s \n", base_nom_complet);
-
 	groupe_local = sc->fin_groupe;
-
 	sc->first_comment_group = (type_noeud_comment *) read_line_with_comment(f1, sc->first_comment_group, ligne);
-
 	sscanf(ligne, "nombre de groupes = %d\n", &nbre_groupe_macro);
 	debug_printf("nbre groupes deja lu %d, nombre de groupes macro = %d\n", sc->nbre_groupe, nbre_groupe_macro);
 	if (nbre_groupe_macro == 0)
