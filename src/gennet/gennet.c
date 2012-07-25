@@ -492,7 +492,6 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 
 	/* On memorise le chemin du script */
 	script_path_symb = promnet_prom_script_get_argument(prom_script, prom_script->path_file_symb);
-
 	script_path_script = promnet_prom_script_get_argument(prom_script, prom_script->path_file_script);
 
 	/* cas ou il n'y a pas de chemin de definis */
@@ -509,7 +508,9 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 			return;
 		}
 
-		if (strlen(script_path_script) > 0) snprintf(leto_first_argument, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, script_path_script);
+		if (strlen(script_path_script) > 0) {
+		  snprintf(leto_first_argument, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, script_path_script);
+		}
 
 		memset(script_path_symb, 0, sizeof(char) * (strlen(logical_name) + 8));
 		sprintf(script_path_symb, "%s.symb", logical_name);
@@ -1951,8 +1952,6 @@ void init_gui_arg_find_symb(t_gennet *data)
 			pscript->prom_script = promnet_add_new_prom_script(data->promnet);
 			if (pscript->prom_script != promnet_prom_script_get_next(data->promnet, NULL)) fprintf(stderr, "Probleme d'ajout du script %s a la liste des scripts\n", data->av[i]);
 
-			strcpy(pscript->prom_script->path_file_symb, data->av[i]);
-
 			/* on ajoute le nom logique du script */
 			memset(nom, 0, sizeof(char) * 1024);
 			memcpy(nom, data->av[i], (strlen(data->av[i]) + 1) * sizeof(char));
@@ -1962,11 +1961,13 @@ void init_gui_arg_find_symb(t_gennet *data)
 			{
 				memset(basepath, 0, MAX_ALL_PATH);
 				memcpy(basepath, data->av[i], end_path - data->av[i]);
+				strcpy(pscript->prom_script->path_file_symb, end_path+1);
 				/* on ajoute le chemin du script */
 				promnet_prom_script_set_all_path(pscript->prom_script, basepath, nom);
 			}
 			else
 			{
+				strcpy(pscript->prom_script->path_file_symb, data->av[i]);
 				promnet_prom_script_set_all_path(pscript->prom_script, ".", nom);
 				/* 	      promnet_prom_script_set_path_file_script(pscript->prom_script, data->av[i]); */
 			}
@@ -1998,8 +1999,6 @@ void init_gui_arg_find_script(t_gennet *data)
 			pscript->prom_script = promnet_add_new_prom_script(data->promnet);
 			if (pscript->prom_script != promnet_prom_script_get_next(data->promnet, NULL)) fprintf(stderr, "Probleme d'ajout du script %s a la liste des scripts\n", data->av[i]);
 
-			strcpy(pscript->prom_script->path_file_script, data->av[i]);
-
 
 			/* on ajoute le nom logique du script */
 			memset(nom, 0, sizeof(char) * 1024);
@@ -2010,13 +2009,15 @@ void init_gui_arg_find_script(t_gennet *data)
 			{
 				memset(basepath, 0, MAX_ALL_PATH);
 				memcpy(basepath, data->av[i], end_path - data->av[i]);
+				strcpy(pscript->prom_script->path_file_script, end_path+1);
 				/* on ajoute le chemin du script */
 				promnet_prom_script_set_all_path(pscript->prom_script, basepath, nom);
 			}
 			else
 			{
-				promnet_prom_script_set_all_path(pscript->prom_script, ".", nom);
-				/* 	      promnet_prom_script_set_path_file_script(pscript->prom_script, data->av[i]); */
+			  strcpy(pscript->prom_script->path_file_script, data->av[i]);
+			  promnet_prom_script_set_all_path(pscript->prom_script, ".", nom);
+			  /* 	      promnet_prom_script_set_path_file_script(pscript->prom_script, data->av[i]); */
 			}
 			pscript->pango = gtk_widget_create_pango_layout(GTK_WIDGET(data->gui->DrawingArea), nom);
 
