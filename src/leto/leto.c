@@ -1014,9 +1014,9 @@ void fill_group_dialog(int type)
 	    case No_item_groupe:
 	       entry_text = group->no_name;
 	       break;
-	    case No_item_nom:
+	    /*case No_item_nom:
 	       entry_text = group->nom;
-	       break;
+	       break;*/
 	    case No_item_taillex:
 	       entry_text = MY_Int2Str(group->taillex);
 	       break;

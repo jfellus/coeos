@@ -37,30 +37,28 @@ extern GtkWidget *combo_debug_groupe;
 /*-------------------------------------------------------------*/
 
 #define No_item_groupe		0
-#define No_item_nom 		1
-#define No_item_taillex 	2
-#define No_item_tailley 	3
-#define No_item_nbre 		4
-#define No_item_seuil 		5
-#define No_item_learning_rate 	6
-#define No_item_simulation_speed 7
-#define No_item_type2 		8
-#define No_item_ech_temps 	9
-#define No_item_noise_level     10  /* ajout recent PG - place liee a pos dans IHM */
-#define No_item_tolerance 	11
-#define No_item_alpha 		12
-#define No_item_nbre_de_1	13
-#define No_item_dvp 		14
-#define No_item_dvn 		15
-#define No_item_sigma_f 	16
-#define No_item_plan     	17
+/*#define No_item_nom 		1*/
+#define No_item_taillex 	1
+#define No_item_tailley 	2
+#define No_item_nbre 		3
+#define No_item_seuil 		4
+#define No_item_learning_rate 	5
+#define No_item_simulation_speed 6
+#define No_item_type2 		7
+#define No_item_ech_temps  8
+#define No_item_noise_level     9  /* ajout recent PG - place liee a pos dans IHM */
+#define No_item_tolerance 	10
+#define No_item_alpha 		11
+#define No_item_nbre_de_1	12
+#define No_item_dvp 		13
+#define No_item_dvn 		14
+#define No_item_sigma_f 	15
+#define No_item_plan     	16
 
-#define Number_of_items         18
+#define Number_of_items         17
 
-#define No_item_comment     	18
-
-
-#define Number_of_items_total 	19
+#define No_item_comment     	17
+#define Number_of_items_total 	18
 
 /*--------------------------------------------------------------*/
 

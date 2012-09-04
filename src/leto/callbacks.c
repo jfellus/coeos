@@ -54,22 +54,6 @@ void entry_group_callback_no_name(GtkWidget * widget, GtkWidget * entry, TxDonne
 	}
 }
 
-void entry_group_callback_nom(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
-{
-	const gchar *entry_text;
-	selected_group *sel_group;
-
-	if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
-
-	entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
-
-	for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
-	{
-		memcpy(sel_group->group->nom, entry_text, (strlen(entry_text) + 1) * sizeof(char));
-		debug_printf("Entry group name: %s\n", sel_group->group->nom);
-	}
-}
-
 void combo_nom_groupe_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
 {
 	const gchar *entry_text;
@@ -93,6 +77,23 @@ void combo_nom_groupe_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesF
 			}
 			return;
 		}
+}
+
+void combo_group_function_name_callback(GtkWidget * widget, GtkWidget * combo, TxDonneesFenetre *onglet_leto)
+{
+  const gchar *entry_text;
+  selected_group *sel_group;
+
+  entry_text = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(combo)->entry));
+
+  if (strlen(entry_text) == 0) return;
+
+
+      for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
+      {
+        strcpy(sel_group->group->nom, entry_text);
+      }
+      return;
 }
 
 void combo_nom_groupe_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
@@ -528,6 +529,7 @@ void menu_addLeto(GtkUIManager * p_uiManager, GtkWidget * p_widget, gpointer dat
 }
 
 extern GtkWidget *combo_type_groupe_entry;
+extern GtkWidget *combo_group_function_name;
 extern GtkWidget *combo_debug_groupe;
 extern GtkWidget *combo_reverse_groupe;
 
@@ -545,6 +547,7 @@ void group_validate_button_callback(GtkWidget * widget, gpointer data)
 	formulaire_group[No_item_comment].entry_widget_callback(widget, formulaire_group[No_item_comment].widget_entry, (TxDonneesFenetre *) data);
 
 	combo_nom_groupe_callback(widget, combo_type_groupe_entry, ((TxDonneesFenetre *) data));
+	combo_group_function_name_callback(widget, combo_group_function_name, ((TxDonneesFenetre *) data));
 	combo_reverse_groupe_callback(widget, combo_reverse_groupe, ((TxDonneesFenetre *) data));
 	combo_debug_groupe_callback(widget, combo_debug_groupe, ((TxDonneesFenetre *) data));
 
@@ -1689,8 +1692,12 @@ gboolean scribble_motion_notify_event(GtkWidget * widget, GdkEventMotion * event
 	GdkModifierType state;
 	TxPoint point;
 
-	if (((TxDonneesFenetre *) data)->pixmap == NULL) return FALSE; /* paranoia check, in case we haven't gotten
-	 * a configure event */
+	/* paranoia check, in case we haven't gotten a configure event */
+	if (((TxDonneesFenetre *) data)->pixmap == NULL) return FALSE;
+
+
+	if (sc->groupes_courants == NULL) return FALSE;
+
 
 	/* This call is very important; it requests the next motion event.
 	 * If you don't call gdk_window_get_pointer() you'll only get
