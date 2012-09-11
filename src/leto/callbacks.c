@@ -1651,7 +1651,7 @@ gboolean scribble_configure_event(GtkWidget * widget, GdkEventConfigure * event,
 		((TxDonneesFenetre *) data)->pixmap = gdk_pixmap_new(widget->window, widget->allocation.width, widget->allocation.height, -1);
 		((TxDonneesFenetre *) data)->window_pixmap = widget->window;
 		((TxDonneesFenetre *) data)->widget_pixmap = widget;
-		((TxDonneesFenetre *) data)->cr = NULL;
+		((TxDonneesFenetre *) data)->graphic = NULL;
 
 	}
 

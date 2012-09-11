@@ -1331,7 +1331,7 @@ void run_leto(char *fichier_script, char *fichier_draw, char *fichier_res, char 
     gtk_signal_connect(GTK_OBJECT(onglet_leto->window), "drag_data_get",
                        GTK_SIGNAL_FUNC(source_drag_data_get), onglet_leto);
 
-    onglet_leto->cr=NULL;
+    onglet_leto->graphic=NULL;
 
 
 }
@@ -1446,7 +1446,7 @@ int main(int argc, char *argv[])
 /********************************************************************************************************************/
 
 
-    	pscript->onglet_leto->cr=NULL;
+    	pscript->onglet_leto->graphic=NULL;
 
 
 /******************************************************* Lancement de Leto ****************************************/
@@ -1549,7 +1549,7 @@ int main(int argc, char *argv[])
                        GTK_SIGNAL_FUNC(source_drag_data_get), NULL);
 
 
-    pscript->onglet_leto->cr=NULL;
+    pscript->onglet_leto->graphic=NULL;
 
     gdk_threads_enter();
 
