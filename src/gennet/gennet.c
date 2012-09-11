@@ -668,7 +668,7 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 
 		/********************************************************************************************************************/
 
-		pscript->onglet_leto->cr = NULL;
+		pscript->onglet_leto->graphic = NULL;
 
 		/* insere un onglet dans pNotebook, qui a pour nom NomOnglet, 
 		 * contient pscript->onglet_leto->window et a comme menu pMenuLabel */
