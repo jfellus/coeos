@@ -1111,7 +1111,7 @@ void fill_group_dialog(int type)
    {
       selected_group *sel_group = NULL;
       int plane = -1, ech_temps = -1, type2 = -1;
-      char plane_text[256], ech_temps_text[256], type2_text[256], taillex_text[256], tailley_text[256];
+      char plane_text[256], ech_temps_text[256], type2_text[256], taillex_text[256], tailley_text[256], function_name[256];
       int first = 1;
       int field_editable;
 
@@ -1129,9 +1129,14 @@ void fill_group_dialog(int type)
 	    sprintf(taillex_text, "%s", MY_Int2Str(group->taillex));
 	    sprintf(tailley_text, "%s", MY_Int2Str(group->tailley));
 	    first = 0;
+	    sprintf(function_name, "%s", group->nom);
 	 }
 	 else
 	 {
+	   if (function_name != group->nom)
+	         {
+	            strcpy(function_name, "X");
+	         }
 	    if (plane != abs(group->reverse))
 	    {
 	       strcpy(plane_text, "X");
@@ -1198,6 +1203,12 @@ void fill_group_dialog(int type)
       gtk_entry_set_text(GTK_ENTRY(combo_reverse_groupe), "X");
       gtk_editable_set_editable(GTK_EDITABLE(combo_reverse_groupe), FALSE);
       gtk_widget_set_sensitive(GTK_WIDGET(combo_reverse_groupe), FALSE);
+
+
+      gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combo_group_function_name)->entry), "X");
+      gtk_editable_set_editable(GTK_EDITABLE(GTK_COMBO(combo_group_function_name)->entry), FALSE);
+      gtk_widget_set_sensitive(GTK_WIDGET(GTK_COMBO(combo_group_function_name)->entry), FALSE);
+
    }
 }
 

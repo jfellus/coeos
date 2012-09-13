@@ -86,7 +86,7 @@ void combo_group_function_name_callback(GtkWidget * widget, GtkWidget * combo, T
 
   entry_text = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(combo)->entry));
 
-  if (strlen(entry_text) == 0) return;
+  if (strlen(entry_text) == 0 && entry_text[0] == 'X') return;
 
 
       for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
@@ -119,6 +119,22 @@ void combo_nom_groupe_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFe
 	}
 }
 
+void combo_group_algo_function_name_callback(GtkWidget * widget, GtkWidget * combo, TxDonneesFenetre *onglet_leto)
+{
+  const gchar *entry_text;
+  selected_group *sel_group;
+
+  entry_text = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(combo)->entry));
+
+  if (strlen(entry_text) > 0 && entry_text[0] == 'X') return;
+
+
+      for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
+      {
+        strcpy(sel_group->group->nom, entry_text);
+      }
+      return;
+}
 void combo_debug_groupe_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
 {
 	const gchar *entry_text;
@@ -547,9 +563,10 @@ void group_validate_button_callback(GtkWidget * widget, gpointer data)
 	formulaire_group[No_item_comment].entry_widget_callback(widget, formulaire_group[No_item_comment].widget_entry, (TxDonneesFenetre *) data);
 
 	combo_nom_groupe_callback(widget, combo_type_groupe_entry, ((TxDonneesFenetre *) data));
-	combo_group_function_name_callback(widget, combo_group_function_name, ((TxDonneesFenetre *) data));
+	/*combo_group_function_name_callback(widget, combo_group_function_name, ((TxDonneesFenetre *) data));*/
 	combo_reverse_groupe_callback(widget, combo_reverse_groupe, ((TxDonneesFenetre *) data));
 	combo_debug_groupe_callback(widget, combo_debug_groupe, ((TxDonneesFenetre *) data));
+	combo_group_algo_function_name_callback(widget, combo_group_function_name, ((TxDonneesFenetre *) data));
 
 	sc->modified = 1;
 	set_title((TxDonneesFenetre *) data);
@@ -1027,7 +1044,7 @@ int find_new_name_script(TxDonneesFenetre *onglet_leto, int option)
 			i++;
 		if (i < NB_MAX_SCRIPTS)
 		{
-			Name_error = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Nom de script deja� utilisee !");
+			Name_error = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Nom de script deja��� utilisee !");
 			gtk_dialog_run(GTK_DIALOG(Name_error));
 			gtk_widget_destroy(Name_error);
 			gtk_widget_destroy(window);

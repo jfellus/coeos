@@ -53,32 +53,7 @@ type_group_function_pointers NN_Core_function_pointers[] =
 #include "gere_coudes.h"
 #include "manage_comments.h"
 
-/* Ces variables ne servent à rien, c'est juste pour que les librairies puissent charger, sinon elle cherchent des variables
- qui ne sont définies nul part
- */
 
-typedef struct
-{
-  void * rien;
-} motivation;
-typedef struct TAG_LIST_RFFTWND_PLAN
-{
-  void * rien;
-} list_rfftwnd_plan;
-int MOTOR_LOGICAL_STATUS[1], alealearn, nbre_liaison, EMISSION_ROBOT, learn_NN, nbre_entree, NbrFeaturesPoints, global_learn, echelle_temps[1], USE_ROBOT, continue_simulation_status;
-type_tableau_voies liaison;
-type_neurone *neurone;
-type_groupe def_groupe[1];
-pthread_mutex_t mutex_lecture_clavier, mutex_list_prom_fft;
-char vrai_nom_image[1], GLOB_path_SAVE[1], args;
-float global_temps, dP, MOTOR_1, MOTOR_2, MOTOR_3, MOTOR_4, MOTOR_5, Niveau_ressources[1], vigilence, Orientation, eps;
-motivation motivations[1];
-struct timeval prom_started_date, SystemTime;
-typedef long snd_pcm_sframes_t;
-snd_pcm_sframes_t snd_pcm_mmap_readn, snd_pcm_readi, snd_pcm_readn, snd_pcm_mmap_writei, snd_pcm_writei, snd_pcm_mmap_writen, snd_pcm_writen, snd_pcm_mmap_readi;
-typedef struct _snd_config snd_config_t;
-snd_config_t *snd_config;
-list_rfftwnd_plan *list_prom_fft = NULL;
 
 #define MODULE_REQUIRED 1
 
@@ -266,6 +241,36 @@ static GtkActionEntry menu_items[] =
     { "/Help/_About", GTK_STOCK_ABOUT, "_About", "<Release>F1", "About", G_CALLBACK(about) }, };
 
 /* static gint nmenu_items = sizeof(menu_items) / sizeof(menu_items[0]); */
+
+
+
+/* Ces variables ne servent à rien, c'est juste pour que les librairies puissent charger, sinon elle cherchent des variables
+ qui ne sont définies nul part
+ */
+
+typedef struct
+{
+  void * rien;
+} motivation;
+typedef struct TAG_LIST_RFFTWND_PLAN
+{
+  void * rien;
+} list_rfftwnd_plan;
+int MOTOR_LOGICAL_STATUS[1], alealearn, nbre_liaison, EMISSION_ROBOT, learn_NN, nbre_entree, NbrFeaturesPoints, global_learn, echelle_temps[1], USE_ROBOT, continue_simulation_status;
+type_tableau_voies liaison;
+type_neurone *neurone;
+type_groupe def_groupe[1];
+pthread_mutex_t mutex_lecture_clavier, mutex_list_prom_fft;
+char vrai_nom_image[1], GLOB_path_SAVE[1], args;
+float global_temps, dP, MOTOR_1, MOTOR_2, MOTOR_3, MOTOR_4, MOTOR_5, Niveau_ressources[1], vigilence, Orientation, eps;
+motivation motivations[1];
+struct timeval prom_started_date, SystemTime;
+typedef long snd_pcm_sframes_t;
+snd_pcm_sframes_t snd_pcm_mmap_readn, snd_pcm_readi, snd_pcm_readn, snd_pcm_mmap_writei, snd_pcm_writei, snd_pcm_mmap_writen, snd_pcm_writen, snd_pcm_mmap_readi;
+typedef struct _snd_config snd_config_t;
+snd_config_t *snd_config;
+list_rfftwnd_plan *list_prom_fft = NULL;
+
 
 /* Permet de recuperer le menu_items dans d'autres sources */
 void get_menu_items(GtkActionEntry *menu)
