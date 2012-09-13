@@ -27,6 +27,7 @@ extern GtkWidget *combo_type_groupe_entry;
 extern GtkWidget *combo_type_link_entry;
 extern GtkWidget *combo_mode_link_entry;
 extern GtkWidget *combo_reverse_groupe;
+extern GtkWidget *combo_group_function_name;
 extern GtkWidget *combo_debug_groupe;
 /*-------------------------------------------------------------*/
 
