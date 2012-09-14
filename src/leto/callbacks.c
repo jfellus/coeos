@@ -1713,9 +1713,6 @@ gboolean scribble_motion_notify_event(GtkWidget * widget, GdkEventMotion * event
 	if (((TxDonneesFenetre *) data)->pixmap == NULL) return FALSE;
 
 
-	if (sc->groupes_courants == NULL) return FALSE;
-
-
 	/* This call is very important; it requests the next motion event.
 	 * If you don't call gdk_window_get_pointer() you'll only get
 	 * a single motion event. The reason is that we specified
@@ -1942,6 +1939,7 @@ gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, gpointer data
 		sc->flag_rectangle_selection = 1;
 		return TRUE;
 	}
+
 
 	if (event->button == 1 || event->button == 3)
 	{
