@@ -271,7 +271,7 @@ void Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
 
 	gen->gui->NewScriptDialog = gtk_dialog_new_with_buttons("Script properties", GTK_WINDOW(gen->gui->WinMain), GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
 
-	e_name = script_edit_argument(prom_script, prom_script->logical_name, MAX_LOGICAL_NAME);
+	e_name = script_edit_argument(prom_script, prom_script->logical_name, LOGICAL_NAME_MAX);
 	new_control(gen->gui->NewScriptDialog, e_name, "Script name :");
 
 	label = gtk_label_new("");
@@ -340,7 +340,7 @@ void Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
 	e_pbinary = script_edit_argument(prom_script, prom_script->path_prom_binary, PATH_MAX);
 	OpenFile_control_browse(gen->gui->NewScriptDialog, e_pbinary, "Path to promethe binary :");
 
-	e_argline = script_edit_argument(prom_script, prom_script->prom_args_line, MAX_PROM_ARGS_LINE);
+	e_argline = script_edit_argument(prom_script, prom_script->prom_args_line, PROM_ARGS_LINE_MAX);
 	new_control(gen->gui->NewScriptDialog, e_argline, "promethe arguments");
 
 	result = gtk_dialog_run(GTK_DIALOG(gen->gui->NewScriptDialog));
@@ -451,7 +451,7 @@ void Computer_Edit_Computer(t_gennet *gen, t_gennet_computer *pcomputer)
 
 	gen->gui->AddComputerDialog = gtk_dialog_new_with_buttons("New computer", GTK_WINDOW(gen->gui->NewComputerDialog), GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
 
-	gaddress = gtk_entry_new_with_max_length(MAX_ADDRESS - 1);
+	gaddress = gtk_entry_new_with_max_length(ADDRESS_MAX - 1);
 	if (pcomputer != NULL)
 	{
 		val = promnet_computer_get_address(pcomputer->computer);
@@ -460,7 +460,7 @@ void Computer_Edit_Computer(t_gennet *gen, t_gennet_computer *pcomputer)
 	}
 	new_control(gen->gui->AddComputerDialog, gaddress, "Address : ");
 
-	glogin = gtk_entry_new_with_max_length(MAX_LOGIN - 1);
+	glogin = gtk_entry_new_with_max_length(LOGIN_MAX - 1);
 	if (pcomputer != NULL)
 	{
 		val = promnet_computer_get_login(pcomputer->computer);
@@ -478,7 +478,7 @@ void Computer_Edit_Computer(t_gennet *gen, t_gennet_computer *pcomputer)
 	}
 	SelectFolder_control_browse(gen->gui->AddComputerDialog, gpath, "Path to simulator: ");
 
-	gcpu = gtk_entry_new_with_max_length(MAX_CPU - 1);
+	gcpu = gtk_entry_new_with_max_length(CPU_MAX - 1);
 	if (pcomputer != NULL)
 	{
 		val = promnet_computer_get_cpu(pcomputer->computer);
@@ -487,7 +487,7 @@ void Computer_Edit_Computer(t_gennet *gen, t_gennet_computer *pcomputer)
 	}
 	new_control(gen->gui->AddComputerDialog, gcpu, "CPU type : ");
 
-	ginfos = gtk_entry_new_with_max_length(MAX_INFORMATION - 1);
+	ginfos = gtk_entry_new_with_max_length(INFORMATION_MAX - 1);
 	if (pcomputer != NULL)
 	{
 		val = promnet_computer_get_information(pcomputer->computer);
@@ -595,7 +595,7 @@ void Edit_Computer(t_gennet *gen, t_gennet_computer *pcomputer)
 	gtk_box_pack_start(GTK_BOX(hBox), glabel, FALSE, TRUE, 0);
 	gtk_widget_show(glabel);
 
-	gen->gui->gname = gtk_entry_new_with_max_length(MAX_COMPUTER - 1);
+	gen->gui->gname = gtk_entry_new_with_max_length(COMPUTER_MAX - 1);
 	if (pcomputer != NULL)
 	{
 		val = promnet_computer_get_name(pcomputer->computer);
@@ -905,7 +905,7 @@ int NewComlink_getName(t_gennet *data, t_gennet_comlink *comlink)
 
 	dialog = gtk_dialog_new_with_buttons("Link name", GTK_WINDOW(data->gui->WinMain), GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
 
-	e_name = gtk_entry_new_with_max_length(MAX_LINK_NAME - 1);
+	e_name = gtk_entry_new_with_max_length(LINK_NAME_MAX - 1);
 	if (comlink != NULL)
 	{
 		val = promnet_prom_link_get_name(comlink->prom_link);
@@ -1204,10 +1204,10 @@ static void OpenNetwork(GtkWidget *widget, gpointer data)
 
 	dialog = gtk_dialog_new_with_buttons("Open network", GTK_WINDOW(gen->gui->WinMain), GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
 
-	e_netfile = gtk_entry_new_with_max_length(MAX_NET_PATH - 1);
+	e_netfile = gtk_entry_new_with_max_length(NET_PATH_MAX - 1);
 	OpenFile_control_browse(dialog, e_netfile, "Path to net file :");
 
-	e_cptfile = gtk_entry_new_with_max_length(MAX_CPT_PATH - 1);
+	e_cptfile = gtk_entry_new_with_max_length(CPT_PATH_MAX - 1);
 	OpenFile_control_browse(dialog, e_cptfile, "Path to cpt file :");
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -1258,15 +1258,15 @@ static void SaveNetwork(GtkWidget *widget, gpointer data)
 
 	gen->gui->SaveNetworkDialog = gtk_dialog_new_with_buttons("Save Network", GTK_WINDOW(gen->gui->WinMain), GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
 
-	e_netfile = gtk_entry_new_with_max_length(MAX_NET_PATH - 1);
+	e_netfile = gtk_entry_new_with_max_length(NET_PATH_MAX - 1);
 	if (gen->promnet != NULL && gen->promnet->net_path != NULL) gtk_entry_set_text((GtkEntry *) e_netfile, gen->promnet->net_path);
 	SaveFile_control_browse(gen->gui->SaveNetworkDialog, e_netfile, "Path to net file :");
 
-	e_cptfile = gtk_entry_new_with_max_length(MAX_CPT_PATH - 1);
+	e_cptfile = gtk_entry_new_with_max_length(CPT_PATH_MAX - 1);
 	if (gen->promnet != NULL && gen->promnet->cpt_path != NULL) gtk_entry_set_text((GtkEntry *) e_cptfile, gen->promnet->cpt_path);
 	SaveFile_control_browse(gen->gui->SaveNetworkDialog, e_cptfile, "Path to cpt file :");
 
-	e_ivybus_envvar = gtk_entry_new_with_max_length(MAX_IVYBUS_ENVVAR - 1);
+	e_ivybus_envvar = gtk_entry_new_with_max_length(IVYBUS_ENVVAR_MAX - 1);
 	if (gen->promnet != NULL && gen->promnet->ivybus_envvar != NULL) gtk_entry_set_text((GtkEntry *) e_ivybus_envvar, gen->promnet->ivybus_envvar);
 
 	printf("IVYBUS: %s \n", gen->promnet->ivybus_envvar);

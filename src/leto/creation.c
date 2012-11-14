@@ -14,13 +14,7 @@
 
 void destruction()
 {
-	type_groupe *groupe;
-	type_liaison *liaison;
-
 	printf("Destruction/liberation des donnees liees au .res \n");
-
-	groupe = sc->deb_groupe;
-	liaison = sc->deb_liaison;
 
 	/*  free_liaison(liaison);
 	 free_liste_groupes(groupe);*/

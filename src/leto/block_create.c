@@ -78,7 +78,7 @@ void transfo_groups_in_block(char *nom,TxDonneesFenetre *onglet_leto)
 {
   selected_group *sel_group = NULL;
   type_groupe *groupe_local,*new_group;
-  int mode_inclusion=1,succes;
+  int succes;
   int no_macro_used;
   int selected_plane;
   char base_nom[SIZE_NO_NAME],base_nom_complet[SIZE_NO_NAME];
@@ -92,7 +92,6 @@ void transfo_groups_in_block(char *nom,TxDonneesFenetre *onglet_leto)
   printf("debut transfo_groups_in_block %s\n",nom);
   
   px=sc->point_courant_leto.x;py=sc->point_courant_leto.y;  /* point central de la macro */
-  mode_inclusion=1;
 
 /* creation d'un macro groupe: */
   sc->fin_groupe =new_group = (type_groupe *) creer_groupeb(sc->fin_groupe);

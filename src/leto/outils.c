@@ -212,8 +212,7 @@ type_matrice creer_matrice(int n, int m) /*nbre de lignes , nbre de colonnes */
 
 void free_matrice(type_matrice *t, int n)
 {
-	int i, b;
-	b = n + 2;
+	int i;
 
 	for (i = 0; i < n; i++) /* libere chaque ligne avant de liberer le tableau global*/
 		free(t[i]);

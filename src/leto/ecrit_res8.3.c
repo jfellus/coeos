@@ -3,12 +3,10 @@
 
 void ecriture_reseau2( char freseau[100], char nomfich1[100])
 {
-   int i, j, fl, in, items, res;
+   int i, j, items;
     type_coeff *pt;
     FILE *f1;
 
-    fl = sizeof(float);
-    in = sizeof(int);
     f1 = fopen(freseau, "w");
     if (f1 == NULL)
     {
@@ -68,7 +66,7 @@ void ecriture_reseau2( char freseau[100], char nomfich1[100])
         pt = (sc->neurone[i]).coeff;
         while (pt != nil)       /* ecrit tous les coefficients     */
         {
-            res = fwrite((type_coeff *) pt, sizeof(type_coeff), 1, f1);
+            fwrite((type_coeff *) pt, sizeof(type_coeff), 1, f1);
             pt = pt->s;         /* inscrit coeff suivant           */
         }
     }

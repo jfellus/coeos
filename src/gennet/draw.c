@@ -135,7 +135,7 @@ void refresh_script(t_gennet *data, t_gennet_script *script, int x, int y)
 
 	height = IMG_SCRIPT_HEIGHT + VSPACE_COMPUTER_SCRIPT + data->gui->font_height;
 
-	gtk_widget_queue_draw_area(data->gui->DrawingArea, x - 5, y - 5, IMG_SCRIPT_WIDTH + (data->gui->font_width * MAX_LOGICAL_NAME) + 10, height + 10);
+	gtk_widget_queue_draw_area(data->gui->DrawingArea, x - 5, y - 5, IMG_SCRIPT_WIDTH + (data->gui->font_width * LOGICAL_NAME_MAX) + 10, height + 10);
 }
 
 void refresh_link(t_gennet *data, t_gennet_comlink *comlink)
@@ -622,16 +622,11 @@ void DrawingArea_button_motion_event_callback(GtkWidget *widget, GdkEventMotion 
 	t_gennet_script *script = NULL;
 	t_gennet_script_list *script_list = NULL;
 	t_polyline *polyline = NULL;
-	int old_x = -1;
-	int old_y = -1;
 
 	debug_printf("button_motion_event_callback\n");
 
 	if ((script = find_widget_held_script(gen, event->x, event->y)) != NULL)
 	{
-		old_x = script->pos_x;
-		old_y = script->pos_y;
-
 		if ((script->pos_x = (((int) event->x) - script->pointer_x)) < 0) script->pos_x = 0;
 		if ((script->pos_y = (((int) event->y) - script->pointer_y)) < 0) script->pos_y = 0;
 	}
@@ -641,9 +636,6 @@ void DrawingArea_button_motion_event_callback(GtkWidget *widget, GdkEventMotion 
 
 		script->hold = 1;
 		move_script_out_computer(gen, computer, script_list);
-
-		old_x = script->pos_x;
-		old_y = script->pos_y;
 
 		if ((script->pos_x = (((int) event->x) - script->pointer_x)) < 0) script->pos_x = 0;
 		if ((script->pos_y = (((int) event->y) - script->pointer_y)) < 0) script->pos_y = 0;

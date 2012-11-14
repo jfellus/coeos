@@ -460,7 +460,6 @@ void zoom_groups(float scale, TxDonneesFenetre *onglet_leto)
     int xoffset, yoffset;
     type_groupe *gpe;
     type_liaison *liaison = NULL;
-    TxPoint point;
     selected_group *sel_group = NULL;
     int selected_planes[nb_max_planes];
     int planes_to_select = 0;
@@ -545,9 +544,6 @@ void zoom_groups(float scale, TxDonneesFenetre *onglet_leto)
       }
       gpe = gpe->s;
     }
-
-    point.x = xmin;
-    point.y = ymin;
 
     xoffset = yoffset = 0;
     if (xmin < 60)

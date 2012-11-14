@@ -88,9 +88,6 @@ void get_link_caption_coordinates(type_liaison *link, int *x, int *y)
 
 void initialise_coudes_liaison(type_liaison *liaison)
 {
-   t_polyline *polyline;
-   type_groupe *groupe1, *groupe2;
-   
    debug_printf("initialise_coudes_liaison\n");
    
    if(liaison->polyline_list != NULL || liaison->depart < 0 || liaison->arrivee < 0) 
@@ -99,10 +96,7 @@ void initialise_coudes_liaison(type_liaison *liaison)
    }
 
    liaison->polyline_list = create_polyline_list();	
-   polyline = add_polyline_to_polyline_list(liaison->polyline_list);
-
-   groupe1 = trouver_groupe(liaison->depart);
-   groupe2 = trouver_groupe(liaison->arrivee);
+   add_polyline_to_polyline_list(liaison->polyline_list);
 
    rescale_link(liaison);
 }

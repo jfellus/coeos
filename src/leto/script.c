@@ -304,7 +304,7 @@ int read_macro(char *base_base, char *nom, int px, int py, int relatif, int mode
 	char base_nom_complet[SIZE_NO_NAME];
 
 	type_groupe *groupe_local, *debut_macro;
-	type_liaison *liaison, *liaison1 = NULL;
+	type_liaison *liaison;
 	FILE *f1;
 	char macro_script_path[PATH_MAX];
 	int reverse;
@@ -445,7 +445,6 @@ int read_macro(char *base_base, char *nom, int px, int py, int relatif, int mode
 		liaison->deja_active = mode_inclusion;
 		/* liaison->depart = liaison->depart + sc->nbre_groupe;  *//* offset to change the connected groups (inutile maintenant)*/
 		/* liaison->arrivee = liaison->arrivee + sc->nbre_groupe; *//* c'est le nom compose qui evite le pb */
-		if (i == sc->nbre_liaison) liaison1 = liaison;
 #ifndef AVEUGLE
 		initialise_coudes_liaison(liaison); /*initialise les coudes de la liaison - par defaut on ne reprend pas le graphisme */
 #endif
@@ -555,14 +554,14 @@ void save_script_selected(int comment, int save_sub_networks, char *nom, TxDonne
 	selected_group *sel_group;
 	type_liaison *liaison;
 	FILE *f1;
-	int nbre_groupe_a_sauvegarder, nbre_liaison_a_sauvegarder, res;
+	int nbre_groupe_a_sauvegarder, nbre_liaison_a_sauvegarder;
 	char nom_du_script[1024];
 
 	debug_printf("save script selected \n");
 	if (nom == NULL)
 	{
 		printf("nom du fichier pour la sauvegarde : ");
-		res = scanf("%s", nom_du_script);
+		if (scanf("%s", nom_du_script)!=1) PRINT_WARNING("Fail reading the filename");
 	}
 	else memcpy(nom_du_script, nom, (strlen(nom) + 1) * sizeof(char));
 

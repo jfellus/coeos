@@ -33,7 +33,7 @@
 
 int main(int argc, char *argv[])
 {
-   int val, res;
+   int val;
 
     if (argc != 3)
     {
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     }
 
     printf("initial value of the pseudo random generator : ");
-    res = scanf("%d", &val);
+    if (scanf("%d", &val) != 1) PRINT_WARNING("Wrong value (not integer) of generator");
     srand48((long) val);
 
     sc->draw[0]='\0';
