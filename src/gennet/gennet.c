@@ -1358,13 +1358,13 @@ void writeNetworkSection(t_gennet *data, FILE *fprt)
 		for (scriptlist = computer->scriptlist; scriptlist != NULL; scriptlist = scriptlist->next)
 		{
 			if (scriptlist->script == NULL) continue;
-			if ((scriptlist->script->comlinklist_in != NULL) || (scriptlist->script->comlinklist_out != NULL))
-			{
+			/*if ((scriptlist->script->comlinklist_in != NULL) || (scriptlist->script->comlinklist_out != NULL))
+			{*/
 				name = promnet_prom_script_get_argument(scriptlist->script->prom_script, scriptlist->script->prom_script->logical_name);
 				address = promnet_computer_get_address(computer->computer);
 				fprintf(fprt, "%s %s %i\n", name, address, port);
 				port += 10;
-			}
+			/*}*/
 		}
 	}
 	fprintf(fprt, "end\n");
