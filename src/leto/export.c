@@ -5,8 +5,6 @@
 
   il suffit d'appeler la fonction export(format,nom_fichier,liste_chainee_groupe,liste_chainee_liaison)
 */
-#include "public_leto.h"
-
 #ifdef EXPORT
 
 #include "export.h"

@@ -2,25 +2,12 @@
 /* a partir d'un fichier .script */
 /* la gestion detaillee de la creation est faite dans leto_cle.c     */
 
-#include "public_leto.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "leto_global_var.h"
+#include "graphic_Tx.h"
 #include "outils.h"
-
-/* detruit tous les neurones et les liens crees pour la creation et l'enregistrement du .res */
-/* evite les pbs de debordement de memoire si l'on fait plusieurs creation de reseau sans quitter leto */
-
-void destruction()
-{
-	printf("Destruction/liberation des donnees liees au .res \n");
-
-	/*  free_liaison(liaison);
-	 free_liste_groupes(groupe);*/
-	free_reseau(sc->neurone);
-	printf("fin de la destruction\n");
-}
+#include "outils_externes.h"
+#include "script.h"
 
 /*-------------------------------------------------------------------------*/
 
@@ -69,7 +56,6 @@ void creation(TxDonneesFenetre *onglet_leto)
 	while (groupe != NULL)
 	{
 		i = groupe->no;
-		debug_printf("etude du groupe %d\n", i);
 		nbre_voie = 0;
 		if (groupe->nbre_voie > 1
 				&& (groupe->type == No_PTM || groupe->type == No_Winner_Macro || groupe->type == No_PLG || groupe->type == No_Winner_Colonne || groupe->type == No_But || groupe->type == No_Pyramidal || groupe->type == No_Pyramidal_plan
@@ -101,7 +87,6 @@ void creation(TxDonneesFenetre *onglet_leto)
 			}
 		}
 		s_fin = j - 1;
-		debug_printf("s_deb = %d , s_fin = %d \n", s_deb, s_fin);
 		liaison = sc->deb_liaison;
 		no_gpe_liaison = 1; /* le 0 correspond aux liens entre micro et macro neurones */
 		while (liaison != NULL)
@@ -126,7 +111,6 @@ void creation(TxDonneesFenetre *onglet_leto)
 						if (sc->neurone[j].groupe != k) break;
 					}
 					e_fin = j - 1;
-					debug_printf("e_deb = %d ,e_fin = %d \n", e_deb, e_fin);
 					creer_liaisons_entre_groupe(e_deb, e_fin, s_deb, s_fin, i, k, liaison, nbre_voie - 1, pas, no_gpe_liaison - 1);
 				}
 				no_gpe_liaison++;
@@ -174,7 +158,6 @@ void creation(TxDonneesFenetre *onglet_leto)
 		{
 			if (groupe->type == No_But || groupe->type == No_Ou) val = 1.;
 			else val = 1. / ((float) nbre_voie);
-			debug_printf("creation w=%f %d \n", val, nbre_voie);
 			creer_micro_liens(s_deb, s_fin, i, nbre_voie, val);
 		}
 
@@ -197,7 +180,6 @@ void creation(TxDonneesFenetre *onglet_leto)
 					if (sc->neurone[j].groupe != k) break;
 				}
 				e_fin = j - 1;
-				debug_printf("e_deb = %d ,e_fin = %d \n", e_deb, e_fin);
 				creer_liaisons_entre_groupe(e_deb, e_fin, s_deb, s_fin, i, k, liaison, nbre_voie - 1, -1/* pas=-1 -> cluster management !*/, no_gpe_liaison - 1);
 			}
 			no_gpe_liaison++;

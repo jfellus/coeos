@@ -19,12 +19,45 @@
 #include "reseau.h"
 #include "outils_externes.h"
 
-#include "outils.h"
 #include "script.h"
 #include "creation.h"
-#include "leto_global_var.h"
 
 #include <locale.h>
+
+void vkprints(const char *fmt, va_list ap)
+{
+    vfprintf(stdout, fmt, ap);
+}
+
+void kprints(const char *fmt, ...) /* version simplifiee du kernel pour permettre la compilation des librairies*/
+{
+    va_list ap;
+    va_start(ap, fmt);
+    vfprintf(stdout, fmt, ap);
+    va_end(ap);
+}
+
+void print_warning(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
+{
+    va_list arguments;
+    va_start(arguments, message);
+    kprints("\n\033[1;33m %s \t %s \t %i :\n \t Warning: ", name_of_file, name_of_function, numero_of_line);
+    vkprints(message, arguments);
+    kprints("\033[0m\n\n");
+    va_end(arguments);
+     exit(EXIT_FAILURE);
+}
+
+void fatal_error(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
+{
+    va_list arguments;
+    va_start(arguments, message);
+    kprints("\n\033[1;31m %s \t %s \t %i :\n \t Error: ", name_of_file, name_of_function, numero_of_line);
+    vkprints(message, arguments);
+    kprints("\033[0m\n\n");
+    va_end(arguments);
+     exit(EXIT_FAILURE);
+}
 
 
 /*---------------------------------------------------------------*/
@@ -61,7 +94,7 @@ int main(int argc, char *argv[])
     /*gtk_set_locale (); */
     setlocale(LC_ALL, "C");
 
-    lecture(1, NULL);  /* lecture recursive a priori */
+    script_load(sc, sc->nomfich1, 1, NULL);  /* lecture recursive a priori */
     printf("script read: starting res file generation\n");
     creation(NULL);
     /*   ecrit_reseau();

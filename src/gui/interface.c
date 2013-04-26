@@ -4,7 +4,14 @@
 #include <gdk/gdkkeysyms.h>
 
 #include <group_function_pointers.h>
-#include <public_leto.h>
+#include "gere_coudes.h"
+#include "manage_comments.h"
+#include "interface.h"
+#include "callbacks.h"
+#include "find_and_manage.h"
+#include "draw_leto.h"
+#include "leto.h"
+#include "outils.h"
 
 type_group_function_pointers NN_Core_function_pointers[] =
 {
@@ -49,9 +56,7 @@ type_group_function_pointers NN_Core_function_pointers[] =
 /* pour indiquer la fin du tableau*/
 { NULL, NULL, NULL, NULL, NULL, NULL, -1, -1 } };
 
-#include "public_leto.h"
-#include "gere_coudes.h"
-#include "manage_comments.h"
+
 
 
 
@@ -194,6 +199,9 @@ static GtkActionEntry menu_items[] =
 #endif
 
     { "/_Edit", NULL, "_Edit", NULL, NULL, NULL },
+
+    { "/Edit/Undo", GTK_STOCK_CANCEL, "Undo", "<Control>Z", "Undo", G_CALLBACK(callback_undo) },
+    { "/Edit/Redo", GTK_STOCK_CANCEL, "Redo", "<Shift><Control>Z", "Redo", G_CALLBACK(callback_redo) },
     { "/Edit/Copy", GTK_STOCK_COPY, "Copy", "<Control>C", "Copy", G_CALLBACK(copy_selection) },
     { "/Edit/Paste", GTK_STOCK_PASTE, "Paste", "<Control>V", "Paste", G_CALLBACK(paste_selection) },
     { "/Edit/Search group Name", GTK_STOCK_FIND, "Search Name", "<Control>F", "Search group Name", G_CALLBACK(callback_search_group_by_name) },
@@ -248,6 +256,9 @@ static GtkActionEntry menu_items[] =
  qui ne sont définies nul part
  */
 
+
+
+
 typedef struct
 {
   void * rien;
@@ -270,6 +281,59 @@ snd_pcm_sframes_t snd_pcm_mmap_readn, snd_pcm_readi, snd_pcm_readn, snd_pcm_mmap
 typedef struct _snd_config snd_config_t;
 snd_config_t *snd_config;
 list_rfftwnd_plan *list_prom_fft = NULL;
+
+
+void vkprints(const char *fmt, va_list ap)
+{
+    vfprintf(stdout, fmt, ap);
+}
+
+void kprints(const char *fmt, ...) /* version simplifiee du kernel pour permettre la compilation des librairies*/
+{
+    va_list ap;
+    va_start(ap, fmt);
+    vfprintf(stdout, fmt, ap);
+    va_end(ap);
+}
+
+void print_warning(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
+{
+    va_list arguments;
+    va_start(arguments, message);
+    kprints("\n\033[1;33m %s \t %s \t %i :\n \t Warning: ", name_of_file, name_of_function, numero_of_line);
+    vkprints(message, arguments);
+    kprints("\033[0m\n\n");
+    va_end(arguments);
+    /* exit(EXIT_FAILURE);  On exit pas mais on devrait avoir une fenetre claire */
+}
+
+void fatal_error(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
+{
+    va_list arguments;
+    va_start(arguments, message);
+    kprints("\n\033[1;31m %s \t %s \t %i :\n \t Error: ", name_of_file, name_of_function, numero_of_line);
+    vkprints(message, arguments);
+    kprints("\033[0m\n\n");
+    va_end(arguments);
+    /* exit(EXIT_FAILURE);  On exit pas mais on devrait avoir une fenetre claire */
+}
+
+/*
+ * Envoie un message d'erreur avec name_of_file, name_of_function, number_of_line et affiche le message formate avec les parametres variables.
+ * Puis exit le programme avec le parametre EXIT_FAILURE.
+ */
+void fatal_system_error(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
+{
+    va_list arguments;
+    va_start(arguments, message);
+    kprints("\n\033[1;31m %s \t %s \t %i :\n \t Error: ", name_of_file, name_of_function, numero_of_line);
+    vkprints(message, arguments);
+    kprints("System error: %s\n\n", strerror(errno));
+    kprints("\033[0m\n\n");
+
+    va_end(arguments);
+    /* exit(EXIT_FAILURE); On exit pas mais on devrait avoir une fenetre claire */
+}
 
 
 /* Permet de recuperer le menu_items dans d'autres sources */
@@ -601,8 +665,6 @@ void create_fenetre_dialogue(TxDonneesFenetre * fenetre, TxDonneesFenetre *ongle
   GtkWidget *entry;
   GtkWidget *Winmain;
 
-  debug_printf("create_fenetre_dialog\n");
-
 #ifndef LETO
   Winmain = lookup_widget(onglet_leto->window, "Winmain");
 #else
@@ -639,51 +701,49 @@ void create_fenetre_dialogue(TxDonneesFenetre * fenetre, TxDonneesFenetre *ongle
  */
 
 /* creation du status bar */
-void create_status_bar_leto(TxDonneesFenetre *onglet_leto, GtkWidget *vbox)
+void create_status_bar_leto(t_gennet_script *script_gui, GtkWidget *vbox)
 {
   GtkWidget *statusbar;
 
   statusbar = gtk_statusbar_new();
   g_object_ref(statusbar);
-  g_object_set_data_full(G_OBJECT(onglet_leto->window), "statusbar", statusbar, (GDestroyNotify) g_object_unref);
+  g_object_set_data_full(G_OBJECT(script_gui->onglet_leto->window), "statusbar", statusbar, (GDestroyNotify) g_object_unref);
 #ifndef LETO
-  gtk_box_pack_end(GTK_BOX(onglet_leto->window), statusbar, FALSE, TRUE, 0);
+  gtk_box_pack_end(GTK_BOX(script_gui->onglet_leto->window), statusbar, FALSE, TRUE, 0);
 #else
   gtk_box_pack_end(GTK_BOX(vbox), statusbar, FALSE, TRUE, 0);
 #endif
 }
 
 /* creation de la zone de dessin */
-void create_drawingArea_leto(TxDonneesFenetre *onglet_leto, GtkWidget *viewport1)
+void create_drawingArea_leto(t_gennet_script *script_gui, GtkWidget *viewport1)
 {
-  onglet_leto->da = gtk_drawing_area_new();
-  gtk_widget_set_size_request(onglet_leto->da, taille_max_fenetre1_x, taille_max_fenetre1_y);
-  onglet_leto->width = taille_max_fenetre1_x;
-  onglet_leto->height = taille_max_fenetre1_y;
-  onglet_leto->font = gdk_font_load("-*-courier-medium-r-*-*-*-120-*-*-*-*-*-*");
-  if (!onglet_leto->font) fprintf(stderr, "Erreur creation fontes\n");
-  /* ("-*-times-medium-r-*-*-*-110-*-*-*-*-*-*"); */
+  script_gui->onglet_leto->da = gtk_drawing_area_new();
+  gtk_widget_set_size_request(script_gui->onglet_leto->da, taille_max_fenetre1_x, taille_max_fenetre1_y);
+  script_gui->onglet_leto->width = taille_max_fenetre1_x;
+  script_gui->onglet_leto->height = taille_max_fenetre1_y;
 
-  gtk_container_add(GTK_CONTAINER(viewport1), onglet_leto->da);
 
-  onglet_leto->pixmap = NULL; /* voir scribble_configure_event pour l'init
+  gtk_container_add(GTK_CONTAINER(viewport1), script_gui->onglet_leto->da);
+
+  script_gui->onglet_leto->pixmap = NULL; /* voir scribble_configure_event pour l'init
    * et l'affichage */
-  onglet_leto->filew = NULL;
+  script_gui->onglet_leto->filew = NULL;
 
-  g_signal_connect(onglet_leto->da, "expose_event", G_CALLBACK(scribble_expose_event), onglet_leto);
-  g_signal_connect(onglet_leto->da, "configure_event", G_CALLBACK(scribble_configure_event), onglet_leto);
+  g_signal_connect(script_gui->onglet_leto->da, "expose_event", G_CALLBACK(scribble_expose_event), script_gui);
+  g_signal_connect(script_gui->onglet_leto->da, "configure_event", G_CALLBACK(scribble_configure_event), script_gui);
 
   /* Event signals */
 
   /*select rectangle */
-  g_signal_connect(onglet_leto->da, "motion_notify_event", G_CALLBACK(scribble_motion_notify_event), onglet_leto);
-  g_signal_connect(onglet_leto->da, "button_press_event", G_CALLBACK(mouse_clicked), onglet_leto);
-  g_signal_connect(onglet_leto->da, "button_release_event", G_CALLBACK(mouse_released), onglet_leto);
+  g_signal_connect(script_gui->onglet_leto->da, "motion_notify_event", G_CALLBACK(scribble_motion_notify_event), script_gui);
+  g_signal_connect(script_gui->onglet_leto->da, "button_press_event", G_CALLBACK(mouse_clicked), script_gui);
+  g_signal_connect(script_gui->onglet_leto->da, "button_release_event", G_CALLBACK(mouse_released), script_gui);
 
   /* Ask to receive events the drawing area doesn't normally
    * subscribe to
    */
-  gtk_widget_set_events(onglet_leto->da, gtk_widget_get_events(onglet_leto->da) | GDK_LEAVE_NOTIFY_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_EXPOSURE_MASK);
+  gtk_widget_set_events(script_gui->onglet_leto->da, gtk_widget_get_events(script_gui->onglet_leto->da) | GDK_LEAVE_NOTIFY_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_EXPOSURE_MASK);
 }
 
 /* creation des scrolls de leto */
@@ -1501,7 +1561,7 @@ void set_file_with_ext(char *file, char *ext)
 }
 
 /* recherche la widget qui a ete associe a la widget donnee */
-GtkWidget *lookup_widget(GtkWidget * widget, const gchar * widget_name)
+GtkWidget *lookup_widget(GtkWidget * widget, const char * widget_name)
 {
   GtkWidget *found_widget;
 

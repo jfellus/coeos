@@ -1,5 +1,10 @@
 
-#include "public_leto.h"
+#include <stdio.h>
+
+#include "graphic_Tx.h"
+#include "script.h"
+#include "reseau.h"
+
 
 void ecriture_reseau2( char freseau[100], char nomfich1[100])
 {
@@ -31,18 +36,12 @@ void ecriture_reseau2( char freseau[100], char nomfich1[100])
 
     /*ecrit type de chaque groupe           */
 
-#ifdef HP_cree_system
     for (i = 0; i < sc->nbre_groupe; i++)
     {
         fprintf(f1, "%d\n", (trouver_groupe(i))->type);
         fprintf(f1, "nom du groupe : %s\n", (trouver_groupe(i))->nom);
     }
-#else
-    {
-        fprintf(f1, "%d\n", c[i]);
-        fprintf(f1, "nom du groupe : %s\n", nom_groupe[i]);
-    }
-#endif
+
 
     for (i = 0; i < sc->nbre_neurone; i++)
     {

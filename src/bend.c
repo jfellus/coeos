@@ -4,7 +4,6 @@
 #include <string.h>
 
 #include "bend.h"
-#include "public_leto.h"
 
 float bound(float value, float min, float max)
 {
@@ -38,7 +37,6 @@ int get_all_polyline_list_coordinates(t_polyline_list *polyline_list, int tab[][
       tab[nb_points][1] = polyline->y_b;
       nb_points++;
 
-      debug_printf("get_all_polyline_list_coordinates: point %i = (%i, %i)\n", nb_points, polyline->x_b, polyline->y_b);
       
       while (polyline != NULL)
       {
@@ -46,7 +44,6 @@ int get_all_polyline_list_coordinates(t_polyline_list *polyline_list, int tab[][
 	 tab[nb_points][1] = polyline->y_e;
 	 nb_points++;
 
-	 debug_printf("get_all_polyline_list_coordinates: point %i = (%i, %i)\n", nb_points, polyline->x_e, polyline->y_e);
 
 	 polyline = polyline->next;
       }
@@ -211,16 +208,13 @@ t_polyline * find_polyline(t_polyline_list *polyline_list, int x, int y)
 
    for (polyline = polyline_list->first; polyline != NULL; polyline = polyline->next)
    {
-      debug_printf("find_polyline: test position (%i, %i) on polyline (%i, %i) -> (%i, %i)\n", x, y, polyline->x_b, polyline->y_b, polyline->x_e, polyline->y_e);
       get_polyline_rectangle(polyline, &new_x_b, &new_y_b, &new_x_e, &new_y_e);
 
       if (x >= new_x_b - LINE_CLICK_ZONE && x <= new_x_e + LINE_CLICK_ZONE &&
 	  y >= new_y_b - LINE_CLICK_ZONE && y <= new_y_e + LINE_CLICK_ZONE)
       {
-	 debug_printf("find_polyline: testing polyline\n");
 	 if ((coordinates_on_polyline(polyline, x, y)) == 1)
 	 {
-	    debug_printf("find_polyline: found polyline\n");
 	    return polyline;
 	 }
       }
@@ -641,7 +635,6 @@ void move_polyline_list_coordinates(t_polyline_list *polyline_list, int new_star
       new_dx = new_end_x - new_start_x;
       new_dy = new_end_y - new_start_y;
       
-      debug_printf("move_polyline_list_coordinates(coeos): old window: (%i, %i) -> (%i, %i)\nnew window: (%i, %i) -> (%i, %i)\n", old_start_x, old_start_y, old_end_x, old_end_y, new_start_x, new_start_y, new_end_x, new_end_y);
 
       for (polyline = polyline_list->first; polyline != NULL; polyline = polyline->next)
       {
@@ -663,7 +656,6 @@ void move_polyline_list_coordinates(t_polyline_list *polyline_list, int new_star
 	 }
 	 else if (polyline->fixed == 0)
 	 {
-	    debug_printf("move_polyline_list_coordinates(coeos): position coude (%f, %f)\n", polyline->x_e, polyline->y_e);
 
 	    if (fmin(old_start_x, old_end_x) <= polyline->x_e && fmax(old_start_x, old_end_x) >= polyline->x_e && old_dx != 0)
 	    {
@@ -682,7 +674,6 @@ void move_polyline_list_coordinates(t_polyline_list *polyline_list, int new_star
 	    {
 	       end_y = polyline->y_e;
 	    }
-	    debug_printf("move_polyline_list_coordinates(coeos): ,new position coude (%f, %f)\n", polyline->x_e, polyline->y_e);
 	 }
 	 else
 	 {

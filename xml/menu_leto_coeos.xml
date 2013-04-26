@@ -20,6 +20,9 @@
       <menuitem name="_Quit" action="/File/_Quit" />
     </menu>
     <menu name="_Edit" action="/_Edit">
+      <menuitem name="Undo" action="/Edit/Undo" />
+      <menuitem name="Redo" action="/Edit/Redo" /> 
+      <separator />
       <menuitem name="Copy" action="/Edit/Copy" />
       <menuitem name="Paste" action="/Edit/Paste" />
       <menuitem name="Search group Name" action="/Edit/Search group Name" />

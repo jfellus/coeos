@@ -3,9 +3,16 @@
 
 
 /*#define DEBUG 1*/
-#include "public_leto.h"
 
 /* creation de la zone (sous fenetre avec ascenseur) pour afficher les commentaire a la fin du formulaire*/
+#include "graphic_Tx.h"
+#include "reseau.h"
+#include "basic_tools.h"
+#include "string.h"
+#include "outils_script.h"
+#include "group_selection.h"
+#include "script.h"
+#include "gennet.h"
 
 GtkWidget *InsereCommentdansFormulaire(GtkWidget * fenetre, GtkWidget * table, TxChampsFormulaire * champs)
 {
@@ -13,7 +20,6 @@ GtkWidget *InsereCommentdansFormulaire(GtkWidget * fenetre, GtkWidget * table, T
   GtkWidget *view1,*sw;
   GtkTextIter iter;
  
-  debug_printf("***** InsereCommentdansFormulaire ****\n");
   champs->fenetre = fenetre;
   champs->table = table;
   champs->print_widget_entry = gtk_label_new(champs->nom_champs);
@@ -44,7 +50,6 @@ GtkWidget *InsereCommentdansFormulaire(GtkWidget * fenetre, GtkWidget * table, T
 
   gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw), view1);
   gtk_widget_show(sw);
-  debug_printf("fin InsereComment\n");
   return sw ;
 
 }
@@ -54,27 +59,22 @@ GtkWidget *InsereCommentdansFormulaire(GtkWidget * fenetre, GtkWidget * table, T
 void affiche_comment(GtkTextBuffer *buffer, type_noeud_comment *comment)
 {
    GtkTextIter iter;
-   int nbre_lignes;
 
-   debug_printf("affiche_comment\n");
    if (comment == NULL)
    {
       return;
    }
    
-   nbre_lignes = gtk_text_buffer_get_line_count(buffer);
-   debug_printf("\n\n nbre ligne comment =%d\n", nbre_lignes);
+   gtk_text_buffer_get_line_count(buffer);
 
    gtk_text_buffer_set_text(buffer, comment->chaine, -1);
 
    gtk_text_buffer_get_end_iter(buffer, &iter);
-   debug_printf("affiche_comment: comment= %s \n", comment->chaine);
    comment = comment->suiv;
 
    while (comment != NULL)
    {
       gtk_text_buffer_insert(buffer, &iter, comment->chaine, -1);
-      debug_printf("affiche_comment: comment= %s \n", comment->chaine);
       comment = comment->suiv;
    }
 }
@@ -85,12 +85,7 @@ void update_champs_comment(TxChampsFormulaire * champs, type_noeud_comment *comm
 {
    GtkTextBuffer *buffer;
 
-   debug_printf("update_champs_comment\n");
-   if (comment == NULL)
-   {
-      debug_printf("pas de commentaire \n");
-   }
-   else  
+   if (comment != NULL)
    {
       buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(champs->widget_entry));
       affiche_comment(buffer, comment);
@@ -112,23 +107,20 @@ type_noeud_comment *validate_comments(type_noeud_comment *anchor_comment, GtkWid
 {
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
-  int nbre_lignes;
   char *text;
   gboolean is_not_the_end;
   type_noeud_comment *pt_comment;
   int longueur;
   type_noeud_comment *pt_prec = NULL, *pt_fin = NULL;
 
-  debug_printf("validate_comment \n");
   pt_comment = anchor_comment;
 
   buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(entry));
 
-  nbre_lignes = gtk_text_buffer_get_line_count(buffer);
+  gtk_text_buffer_get_line_count(buffer);
 
   gtk_text_buffer_get_bounds(buffer, &start, &end);
 
-  debug_printf("validate_comment: number of lines in buffer: %i \n", nbre_lignes);
   iter = start;
   do
   {
@@ -138,7 +130,7 @@ type_noeud_comment *validate_comments(type_noeud_comment *anchor_comment, GtkWid
 
      if (pt_comment == NULL)
      {
-	pt_comment = (type_noeud_comment *) calloc(1, sizeof(type_noeud_comment));
+	pt_comment = ALLOCATION(type_noeud_comment);
 	pt_comment->suiv = NULL;
 	if (anchor_comment == NULL)
 	{
@@ -193,18 +185,14 @@ type_noeud_comment *validate_comments(type_noeud_comment *anchor_comment, GtkWid
      free(pt_prec);    
   }
   pt_fin->suiv = NULL;
-
-  debug_printf("end validate_comment \n");
   return anchor_comment;
 }
 
 
-void entry_group_callback_comment(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_group_callback_comment(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
 {
    selected_group *sel_group;
 
-   debug_printf("entry_group_callback_comment \n");
-   
    for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
    {
       sel_group->group->comment = validate_comments(sel_group->group->comment, entry);
@@ -214,6 +202,5 @@ void entry_group_callback_comment(GtkWidget * widget, GtkWidget * entry, TxDonne
 
 void entry_link_callback_comment(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
 {
-   debug_printf("entry_link_callback_comment \n");
    sc->liaison_courante->comment = validate_comments(sc->liaison_courante->comment, entry);
 }

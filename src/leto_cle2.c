@@ -3,7 +3,10 @@
 
 /*#define DEBUG*/
 
-#include "public_leto.h"
+#include "graphic_Tx.h"
+#include "script.h"
+#include "reseau.h"
+#include "outils.h"
 
 int liste[100000]; /* tableau contenant la liste des liens tires au hasard lors de la creation de liens aleatoires*/
 /* pour eviter de retirer plusieurs fois le meme lien */
@@ -20,8 +23,7 @@ void ecrit_reseau_ascii()
   f1 = fopen(sc->freseau, "w");
   if (f1 == NULL)
   {
-    printf("\n Erreur lors de l'ecriture du fichier contenant le reseau \n");
-    exit(1);
+    EXIT_ON_ERROR("Erreur lors de l'ecriture du fichier contenant le reseau \n");
   }
 
   printf("ecriture du reseau\n");
@@ -115,34 +117,26 @@ void ecrit_reseau()
     exit(1);
   }
 
-  debug_printf("Write .res to disk \n");
 
   fprintf(f1, "Reseau de neurone\n");
   fprintf(f1, "Copyright Philippe GAUSSIER oct 1991\n");
 
   fprintf(f1, "Version %i\n\n", RESEAU_VERSION);
-  debug_printf("Version %i\n\n", RESEAU_VERSION);
 
   fprintf(f1, "script associe : %s\n", sc->nomfich1);
-  debug_printf("script associe : %s\n", sc->nomfich1);
 
   fprintf(f1, "%i\n", sc->nbre_couche);
-  debug_printf("nbre_couche = %i\n", sc->nbre_couche);
 
   fprintf(f1, "%i\n", sc->nbre_groupe);
-  debug_printf("nbre_groupe = %i\n", sc->nbre_groupe);
 
   fprintf(f1, "%i\n", sc->nbre_neurone);
-  debug_printf("nbre_neurone = %i\n", sc->nbre_neurone);
 
   for (i = 0; i < sc->nbre_couche; i++)
   {
     fprintf(f1, "%i\n", sc->t[i]);
-    debug_printf("couche %i, val = %i\n", i, sc->t[i]);
   }
 
   fwrite(sc->neurone, sizeof(type_neurone), sc->nbre_neurone, f1);
-  debug_printf("neurons written to res file\n");
 
   /*   for (i = 0; i < sc->nbre_neurone; i++)
    {
@@ -168,8 +162,6 @@ void ecrit_reseau()
       fwrite(&(pt->Nbre_S), taille_float, 1, f1);
       fwrite(&(pt->Nbre_ES), taille_float, 1, f1);
 
-      /*debug_printf("ecrit_reseau: neuron %i, coeff %p => (val = %f, entree = %i, type = %i, evolution = %i, proba = %f, gpe_liaison = %i, Nbre_E = %i, Nbre_S = %i, Nbre ES = %i\n", i, (void *) pt, pt->val, pt->entree, pt->type, pt->evolution, pt->proba, pt->gpe_liaison, pt->Nbre_E, pt->Nbre_S, pt->Nbre_ES);*/
-
       pt = pt->s; /* inscrit coeff suivant           */
 
       if (pt == nil)
@@ -182,7 +174,6 @@ void ecrit_reseau()
       }
     }
   }
-  debug_printf("coeff written to res file\n");
 
   fclose(f1);
 }
@@ -300,7 +291,6 @@ type_groupe * gpe_entree)
 
   if (dvx < 0. || dvy < 0.) /*liens de 1 vers tous sur une ligne ou une colonne */
   {
-    debug_printf("liaison de 1 vers tous sur une colonne ou une ligne \n");
     if (dvx < 0.)
     {
       x = (float) (entree_taillex / 2);
@@ -826,7 +816,6 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin, int
   int cluster_manage = 0;
   int vrai_pas = 0;
 
-  debug_printf("creation des liaisons\n");
   groupe_entree = trouver_groupe(gpe_entree);
 
   /* conversion si necessaire */
@@ -841,7 +830,6 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin, int
     return;
   }
   pas_entree = entree_nbre / nbre;
-  debug_printf("pas pour trouver les macro neurones du gpe d'entree = %d \n", pas_entree);
 
   no_voie = no_voie * 2; /* pair   = produit     */
   /* impair = distance    */
@@ -853,7 +841,6 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin, int
   dx = groupe_taillex;
   dy = groupe_tailley;
 
-  debug_printf("taille du groupe de sortie en x : %d , en y : %d \n", dx, dy);
 
   pos1 = e_deb + pas_entree - 1;
 
@@ -864,7 +851,6 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin, int
   /** neuromod -> pas de micro neurone */
   if (liaison->mode >= NEUROMOD) decalage = 0;
 
-  if (pas > 1) debug_printf("creation d'un lien pour une categorie de micro neurones %d\n", decalage);
 
   if (pas < 0)
   {
@@ -907,6 +893,5 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin, int
       y++;
     }
   }
-  debug_printf("fin creation liaison\n");
 }
 

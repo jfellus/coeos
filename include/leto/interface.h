@@ -5,6 +5,9 @@
 #include "gennet.h"
 #endif
 
+#define taille_max_fenetre1_x 6000
+#define taille_max_fenetre1_y 3000
+
 #define POPUP_MENU_NO_SELECTION 0
 #define POPUP_MENU_GROUP 1
 #define POPUP_MENU_LINK 2
@@ -116,9 +119,9 @@ extern int modified;
 #ifndef AVEUGLE
 void create_menubar_leto(t_gennet_script *pscript, GtkWidget *vbox, int nPage);
 GtkWidget* create_scroll_leto(TxDonneesFenetre *onglet_leto, GtkWidget* viewport1, GtkWidget *vbox);
-void create_drawingArea_leto(TxDonneesFenetre *onglet_leto, GtkWidget *viewport1);
+void create_drawingArea_leto(t_gennet_script *script_gui, GtkWidget *viewport1);
 void create_dialog_leto(TxDonneesFenetre *onglet_leto);
-void create_status_bar_leto(TxDonneesFenetre *onglet_leto, GtkWidget *vbox);
+void create_status_bar_leto(t_gennet_script *script_gui, GtkWidget *vbox);
 extern void get_menu_items(GtkActionEntry *menu);
 #endif
 #endif

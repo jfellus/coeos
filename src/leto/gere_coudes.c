@@ -1,10 +1,11 @@
 
 /*#define DEBUG*/
 
-#include "public_leto.h"
 #include "leto.h"
 #include "gere_coudes.h"
 #include <math.h>
+#include "draw_leto.h"
+#include "outils.h"
 
 
 void start_group_get_link_pos(type_groupe *group, type_liaison *link, int *x, int *y)
@@ -69,11 +70,11 @@ void rescale_link(type_liaison *liaison)
 }
 
 
-int deplace_coude_courant(int x, int y)
+int deplace_coude_courant(donnees_script *script,int x, int y)
 {
-   if (sc->coude_courant->next != NULL)
+   if (script->coude_courant->next != NULL)
    {
-      move_bend_coordinates(sc->coude_courant, x, y);
+      move_bend_coordinates(script->coude_courant, x, y);
 
       return 1;
    }
@@ -88,8 +89,6 @@ void get_link_caption_coordinates(type_liaison *link, int *x, int *y)
 
 void initialise_coudes_liaison(type_liaison *liaison)
 {
-   debug_printf("initialise_coudes_liaison\n");
-   
    if(liaison->polyline_list != NULL || liaison->depart < 0 || liaison->arrivee < 0) 
    {
       return;
@@ -106,7 +105,6 @@ int get_link_points(type_liaison *liaison, TxPoint tab[])
    int points[nbPoint_max][2];
    int i, nb_points;
 
-   debug_printf("TxTraducteur\n"); 
    
    nb_points = get_all_polyline_list_coordinates(liaison->polyline_list, points);
 
@@ -143,7 +141,6 @@ void gere_coude(TxPoint point,TxDonneesFenetre *onglet_leto)
 {
    t_polyline *polyline;
    (void) onglet_leto;
-   debug_printf("gere_coude\n");
    
    if (sc->liaison_courante != NULL)
    {      
@@ -167,7 +164,6 @@ void fill_coudes(TxDonneesFenetre *onglet_leto)
    t_polyline *polyline = NULL;
    TxPoint point;
     
-   debug_printf("fill_coudes\n"); 
    if (sc->liaison_courante == NULL)
    {
       return;
@@ -192,7 +188,6 @@ void fill_coudes(TxDonneesFenetre *onglet_leto)
 
 void efface_coude()
 {
-  debug_printf("efface_coude\n"); 
   if (sc->coude_courant != NULL)
   {
      remove_polyline_and_update(sc->liaison_courante->polyline_list, sc->coude_courant);
@@ -211,7 +206,6 @@ int dupliquer_coude()
    t_polyline *polyline = NULL;
    t_polyline *tmp = NULL;
 
-  debug_printf("dupliquer_coude\n"); 
   if (sc->coude_courant != NULL) /* coude a dupliquer */
   {
      polyline = insert_polyline_before_at_coordinates(sc->liaison_courante->polyline_list, sc->coude_courant, sc->coude_courant->x_e - 15, sc->coude_courant->y_e);
@@ -241,7 +235,6 @@ int dupliquer_coude()
 
 void efface_coudes()
 {
-  debug_printf("efface_coudes\n"); 
   if (sc->liaison_courante != NULL)
   {
      delete_extra_polylines_in_polyline_list(sc->liaison_courante->polyline_list);
@@ -270,8 +263,6 @@ int test_link_position(TxPoint point)
 {
    t_polyline *polyline = NULL;
    type_liaison *liaison = NULL;
-
-   debug_printf("test_link_position: test a point (%i,%i) \n", point.x, point.y);
 
    liaison = sc->deb_liaison;
    while (liaison != NULL)

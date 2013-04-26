@@ -1,57 +1,7 @@
-#include "public_leto.h"
 #include "gere_coudes.h"
+#include "string.h"
+#include "basic_tools.h"
 
-void vkprints(const char *fmt, va_list ap)
-{
-	vfprintf(stdout, fmt, ap);
-}
-
-void kprints(const char *fmt, ...) /* version simplifiee du kernel pour permettre la compilation des librairies*/
-{
-	va_list ap;
-	va_start(ap, fmt);
-	vfprintf(stdout, fmt, ap);
-	va_end(ap);
-}
-
-void print_warning(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
-{
-	va_list arguments;
-	va_start(arguments, message);
-	kprints("\n\033[1;33m %s \t %s \t %i :\n \t Warning: ", name_of_file, name_of_function, numero_of_line);
-	vkprints(message, arguments);
-	kprints("\033[0m\n\n");
-	va_end(arguments);
-	/* exit(EXIT_FAILURE);  On exit pas mais on devrait avoir une fenetre claire */
-}
-
-void fatal_error(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
-{
-	va_list arguments;
-	va_start(arguments, message);
-	kprints("\n\033[1;31m %s \t %s \t %i :\n \t Error: ", name_of_file, name_of_function, numero_of_line);
-	vkprints(message, arguments);
-	kprints("\033[0m\n\n");
-	va_end(arguments);
-	/* exit(EXIT_FAILURE);  On exit pas mais on devrait avoir une fenetre claire */
-}
-
-/*
- * Envoie un message d'erreur avec name_of_file, name_of_function, number_of_line et affiche le message formate avec les parametres variables.
- * Puis exit le programme avec le parametre EXIT_FAILURE.
- */
-void fatal_system_error(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
-{
-	va_list arguments;
-	va_start(arguments, message);
-	kprints("\n\033[1;31m %s \t %s \t %i :\n \t Error: ", name_of_file, name_of_function, numero_of_line);
-	vkprints(message, arguments);
-	kprints("System error: %s\n\n", strerror(errno));
-	kprints("\033[0m\n\n");
-
-	va_end(arguments);
-	/* exit(EXIT_FAILURE); On exit pas mais on devrait avoir une fenetre claire */
-}
 
 void true_dprints(const char *fmt, ...) /* version simplifiee du kernel pour permettre la compilation des librairies*/
 {
@@ -96,23 +46,22 @@ type_tableau creer_reseau(int n) /*liste des neurones              */
 	t2 = (type_tableau) calloc(a, sizeof(type_neurone));
 	if (t2 == NULL)
 	{
-		printf("\n\n ERREUR : le Calloc a echoue !?!?!?!?!?!?!?....\n\ncreer_reseau\n");
-		exit(0);
+		EXIT_ON_ERROR("\n\n ERREUR : le Calloc a echoue !?!?!?!?!?!?!?....\n\ncreer_reseau\n");
 	}
 	return (t2);
 }
 
-void free_reseau(type_tableau t2)
+void free_reseau(donnees_script *script, type_tableau t2)
 {
 	int i;
 
 	printf("free neurons and coeff nbre_neurone=%d \n", sc->nbre_neurone);
-	for (i = 0; i < sc->nbre_neurone; i++)
+	for (i = 0; i < script->nbre_neurone; i++)
 	{
-		if (sc->neurone[i].coeff != NULL)
+		if (script->neurone[i].coeff != NULL)
 		{
 			/*  printf("neurone %d: \n",i);*/
-			free_coeff(sc->neurone[i].coeff);
+			free_coeff(script->neurone[i].coeff);
 		}
 	}
 	free(t2);
@@ -285,8 +234,7 @@ type_groupe *trouver_groupe_par_nom_old(char *nom)
 
 type_groupe *trouver_groupe_par_nom(char *nom, TxDonneesFenetre *onglet_leto)
 {
-	debug_printf("trouver_groupe_par_nom %s \n", nom);
-	return find_group_associated_to_symbolic_name(nom, (void **) &onglet_leto->hashtab);
+	return find_group_associated_to_symbolic_name(nom, onglet_leto->hashtab);
 }
 
 type_liaison *trouver_liaison_par_nom(char *no_groupe_depart_name, char *no_groupe_arrivee_name)
@@ -310,13 +258,9 @@ type_liaison *trouver_liaison_par_nom(char *no_groupe_depart_name, char *no_grou
 type_groupe *creer_groupeb(type_groupe * prec)
 {
 	type_groupe *nouv;
-	if ((nouv = (type_groupe *) calloc(1, sizeof(type_groupe))) == NULL)
-	{
-		fprintf(stderr, "creer_groupeb : memory allocation error\n");
-		exit(3);
-	}
-
+	nouv = (type_groupe *) ALLOCATION(type_groupe);
 	memset(nouv, 0, sizeof(type_groupe));
+
 	if (prec != (type_groupe *) NULL) prec->s = nouv;
 	nouv->s = (type_groupe *) NULL;
 
@@ -358,7 +302,6 @@ void affiche_liste_groupes()
 	groupe = sc->deb_groupe;
 	while (groupe != NULL)
 	{
-		debug_printf("groupe %d -> %s\n", groupe->no, groupe->no_name);
 		groupe = groupe->s;
 	}
 }
@@ -380,7 +323,7 @@ void free_liste_groupes(type_groupe *groupe)
 type_liaison *creer_liaison(type_liaison * prec)
 {
 	type_liaison *nouv;
-	nouv = (type_liaison *) calloc(1, sizeof(type_liaison));
+    nouv = ALLOCATION(type_liaison);
 	if (prec != NULL) prec->s = nouv;
 	memset(nouv, 0, sizeof(type_liaison));
 	return (nouv);

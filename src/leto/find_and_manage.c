@@ -2,11 +2,11 @@
 
 
 /*#define DEBUG 1*/
-
-#include "public_leto.h"
 #include "outils_script.h"
-
+#include "outils.h"
+#include "draw_leto.h"
 #include "gennet.h"
+#include "interface.h"
 
 /* recentre l'affichage sur le groupe considere */
 int highlight_group_selected(char *nom,TxDonneesFenetre *onglet_leto)
@@ -15,11 +15,9 @@ int highlight_group_selected(char *nom,TxDonneesFenetre *onglet_leto)
   type_groupe *groupe_local;
   TxPoint centre;
 
-  debug_printf("highlight: %s\n",nom);
   groupe_local = trouver_groupe_par_nom(nom, onglet_leto);
   if (groupe_local == NULL) 
   {
-     debug_printf("groupe %s  non trouve \n",nom);
      return 0;
   }
 
@@ -63,7 +61,6 @@ GtkTreeModel *create_completion_no_group (void)
   groupe = sc->deb_groupe;
   while (groupe != NULL)
     {
-      debug_printf("groupe %d -> %s\n",groupe->no,groupe->no_name);
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter, 0,groupe->no_name, -1);
       groupe = groupe->s;
@@ -84,7 +81,6 @@ GtkTreeModel *create_completion_name_group (void)
   groupe = sc->deb_groupe;
   while (groupe != NULL)
     {
-      debug_printf("groupe %s (%d) -> %s\n",groupe->no_name,groupe->no,groupe->nom);
       gtk_list_store_append (store, &iter);
       /*  (*iter).get_value(store,iter,2,&val);*/
       gtk_list_store_set (store, &iter, 0,groupe->nom, 1,groupe->no_name, 2,groupe->no, -1);
@@ -112,7 +108,6 @@ void explore_list(GtkTreeModel *list_store,TxDonneesFenetre *onglet_leto)
       gtk_tree_model_get (list_store, &iter, 0, &str_data1, 1, &str_data2, 2, &int_data, -1);
 
       /* Do something with the data */
-      debug_printf ("Ligne %d: (%s,%s,%d)\n", ligne, str_data1,str_data2, int_data);
       highlight_group_selected(str_data2,onglet_leto);
       g_free (str_data1);
       g_free (str_data2);
@@ -132,16 +127,13 @@ void explore_list_by_name(GtkTreeModel *list_store, char *nom,TxDonneesFenetre *
 
   /* Get the first iter in the list */
   valid = gtk_tree_model_get_iter_first (list_store, &iter);
-  debug_printf("explore_liste_by_name search %s \n",nom);
   while (valid)
     {
       gtk_tree_model_get (list_store, &iter, 0, &str_data1, 1, &str_data2, 2, &int_data, -1);
 
       /* Do something with the data */
-      debug_printf("test de %s \n",str_data1);
       if(strcmp(nom,str_data1)==0)
 	{
-	  debug_printf ("Ligne %d: (%s,%s,%d)\n", ligne, str_data1,str_data2, int_data);
 	  highlight_group_selected(str_data2,onglet_leto);
 	}
 	g_free (str_data1);
@@ -162,7 +154,6 @@ void find_group_name(GtkWidget * entry, gpointer data)
 
   memcpy(nom, entry_text, (strlen(entry_text)+1) * sizeof(char));
 
-  debug_printf("find name: %s\n",nom);
   explore_list_by_name(sc->fm_group_list_store, nom,((t_gennet_script *) data)->onglet_leto);
 }
 
@@ -247,7 +238,6 @@ void  callback_search_group_by_name(GtkWidget * widget, gpointer data)
 #endif
 
   do_find_completion(widget,data);
-  debug_printf("fin lancement search_group_by_name \n");
 }
 
 /*----------------------------------------------------------------------------*/
@@ -271,7 +261,6 @@ void callback_find_group(GtkWidget * widget, gpointer data)
    if(tab_is_Metaleto(donnees) == 0) return;
 #endif
    
-   debug_printf("Find callback\n");
    find_dialog = ((t_gennet_script *) data)->fenetre_dialogue->window;
    if (find_dialog == NULL)
    {
@@ -317,6 +306,5 @@ void callback_find_group(GtkWidget * widget, gpointer data)
 
 void callback_hide_find_group(GtkWidget * widget, gpointer data)
 {
-  debug_printf("Ferme fenetre Find \n");
   gtk_widget_hide(widget);
 }

@@ -2,7 +2,8 @@
 #define GROUP_SELECTION_H
 
 #ifndef AVEUGLE
-#include "libx.h"
+#include "reseau.h"
+#include "graphic_Tx.h"
 
 typedef struct selected_group
 {

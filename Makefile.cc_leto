@@ -1,0 +1,55 @@
+SHELL = /bin/sh
+.SUFFIXES:
+.SUFFIXES: .c .o
+.PHONY: default all cc_leto 
+
+default:all
+
+PROGRAM:=cc_leto
+include ../scripts/variables.mk
+
+SOURCES:=$(wildcard src/*.c) $(wildcard src/cc_leto/*.c) 
+OBJECTS:=$(notdir $(patsubst %.c,%.o,$(SOURCES)))
+INCLUDES:=-I../shared/include  -I../enet/include  -I.. $(GLIB_INCLUDES) $(GTK_INCLUDES) -Iinclude/leto -Iinclude 
+LIBS:=  -L../lib/$(system)/script -lscript -L../lib/$(system)/graphique -lgraphique -lmxml $(GLIB_LIBS) $(GTK_LIBS) -ldl -lm
+CFLAGS:=$(CFLAGS)  -DAVEUGLE
+
+debug_objdir:=$(objdir)/$(PROGRAM)/debug
+release_objdir:=$(objdir)/$(PROGRAM)/release
+
+$(debug_objdir):
+	mkdir -p $@
+
+$(release_objdir):
+	mkdir -p $@
+
+$(debug_objdir)/%.o:src/%.c | $(debug_objdir)
+	$(CC) -c $(CFLAGS)  $(INCLUDES) $(FLAGS_DEBUG) $< -o $@  
+
+$(release_objdir)/%.o:src/%.c | $(release_objdir)
+	$(CC) -c $(CFLAGS)  $(INCLUDES) $(FLAGS_OPTIM) $< -o $@
+
+$(debug_objdir)/%.o:src/cc_leto/%.c | $(debug_objdir)
+	$(CC) -c $(CFLAGS)  $(INCLUDES) $(FLAGS_DEBUG) $< -o $@  
+
+$(release_objdir)/%.o:src/cc_leto/%.c | $(release_objdir)
+	$(CC) -c $(CFLAGS)  $(INCLUDES) $(FLAGS_OPTIM) $< -o $@
+	
+
+$(PROGRAM)_debug: $(foreach object, $(OBJECTS), $(debug_objdir)/$(object)) 
+	$(CC) $(CFLAGS) $(FLAGS_DEBUG)  $^ -o $@ $(LIBS) 
+
+$(PROGRAM):$(foreach object, $(OBJECTS), $(release_objdir)/$(object))
+	$(CC) $(CFLAGS) $(FLAGS_OPTIM) $^ -o $@ $(LIBS)
+
+
+$(bindir)/%: %
+	mv $^ $@
+
+all:$(bindir)/$(PROGRAM)_debug $(bindir)/$(PROGRAM)
+
+clean:
+	rm -f $(debug_objdir)/*.o $(release_objdir)/*.o 
+
+reset:clean
+	rm -f $(bindir)/$(PROGRAM)_debug $(bindir)/$(PROGRAM)

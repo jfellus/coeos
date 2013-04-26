@@ -1,5 +1,8 @@
-#include "public_leto.h"
 #include "gere_coudes.h"
+#include "draw_leto.h"
+#include "interface.h"
+#include "outils.h"
+#include "leto.h"
 
 /* supprime les 0 a la fin d'un nombre a virgule */
 void simplifie_nom(char *nom)
@@ -439,14 +442,10 @@ void regenerer_test(TxDonneesFenetre *onglet_leto)
   TxPoint point;
   int i, j, largeur = 0, hauteur = 0;
 
-  debug_printf("regenerer_test: onglet = %p, pixmap = %p\n", (void *) onglet_leto, (void *) onglet_leto->pixmap);
-
   if (!GDK_IS_DRAWABLE(onglet_leto->pixmap))
   {
     return;
   }
-
-  debug_printf("regenerer_test 2\n");
 
   init_cairo(onglet_leto);
 
@@ -492,19 +491,18 @@ void regenerer_test(TxDonneesFenetre *onglet_leto)
     {
       groupe1 = trouver_groupe(liaison->depart);
       if (groupe1 == NULL)
-      {
-        printf("(fct regenerer_test(onglet_leto)) Le gpe1 %d %s de la liaison n'a pas ete trouve liaison->depart \n", liaison->depart, liaison->depart_name);
+        {
         printf("\nListe des groupes existants = \n\n");
         affiche_liste_groupes();
-        exit(1);
+        EXIT_ON_ERROR("Le gpe1 %d %s de la liaison n'a pas ete trouve liaison->depart \n", liaison->depart, liaison->depart_name);
       }
+
       groupe2 = trouver_groupe(liaison->arrivee);
       if (groupe2 == NULL)
       {
-        printf("(fct regenerer_test(onglet_leto)) Le gpe2 %d %s de la liaison n'a pas ete trouve liaison->depart \n", liaison->arrivee, liaison->arrivee_name);
         printf("\nListe des groupes existants = \n\n");
         affiche_liste_groupes();
-        exit(1);
+        EXIT_ON_ERROR("Le gpe2 %d %s de la liaison n'a pas ete trouve liaison->depart \n", liaison->arrivee, liaison->arrivee_name);
       }
 
       if ((groupe1->posx < sc->xmin && groupe2->posx < sc->xmin) || (groupe1->posx > sc->xmax && groupe2->posx > sc->xmax) || (groupe1->posy < sc->ymin && groupe2->posy < sc->ymin) || (groupe1->posy > sc->ymax && groupe2->posy > sc->ymax))

@@ -1,10 +1,10 @@
 #ifndef LETO_H
 #define LETO_H
-
+#include "graphic_Tx.h"
+#include "reseau.h"
+#include "gennet.h"
 
 #define EndOfLine                FALSE
-
-#define HP_cree_system    1
           /* pour ecriture_reseau.h != HP_system6.c */
 #ifndef pi
 #define pi 3.14159
@@ -25,20 +25,22 @@ extern void select_plane(int plane,TxDonneesFenetre *onglet_leto);
 
 extern int gere_modification_lien(TxPoint point,TxDonneesFenetre *onglet_leto);
 
-extern void automatic_group_rename(TxDonneesFenetre *onglet_leto);
+extern void automatic_group_rename(t_gennet_script *script_gui);
 
 extern void fonction_reverse( /*w, rien, c */ );
 
-extern void creation_groupe(GtkWidget * widget, gpointer data);
+extern void creation_groupe(GtkWidget * widget, t_gennet_script *script_gui);
 extern void create_link_callback(GtkWidget * widget, gpointer data);
 extern void create_one_to_one_link_callback(GtkWidget * widget, gpointer data);
 
 extern void detruit_liaison(type_liaison * liaison,TxDonneesFenetre *onglet_leto);
 extern void detruit_groupe(type_groupe *group, TxDonneesFenetre *onglet_leto);
+void detruit_macro(type_groupe *groupe_cible, TxDonneesFenetre *onglet_leto);
+
 extern int detruit_ensemble_groupes(TxDonneesFenetre *onglet_leto);
 
 extern int formulaire_lien(type_liaison * liaison_courante,TxDonneesFenetre *onglet_leto);
-extern int formulaire_groupe(TxDonneesFenetre *onglet_leto);
+int formulaire_groupe(t_gennet_script *script_gui);
 
 extern void zoom(GtkWidget * widget, gpointer data);
 

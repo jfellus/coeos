@@ -3,13 +3,16 @@
 #include <locale.h>
 
 #include "icones.h"
-#include "public_leto.h"
 #include "gennet.h"
 #include "creation.h"
-#include "leto_global_var.h"
 #include <search.h>
 #include "gere_coudes.h"
 #include "basic_tools.h"
+#include "outils.h"
+#include "interface.h"
+#include "leto.h"
+#include "callbacks.h"
+
 
 int get_filename_from_path(char *val)
 {
@@ -476,6 +479,7 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 		return;
 	}
 
+
 	prom_script = pscript->prom_script;
 
 	/* Tout d'abord on regarde a� quel indice peut-on creer l'onglet, si il reste encore de la place */
@@ -617,13 +621,10 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 	{
 		/********************************************** Creation de l'onglet ***********************************************/
 
-		if ((pscript->onglet_leto = malloc(sizeof(TxDonneesFenetre))) == NULL)
-		{
-			g_critical("Edit_Script_With_Leto : Memory error");
-			free(logical_name);
-			/* fermer ce qu'il faut */
-			return;
-		}
+		pscript->onglet_leto = ALLOCATION(TxDonneesFenetre);
+		pscript->onglet_leto->hashtab = ALLOCATION(struct hsearch_data);
+		/* TODO free memory */
+		memset(pscript->onglet_leto->hashtab, 0, sizeof(struct hsearch_data));
 		memset(pscript->onglet_leto, 0, sizeof(TxDonneesFenetre));
 
 		sMenuLabel = g_strdup_printf("Menu -> Page %d", nPage);
@@ -650,8 +651,8 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 		create_menubar_leto(pscript, vbox, nPage);
 		/* le dernier parametre est null car seulement utile pour la version Leto seul */
 		parent = create_scroll_leto(pscript->onglet_leto, parent, NULL);
-		create_drawingArea_leto(pscript->onglet_leto, parent);
-		create_status_bar_leto(pscript->onglet_leto, NULL);
+		create_drawingArea_leto(pscript, parent);
+		create_status_bar_leto(pscript, NULL);
 
 		if ((pscript->fenetre_dialogue = malloc(sizeof(TxDonneesFenetre))) == NULL)
 		{
@@ -709,6 +710,8 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 
 		/* lancement de leto avec les nom de fichier.script et . draw et l'indice de script disponible et l'indice de l'onglet */
 		run_leto(leto_first_argument, nom_script_draw, nom_script_res, nom_script_var, pscript->onglet_leto, idx, nPage, gen->seed);
+	    strcpy(sc->directory, ".");
+
 		pscript->sc = sc;
 		sc = NULL;
 
@@ -1217,8 +1220,6 @@ void loadScript(t_gennet *data)
 	t_gennet_script *script = NULL;
 	t_gennet_computer *computer = NULL;
 
-	debug_printf("LECTURE D'UN SCRIPT \n");
-
 	while ((current = promnet_prom_script_get_next(data->promnet, current)) != NULL)
 	{
 		char *name = NULL;
@@ -1238,7 +1239,6 @@ void loadScript(t_gennet *data)
 			{
 				move_script_in_computer(data, computer, script);
 				draw_script_in_computer(data, computer, script);
-				debug_printf(" ---------- script in computer\n");
 			}
 		}
 		if (name != NULL) free(name);
@@ -1295,7 +1295,6 @@ void separate_superimposed_comlink(t_gennet *gen)
 void loadNetwork_net(t_gennet *data, char *netfile)
 {
 
-	debug_printf("execute loadNetwork_net \n");
 	if (promnet_load_file_net(data->promnet, netfile) == -1)
 	{
 		g_critical("loadNetwork : loading net file failed");
@@ -1304,23 +1303,18 @@ void loadNetwork_net(t_gennet *data, char *netfile)
 	/*
 	 ** Puis les scripts
 	 */
-	debug_printf("avant loadScript\n");
 	loadScript(data);
-	debug_printf("scripts reading done\n");
 
 	/*
 	 ** Puis les links
 	 */
 	loadComlink(data);
-	debug_printf("links reading done\n");
 
 	separate_superimposed_comlink(data);
-	debug_printf("separate_superimposed_comlink done\n");
 }
 
 void loadNetwork(t_gennet *data, char *netfile, char *cptfile)
 {
-	debug_printf("LoadNetwork \n");
 	loadNetwork_cpt(data, cptfile);
 	loadNetwork_net(data, netfile);
 	refresh_all(data);
@@ -1911,7 +1905,6 @@ void init_gui_arg_find_cpt(t_gennet *data)
 		if (strcmp(ext, "cpt") == 0)
 		{
 			loadNetwork_cpt(data, data->av[i]);
-			debug_printf("loadNetwork_cpt done \n");
 		}
 	}
 }
@@ -1927,7 +1920,6 @@ void init_gui_arg_find_net(t_gennet *data)
 		if (strcmp(ext, "net") == 0)
 		{
 			loadNetwork_net(data, data->av[i]);
-			debug_printf("loadNetwork_net done \n");
 		}
 	}
 }
@@ -2082,26 +2074,17 @@ void init_gui(t_gennet *data)
 {
 
 	gtk_init(&data->ac, &data->av);
-	debug_printf("gtk_init done\n");
 	init_gui_winmain(data);
-	debug_printf("init_gui_winmain done\n");
 	init_gui_toolbar(data);
-	debug_printf("init_gui_toolbar done\n");
 	init_gui_drawing(data);
-	debug_printf("init_gui_drawing done\n");
 	init_gui_arg(data);
-	debug_printf("init_gui_arg done\n");
 
 
 }
 
 void init_data(t_gennet *data)
 {
-	if ((data->gui = malloc(sizeof(t_gui))) == NULL)
-	{
-		perror("init_data : malloc");
-		exit(-1);
-	}
+	data->gui = ALLOCATION(t_gui);
 	memset(data->gui, 0, sizeof(t_gui));
 	data->promnet = promnet_init();
 	data->seed = -1;
@@ -2119,13 +2102,11 @@ int main(int ac, char **av)
 	data.av = av;
 
 	init_data(&data);
-	debug_printf("init data done\n");
 	gtk_set_locale();
 	setlocale(LC_NUMERIC, "C");
 	gtk_disable_setlocale();
 
 	init_gui(&data);
-	debug_printf("init gui done\n");
 
 	gdk_threads_enter();
 

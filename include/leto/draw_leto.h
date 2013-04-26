@@ -1,6 +1,8 @@
 #ifndef DRAW_LETO_H
 #define DRAW_LETO_H
 
+#include "graphic_Tx.h"
+
 #define deltax         10
 #define deltay         10
 #define distc          20

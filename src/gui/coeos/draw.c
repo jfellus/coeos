@@ -4,12 +4,10 @@
 
 /*#define DEBUG*/
 
-#include "public_leto.h"
 #include "icones.h"
 #include "gennet.h"
 #include "creation.h"
 #include <outils_script.h>
-#include "leto_global_var.h"
 #include <search.h>
 #include "bend.h"
 
@@ -107,19 +105,16 @@ GdkPixmap *Get_Pixmap_From_File(t_gennet *data, gchar **img, GdkBitmap **mask, G
 void refresh_all(t_gennet *data)
 {
 
-	debug_printf("refresh_all\n");
 	gtk_widget_queue_draw_area(data->gui->DrawingArea, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
 void refresh_zone(t_gennet *data, int x, int y, int size_x, int size_y)
 {
-	debug_printf("refresh_zone\n");
 	gtk_widget_queue_draw_area(data->gui->DrawingArea, x - 5, y - 5, size_x + 10, size_y + 10);
 }
 
 void refresh_computer(t_gennet *data, t_gennet_computer *computer, int x, int y)
 {
-	debug_printf("refresh_computer\n");
 	if (!computer) return;
 
 	gtk_widget_queue_draw_area(data->gui->DrawingArea, x - 5, y - 5, computer->width + 10, computer->height + 10);
@@ -129,7 +124,6 @@ void refresh_script(t_gennet *data, t_gennet_script *script, int x, int y)
 {
 	int height = 0;
 
-	debug_printf("refresh_script\n");
 
 	if ((!script) || (script->in_computer == GENNET_OUT)) return;
 
@@ -150,8 +144,6 @@ void refresh_link(t_gennet *data, t_gennet_comlink *comlink)
 	int end_x;
 	int end_y;
 	int do_refresh;
-
-	debug_printf("refresh_link\n");
 
 	if (!comlink) return;
 
@@ -229,8 +221,6 @@ void DrawingArea_expose_event_script_in_computer(GtkWidget *widget, t_gennet_com
 	t_gennet_comlink_list *comlinklist = NULL;
 	int nr = 0;
 
-	debug_printf("expose_event_script_in_computer\n");
-
 	for (scriptlist = computer->scriptlist; scriptlist != NULL; scriptlist = scriptlist->next, nr++)
 	{
 		gdk_draw_drawable(GTK_LAYOUT(widget)->bin_window, widget->style->fg_gc[GTK_WIDGET_STATE(widget)], scriptlist->script->pixmap, 0, 0, scriptlist->script->pos_x, scriptlist->script->pos_y, IMG_SCRIPT_WIDTH, IMG_SCRIPT_HEIGHT);
@@ -248,8 +238,6 @@ void DrawingArea_expose_event_computer(GtkWidget *widget, GdkEventExpose *event,
 {
 	t_gennet *gen = (t_gennet *) data;
 	t_gennet_computer *computer = NULL;
-
-	debug_printf("expose_event_computer\n");
 
 	for (computer = gen->computers; computer != NULL; computer = computer->next)
 	{
@@ -278,8 +266,6 @@ void DrawingArea_expose_event_comlink(GtkWidget *widget, GdkEventExpose *event, 
 	cairo_t *cr = NULL;
 
 	double angle, dy;
-
-	debug_printf("expose_event_comlink\n");
 
 	cr = gdk_cairo_create(GTK_LAYOUT(widget)->bin_window);
 
@@ -348,7 +334,6 @@ void DrawingArea_expose_event_script(GtkWidget *widget, GdkEventExpose *event, t
 	t_gennet_script *script = NULL;
 	t_gennet_comlink_list *comlinklist = NULL;
 
-	debug_printf("expose_event_script\n");
 
 	for (script = gen->scripts; script != NULL; script = script->next)
 	{
@@ -368,7 +353,6 @@ void DrawingArea_expose_event_script(GtkWidget *widget, GdkEventExpose *event, t
 
 void DrawingArea_clear(GtkWidget *widget, GdkEventExpose *event)
 {
-	debug_printf("clear\n");
 	gdk_draw_rectangle(GTK_LAYOUT(widget)->bin_window, widget->style->white_gc, TRUE, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
@@ -396,8 +380,6 @@ void DrawingArea_tooltips_event_callback(GtkWidget *widget, gpointer data)
 	char *val = NULL;
 	PangoLayout *pango = NULL;
 	t_prom_script *prom_script;
-
-	debug_printf("tooltips_event_callback\n");
 
 	cur = tooltext;
 	memset(tooltext, 0, TOOLTIPS_MAX_LENGTH);
@@ -505,7 +487,6 @@ void DrawingArea_tooltips_event_callback(GtkWidget *widget, gpointer data)
 
 gboolean DrawingArea_expose_event_callback(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	debug_printf("expose_event_callback\n");
 	DrawingArea_clear(widget, event);
 	DrawingArea_expose_event_computer(widget, event, (t_gennet *) data);
 	DrawingArea_expose_event_script(widget, event, (t_gennet *) data);
@@ -522,7 +503,6 @@ void DrawingArea_button1_press_event(GtkWidget *widget, GdkEventButton *event, g
 	t_gennet_script_list *script_list = NULL;
 	t_polyline *polyline = NULL;
 
-	debug_printf("button1_press_event\n");
 
 	if ((script_list = find_widget_script_in_computer(gen, event->x, event->y)) != NULL)
 	{
@@ -602,7 +582,6 @@ void DrawingArea_button1_press_event(GtkWidget *widget, GdkEventButton *event, g
 
 gboolean DrawingArea_button_press_event_callback(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
-	debug_printf("button_press_event_callback\n");
 
 	if (event->button == 1) DrawingArea_button1_press_event(widget, event, data);
 	else if (event->button == 3)
@@ -623,7 +602,6 @@ void DrawingArea_button_motion_event_callback(GtkWidget *widget, GdkEventMotion 
 	t_gennet_script_list *script_list = NULL;
 	t_polyline *polyline = NULL;
 
-	debug_printf("button_motion_event_callback\n");
 
 	if ((script = find_widget_held_script(gen, event->x, event->y)) != NULL)
 	{
@@ -668,7 +646,6 @@ gboolean DrawingArea_motion_event_callback(GtkWidget *widget, GdkEventMotion *ev
 {
 	t_gennet *gen = (t_gennet *) data;
 
-	debug_printf("motion_event_callback\n");
 
 	refresh_zone(gen, gen->gui->mouse_x - 10, gen->gui->mouse_y - 10, 500, 500);
 	gen->gui->mouse_x = event->x;
@@ -690,7 +667,6 @@ gboolean DrawingArea_button_release_event_callback(GtkWidget *widget, GdkEventBu
 	t_gennet_script_list *script_list = NULL;
 	t_polyline *polyline = NULL;
 
-	debug_printf("button_release_event_callback\n");
 
 	if ((computer = find_widget_held_computer(gen, event->x, event->y)) != NULL)
 	{

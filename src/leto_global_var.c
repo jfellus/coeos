@@ -1,12 +1,8 @@
 #include <stdio.h>
 
-#include "public_leto.h"
-
-/*
-#include "reseau.h" 
-#include "outils.h" 
-#include "leto_global_var.h"
-*/
+#include "graphic_Tx.h"
+#include "script.h"
+#include "outils.h"
 
 
 /** insertion de la structure utilisee pour connaitre les modes possibles */
@@ -76,6 +72,7 @@ void init_global_var_un_script(donnees_script *le_script)
   le_script->t = creer_vecteur(1);
   le_script->ngc = creer_vecteur(1);
   le_script->n = creer_vecteur(1);
+  le_script->backup_id = 0;
 }
 
 

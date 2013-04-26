@@ -15,6 +15,7 @@
 
 #include "libpromnet.h"
 #include "bend.h"
+#include "script.h"
 
 #define	PROMETHE_DIR	"/simulateur"
 #define	PROMETHE_ENV	"PROMETHE_DIR"
@@ -170,6 +171,13 @@ typedef	struct		s_gennet
   t_gennet_script	*scripts;
   t_gennet_comlink	*comlinks;
 }			t_gennet;
+
+
+typedef struct script_gui
+{
+  donnees_script *data;
+  TxDonneesFenetre *onglet_leto;
+}type_script_gui;
 
 /* draw */
 void refresh_link(t_gennet *data, t_gennet_comlink *comlink);
