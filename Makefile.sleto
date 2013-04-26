@@ -46,8 +46,10 @@ $(bindir)/$(PROGRAM)_debug: $(foreach object, $(OBJECTS), $(debug_objdir)/$(obje
 $(bindir)/$(PROGRAM):$(foreach object, $(OBJECTS), $(release_objdir)/$(object))
 	$(CC) $(CFLAGS) $(FLAGS_OPTIM) $^ -o $@ $(LIBS)
 
+$(bindir)/resources/leto_icon.png:resources/leto_icon.png
+	cp $< $@
 
-all:$(bindir)/$(PROGRAM)_debug $(bindir)/$(PROGRAM)
+all:$(bindir)/$(PROGRAM)_debug $(bindir)/$(PROGRAM) $(bindir)/resources/leto_icon.png
 
 clean:
 	rm -f $(debug_objdir)/*.o $(release_objdir)/*.o 
