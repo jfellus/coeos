@@ -12,8 +12,6 @@ OBJDIR="$PWD/obj/$SYSTEM"
 source ../scripts/COMPILE_FLAG
 
 bash Create_Coeos_Makefile.sh $*
-bash Create_Leto_Makefile.sh $*
-bash Create_Sleto_Makefile.sh  $*
 
 # Resets the previous Makefile
 echo "" > Makefile

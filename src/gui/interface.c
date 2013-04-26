@@ -887,7 +887,7 @@ GtkWidget *combo_debug_groupe;
 GtkWidget *combo_reverse_groupe;
 GtkWidget *combo_name_groupe_entry;
 
-type_group_function_pointers *load_list_functions(char *module_name, int required)
+type_group_function_pointers *load_list_functions(const char *module_name, int required)
 {
   void *module;
   char buffer[MAXBUF], ld_prom_path[MAXBUF];
@@ -1519,11 +1519,9 @@ void set_title(TxDonneesFenetre *onglet_leto)
 #endif
 }
 
-void set_widgets_sensitivity(TxDonneesFenetre *onglet_leto)
-{
-}
 
-char *get_file_extension(char *file)
+
+char *get_file_extension(const char *file)
 {
   char *base;
   char *ext;

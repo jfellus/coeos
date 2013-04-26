@@ -1,0 +1,56 @@
+SHELL = /bin/sh
+.SUFFIXES:
+.SUFFIXES: .c .o
+.PHONY: default all
+
+default:all
+
+PROGRAM:=leto
+include ../scripts/local_config.mk
+
+SOURCES:=$(wildcard src/*.c) $(wildcard src/gui/*.c) $(wildcard src/gui/leto/*.c)
+OBJECTS:=$(notdir $(patsubst %.c,%.o,$(SOURCES)))
+INCLUDES:=-I../shared/include  -I../enet/include  -I.. $(GTK_INCLUDES) -Iinclude/leto -Iinclude -Isrc/gui/leto -Isrc/gui
+LIBS:=  -L../lib/$(system)/script -lscript -L../lib/$(system)/graphique -lgraphique -lmxml $(GTK_LIBS) -ldl -lm
+CFLAGS:=$(CFLAGS) -DLETO
+
+debug_objdir:=$(objdir)/$(PROGRAM)/debug
+release_objdir:=$(objdir)/$(PROGRAM)/release
+
+$(debug_objdir):
+	mkdir -p $@
+
+$(release_objdir):
+	mkdir -p $@
+
+$(debug_objdir)/%.o:src/%.c | $(debug_objdir)
+	$(CC) -c $(CFLAGS)  $(INCLUDES) $(FLAGS_DEBUG) $< -o $@  
+$(release_objdir)/%.o:src/%.c | $(release_objdir)
+	$(CC) -c $(CFLAGS)  $(INCLUDES) $(FLAGS_OPTIM) $< -o $@
+
+$(debug_objdir)/%.o:src/gui/%.c | $(debug_objdir)
+	$(CC) -c $(CFLAGS)  $(INCLUDES) $(FLAGS_DEBUG) $< -o $@  
+$(release_objdir)/%.o:src/gui/%.c | $(release_objdir)
+	$(CC) -c $(CFLAGS)  $(INCLUDES) $(FLAGS_OPTIM) $< -o $@
+
+$(debug_objdir)/%.o:src/gui/leto/%.c | $(debug_objdir)
+	$(CC) -c $(CFLAGS)  $(INCLUDES) $(FLAGS_DEBUG) $< -o $@  
+$(release_objdir)/%.o:src/gui/leto/%.c | $(release_objdir)
+	$(CC) -c $(CFLAGS)  $(INCLUDES) $(FLAGS_OPTIM) $< -o $@
+
+
+$(bindir)/$(PROGRAM)_debug: $(foreach object, $(OBJECTS), $(debug_objdir)/$(object)) 
+	$(CC) $(CFLAGS) $(FLAGS_DEBUG)  $^ -o $@ $(LIBS) 
+
+$(bindir)/$(PROGRAM):$(foreach object, $(OBJECTS), $(release_objdir)/$(object))
+	$(CC) $(CFLAGS) $(FLAGS_OPTIM) $^ -o $@ $(LIBS)
+
+
+all:$(bindir)/$(PROGRAM)_debug $(bindir)/$(PROGRAM)
+
+clean:
+	rm -f $(debug_objdir)/*.o $(release_objdir)/*.o 
+
+reset:clean
+	rm -f $(bindir)/$(PROGRAM)_debug $(bindir)/$(PROGRAM)
+

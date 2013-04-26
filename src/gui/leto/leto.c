@@ -1199,7 +1199,7 @@ void init_target_table()
 }
 
 /* fonction de lancement de leto via metaleto */
-void run_leto(char *fichier_script, char *fichier_draw, char *fichier_res, char *fichier_var, TxDonneesFenetre *onglet_leto, int idx, int numPage, long seed)
+void run_leto(const char *fichier_script, const char *fichier_draw, const char *fichier_res, const char *fichier_var, TxDonneesFenetre *onglet_leto, int idx, int numPage, long seed)
 {
 #ifndef LETO
   char *ext;
@@ -1374,8 +1374,8 @@ int main(int argc, char *argv[])
 
   create_menubar_leto(pscript, vbox_menu, 0);
   parent = create_scroll_leto(pscript->onglet_leto,parent,vbox);
-  create_status_bar_leto(pscript->onglet_leto,vbox);
-  create_drawingArea_leto(pscript->onglet_leto,parent);
+  create_status_bar_leto(pscript,vbox);
+  create_drawingArea_leto(pscript, parent);
 
   /* signaux de la fenetre principal */
   g_signal_connect(pscript->onglet_leto->window, "delete_event", G_CALLBACK(leto_quit), NULL);

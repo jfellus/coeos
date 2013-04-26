@@ -1393,3 +1393,30 @@ void Tools_NewScript(GtkWidget *widget, gpointer data)
 {
   Edit_Properties((t_gennet *) data, NULL);
 }
+
+/**
+ * This function is called when a tab is closed.
+ * We check if modifications have been made but aren't saved yet.
+ */
+gboolean tabLeto_quit(GtkWidget * widget, t_gennet_script *script_gui)
+{
+  GtkWidget *Notebook;
+  gint page_num;
+
+  if (script_gui == NULL) EXIT_ON_ERROR("script_gui est NULL ! ?");
+
+  /* controle si on est dans un onglet Leto
+   * ( l'onglet Metaleto etant le numero 0 )
+   */
+  if ((page_num = tab_is_Metaleto(script_gui->onglet_leto)) == 0) return FALSE;
+
+  leto_quit(widget, NULL);
+
+  /* on recupere la fenetre principal */
+  Notebook = lookup_widget(script_gui->onglet_leto->window, "Notebook");
+
+  /* suppresion de l'onglet */
+  gtk_notebook_remove_page(GTK_NOTEBOOK(Notebook), page_num);
+
+  return FALSE;
+}

@@ -103,9 +103,8 @@ extern type_lien_no_nom lien_no_nom_type_link[nbre_type_links];
 GtkWidget *get_menubar_menu(TxDonneesFenetre * onglet_leto);
 void show_popup_menu(int popup_menu_type, GdkEventButton *event, TxDonneesFenetre *onglet_leto);
 void show_status(TxDonneesFenetre *onglet_leto, const char *fmt, ...);
-void set_widgets_sensitivity(TxDonneesFenetre *onglet_leto);
 /* void change_dir(); */
-char *get_file_extension(char *file);
+char *get_file_extension(const char *file);
 void set_file_with_ext(char *file, char *ext);
 void set_title(TxDonneesFenetre *onglet_leto);
 void scroll_window(int x, int y,TxDonneesFenetre *onglet_leto);

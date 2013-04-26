@@ -98,12 +98,14 @@ do
 	done
 	
 #pour l'edition de liens et le lien sur le binaire
-	echo "$PROG_NAME: $OBJECTS" >> $MAKEFILE
+	echo "$PROG_NAME: $OBJECTS  " >> $MAKEFILE
 	echo -e "\t@mkdir -p $BINDIR" >> $MAKEFILE
 	echo -e "\t@echo \"[Link objects...] \"">> $MAKEFILE
 	echo -e "\t@$CC $OBJECTS -o $BINDIR/$PROG_NAME $FINALLIBS -rdynamic" >> $MAKEFILE
 	echo -e "\t@cp $XML  $DIR_BIN_LETO_PROM/. " >> $MAKEFILE
 	echo -e "\t@cp $BINDIR/$PROG_NAME $DIR_BIN_LETO_PROM " >> $MAKEFILE
+    echo -e "\t@cp  resources/coeos_icon.png $DIR_BIN_LETO_PROM/resources/coeos_icon.png" >> $MAKEFILE
+
 	echo "" >> $MAKEFILE
 
 #regles additionnelles

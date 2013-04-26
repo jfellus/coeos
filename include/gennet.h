@@ -256,4 +256,8 @@ void menuLinkDeletePolyline(gpointer data);
 void menuLinkDeleteBend(gpointer data);
 
 int		is_resize_computer(t_gennet_computer *computer, int x, int y);
+gboolean tabLeto_quit(GtkWidget * widget, t_gennet_script *script_gui);
+
+
+
 #endif /* _GENNET_H_ */

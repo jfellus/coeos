@@ -541,7 +541,6 @@ void regenerer_test(TxDonneesFenetre *onglet_leto)
   }
 
   TxFlushDessin(onglet_leto, sc->xmin, sc->ymin, sc->xmax - sc->xmin, sc->ymax - sc->ymin);
-  set_widgets_sensitivity(onglet_leto);
 }
 
 /*********************************************************************************************************************/

@@ -91,7 +91,7 @@ void entry_group_callback_no_name(GtkWidget * widget, GtkWidget * entry, t_genne
   }
 }
 
-void combo_nom_groupe_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void combo_nom_groupe_callback(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -149,7 +149,7 @@ void combo_nom_groupe_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFe
   }
 }
 
-void combo_group_algo_function_name_callback(GtkWidget * widget, GtkWidget * combo, TxDonneesFenetre *onglet_leto)
+void combo_group_algo_function_name_callback(GtkWidget * widget, GtkWidget * combo, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -1275,7 +1275,6 @@ void save_file(GtkWidget * widget, gpointer data)
     show_status(((t_gennet_script *) data)->onglet_leto, "Script saved");
   }
   set_title(((t_gennet_script *) data)->onglet_leto);
-  set_widgets_sensitivity(((t_gennet_script *) data)->onglet_leto);
 }
 
 /* sauvegarde un script dans un chemin donnee */
@@ -1363,7 +1362,6 @@ void save_file_as(GtkWidget * widget, gpointer data)
   }
 
   gtk_widget_destroy(dialog);
-  set_widgets_sensitivity(((t_gennet_script *) data)->onglet_leto);
 }
 
 void copy_selection(GtkWidget * widget, gpointer data)
@@ -2110,32 +2108,7 @@ void tabLeto_removed(GtkNotebook *notebook, GtkWidget *child, guint page_num, t_
   changed_tab(notebook, NULL, nPage, coeos);
 }
 
-/**
- * This function is called when a tab is closed.
- * We check if modifications have been made but aren't saved yet.
- */
-gboolean tabLeto_quit(GtkWidget * widget, t_gennet_script *script_gui)
-{
-  GtkWidget *Notebook;
-  gint page_num;
 
-  if (script_gui == NULL) EXIT_ON_ERROR("script_gui est NULL ! ?");
-
-  /* controle si on est dans un onglet Leto
-   * ( l'onglet Metaleto etant le numero 0 )
-   */
-  if ((page_num = tab_is_Metaleto(script_gui->onglet_leto)) == 0) return FALSE;
-
-  leto_quit(widget, NULL);
-
-  /* on recupere la fenetre principal */
-  Notebook = lookup_widget(script_gui->onglet_leto->window, "Notebook");
-
-  /* suppresion de l'onglet */
-  gtk_notebook_remove_page(GTK_NOTEBOOK(Notebook), page_num);
-
-  return FALSE;
-}
 
 void slide_groups_up(GtkWidget * widget, gpointer data)
 {
@@ -2603,5 +2576,4 @@ void block_transfo(GtkWidget * widget, gpointer data)
   }
 
   gtk_widget_destroy(dialog);
-  set_widgets_sensitivity(((t_gennet_script *) data)->onglet_leto);
 }

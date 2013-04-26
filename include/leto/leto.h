@@ -65,5 +65,5 @@ extern void swap_links_group(type_groupe *m,type_groupe *n);
 extern void create_dir_point_leto(); /* creation du repertoire .leto */
 
 /* mes fonctions a moi */
-extern void run_leto(char *fichier_script, char *fichier_draw, char *fichier_res, char *fichier_var, TxDonneesFenetre *onglet_leto,int idx, int numPage, long seed);
+void run_leto(const char *fichier_script, const char *fichier_draw, const char *fichier_res, const char *fichier_var, TxDonneesFenetre *onglet_leto, int idx, int numPage, long seed);
 #endif

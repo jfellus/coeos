@@ -42,7 +42,7 @@ extern void enter_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenet
 
 extern void entry_group_callback(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui);
 extern void entry_taille_x_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre * onglet_leto);
-extern void combo_nom_groupe_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre * onglet_leto);
+extern void combo_nom_groupe_callback(GtkWidget * widget, GtkWidget * entry,t_gennet_script *script_gui);
 extern void combo_nom_groupe_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto);
 extern void entry_toggle_editable(GtkWidget * checkbutton, GtkWidget * entry);
 extern void entry_toggle_visibility(GtkWidget * checkbutton,
@@ -157,7 +157,6 @@ void creation_cb(GtkWidget * widget, gpointer data);
 void changed_tab(GtkNotebook *notebook, GtkNotebookPage *page, guint page_num, t_gennet *coeos);
 void menu_addLeto (GtkUIManager * p_uiManager, GtkWidget * p_widget, gpointer data);
 void                tabLeto_removed(GtkNotebook *notebook, GtkWidget *child, guint page_num, t_gennet *coeos);
-gboolean tabLeto_quit(GtkWidget * widget, t_gennet_script *script_gui);
 int find_new_name_script(TxDonneesFenetre *onglet_leto, int option);
 int erase_without_saving(gpointer data);
 
