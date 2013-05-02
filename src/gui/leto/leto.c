@@ -566,6 +566,48 @@ void zoom_out(GtkWidget * widget, gpointer data)
   zoom_groups(0.9, ((t_gennet_script *) data)->onglet_leto);
 }
 
+void script_slide(donnees_script *script, TxPoint translation)
+{
+  type_groupe *group;
+  type_liaison *link;
+  t_polyline *polyline;
+
+  for (group = script->deb_groupe; group != NULL ; group = group->s)
+  {
+    group->posx += translation.x;
+    group->posy += translation.y;
+  }
+
+  for (link = script->deb_liaison; link != NULL ; link = link->s)
+  {
+    link->posx1 += translation.x;
+    link->posy1 += translation.y;
+    link->posx2 += translation.x;
+    link->posy2 += translation.y;
+
+    for (polyline = link->polyline_list->first; polyline != NULL ; polyline = polyline->next)
+    {
+      polyline->x_b += translation.x;
+      polyline->y_b += translation.y;
+      polyline->x_e += translation.x;
+      polyline->y_e += translation.y;
+    }
+  }
+}
+
+void script_zoom(donnees_script *script, TxPoint center, float scale)
+{
+  type_groupe *group;
+  TxPoint point;
+
+  for (group = script->deb_groupe; group != NULL ; group = group->s)
+  {
+    point.x = center.x + (group->posx - center.x) * scale;
+    point.y = center.y + (group->posy - center.y) * scale;
+    nouvelle_position_groupe(group, point);
+  }
+}
+
 /*--------------------------------------------------*/
 
 void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, TxDonneesFenetre *onglet_leto, int link_type)

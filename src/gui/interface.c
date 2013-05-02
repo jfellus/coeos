@@ -739,11 +739,13 @@ void create_drawingArea_leto(t_gennet_script *script_gui, GtkWidget *viewport1)
   g_signal_connect(script_gui->onglet_leto->da, "motion_notify_event", G_CALLBACK(scribble_motion_notify_event), script_gui);
   g_signal_connect(script_gui->onglet_leto->da, "button_press_event", G_CALLBACK(mouse_clicked), script_gui);
   g_signal_connect(script_gui->onglet_leto->da, "button_release_event", G_CALLBACK(mouse_released), script_gui);
+  g_signal_connect(script_gui->onglet_leto->da, "scroll-event", G_CALLBACK(mouse_scroll), script_gui);
+
 
   /* Ask to receive events the drawing area doesn't normally
    * subscribe to
    */
-  gtk_widget_set_events(script_gui->onglet_leto->da, gtk_widget_get_events(script_gui->onglet_leto->da) | GDK_LEAVE_NOTIFY_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_EXPOSURE_MASK);
+  gtk_widget_set_events(script_gui->onglet_leto->da, /*gtk_widget_get_events(script_gui->onglet_leto->da) |*/ GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_EXPOSURE_MASK | GDK_SCROLL_MASK);
 }
 
 /* creation des scrolls de leto */

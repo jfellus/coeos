@@ -3,7 +3,7 @@
 
 #include "graphic_Tx.h"
 
-#define deltax         10
+#define deltax         20
 #define deltay         10
 #define distc          20
 

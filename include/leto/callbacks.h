@@ -162,6 +162,8 @@ int erase_without_saving(gpointer data);
 
 gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, t_gennet_script *script_gui);
 gboolean mouse_released(GtkWidget * widget, GdkEventButton * event, t_gennet_script *script_gui);
+gboolean mouse_scroll(GtkWidget *widget, GdkEventScroll *event, t_gennet_script *script_gui);
+
 
 void set_random_gen(GtkWidget * widget, gpointer data);
 #endif

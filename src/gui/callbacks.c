@@ -234,7 +234,7 @@ void combo_reverse_groupe_callback(GtkWidget * widget, GtkWidget * entry, t_genn
   }
 }
 
-void entry_group_callback_taillex(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_taillex(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -255,7 +255,7 @@ void entry_group_callback_taillex(GtkWidget * widget, GtkWidget * entry,  t_genn
   }
 }
 
-void entry_group_callback_tailley(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_tailley(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -273,7 +273,7 @@ void entry_group_callback_tailley(GtkWidget * widget, GtkWidget * entry,  t_genn
   }
 }
 
-void entry_group_callback_seuil(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_seuil(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -291,7 +291,7 @@ void entry_group_callback_seuil(GtkWidget * widget, GtkWidget * entry,  t_gennet
   }
 }
 
-void entry_group_callback_learning_rate(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_learning_rate(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -309,7 +309,7 @@ void entry_group_callback_learning_rate(GtkWidget * widget, GtkWidget * entry,  
   }
 }
 
-void entry_group_callback_simulation_speed(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_simulation_speed(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -327,7 +327,7 @@ void entry_group_callback_simulation_speed(GtkWidget * widget, GtkWidget * entry
   }
 }
 
-void entry_group_callback_type2(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_type2(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -348,7 +348,7 @@ void entry_group_callback_type2(GtkWidget * widget, GtkWidget * entry,  t_gennet
   }
 }
 
-void entry_group_callback_ech_temps(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_ech_temps(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -369,7 +369,7 @@ void entry_group_callback_ech_temps(GtkWidget * widget, GtkWidget * entry,  t_ge
   }
 }
 
-void entry_group_callback_noise_level(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_noise_level(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -405,7 +405,7 @@ void entry_group_callback_tolerance(GtkWidget * widget, GtkWidget * entry, t_gen
   }
 }
 
-void entry_group_callback_alpha(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_alpha(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -477,7 +477,7 @@ void entry_group_callback_dvn(GtkWidget * widget, GtkWidget * entry, t_gennet_sc
   }
 }
 
-void entry_group_callback_sigma_f(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_sigma_f(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   selected_group *sel_group;
@@ -495,7 +495,7 @@ void entry_group_callback_sigma_f(GtkWidget * widget, GtkWidget * entry,  t_genn
   }
 }
 
-void entry_group_callback_plan(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_plan(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
 {
   const gchar *entry_text;
   TxPoint point;
@@ -1670,10 +1670,7 @@ gboolean scribble_expose_event(GtkWidget * widget, GdkEventExpose * event, t_gen
 gboolean scribble_motion_notify_event(GtkWidget * widget, GdkEventMotion * event, t_gennet_script *script_gui)
 {
   /*int x, y;*/
-  TxPoint point;
-
-  /* paranoia check, in case we haven't gotten a configure event */
-  /* if (((TxDonneesFenetre *) data)->pixmap == NULL) return FALSE;*/
+  TxPoint point, translation;
 
   /* This call is very important; it requests the next motion event.
    * If you don't call gdk_window_get_pointer() you'll only get
@@ -1687,29 +1684,42 @@ gboolean scribble_motion_notify_event(GtkWidget * widget, GdkEventMotion * event
    */
   /* gdk_window_get_pointer(event->window, &x, &y, &state);*/
 
-  if (!event->is_hint) return TRUE;
-
-  point.x = event->x;
-  point.y = event->y;
-
-  if (sc->flag_drag_group == 1)
+  if (event->is_hint)
   {
-    drag_selected_groups(point, script_gui->onglet_leto);
-    scroll(point, script_gui->onglet_leto);
-    regenerer_test(script_gui->onglet_leto);
-  }
-  else if (sc->flag_drag_coude == 1)
-  {
-    if (deplace_coude_courant(sc, point.x, point.y) == 1)
+    if (event->state & GDK_BUTTON1_MASK)
     {
-      scroll(point, script_gui->onglet_leto);
-      regenerer_test(script_gui->onglet_leto);
+      point.x = event->x;
+      point.y = event->y;
+
+      if (sc->flag_drag_group == 1)
+      {
+        drag_selected_groups(point, script_gui->onglet_leto);
+        scroll(point, script_gui->onglet_leto);
+        regenerer_test(script_gui->onglet_leto);
+      }
+      else if (sc->flag_drag_coude == 1)
+      {
+        if (deplace_coude_courant(sc, point.x, point.y) == 1)
+        {
+          scroll(point, script_gui->onglet_leto);
+          regenerer_test(script_gui->onglet_leto);
+        }
+      }
+      else if (sc->flag_rectangle_selection == 1)
+      {
+        draw_selection(widget, point.x, point.y, script_gui->onglet_leto, event->state & GDK_CONTROL_MASK);
+      }
     }
-  }
-  else if (sc->flag_rectangle_selection == 1 && (event->state & GDK_BUTTON1_MASK))
-  {
-    draw_selection(widget, point.x, point.y, script_gui->onglet_leto, event->state & GDK_CONTROL_MASK);
-  }
+    else if ((event->state & GDK_BUTTON2_MASK) && (script_gui->sc->groupes_courants == NULL))
+    {
+      translation.x = event->x - script_gui->sc->pointer_selection_center.x;
+      translation.y = event->y - script_gui->sc->pointer_selection_center.y;
+      script_slide(script_gui->sc, translation);
+      script_gui->sc->pointer_selection_center.x = event->x;
+      script_gui->sc->pointer_selection_center.y = event->y;
+      regenerer_test(script_gui->onglet_leto);
+    } else return FALSE;
+  }  else return FALSE;
 
   /* We've handled it, stop processing */
   return TRUE;
@@ -1733,7 +1743,7 @@ void export_cb(GtkWidget * widget, gpointer data)
 /**
  * Callback to modify a group or a link.
  */
-void modify_callback(GtkWidget * widget,  t_gennet_script *script_gui)
+void modify_callback(GtkWidget * widget, t_gennet_script *script_gui)
 {
 #ifndef LETO
   /* controle si on est dans un onglet Leto
@@ -1856,7 +1866,7 @@ void delete_all_coudes_callback(GtkWidget * widget, gpointer data)
   }
 }
 
-/* fonction gerant les differentes actions a la souris: 
+/* fonction gerant les differentes actions a la souris:
  deplacement, selection, suppression, creation, modification (liens et groupes) ... */
 gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, t_gennet_script *script_gui)
 {
@@ -1988,6 +1998,36 @@ gboolean mouse_released(GtkWidget * widget, GdkEventButton * event, t_gennet_scr
   return TRUE;
 }
 
+gboolean mouse_scroll(GtkWidget *widget, GdkEventScroll *event, t_gennet_script *script_gui)
+{
+  TxPoint center;
+  (void) widget;
+
+  if (event->state & GDK_CONTROL_MASK)
+  {
+    center.x = event->x;
+    center.y = event->y;
+
+    switch (event->direction)
+    {
+    case GDK_SCROLL_DOWN:
+      script_zoom(script_gui->sc, center, 0.75);
+      regenerer_test(script_gui->onglet_leto);
+
+      break;
+    case GDK_SCROLL_UP:
+      script_zoom(script_gui->sc, center, 1.25);
+      regenerer_test(script_gui->onglet_leto);
+
+      break;
+    default:
+      break;
+    }
+    return TRUE;
+  }
+  return FALSE;
+}
+
 /**
  * Displays information about the application
  */
@@ -2107,8 +2147,6 @@ void tabLeto_removed(GtkNotebook *notebook, GtkWidget *child, guint page_num, t_
 
   changed_tab(notebook, NULL, nPage, coeos);
 }
-
-
 
 void slide_groups_up(GtkWidget * widget, gpointer data)
 {
@@ -2380,7 +2418,7 @@ void resized_cb(GtkWidget * widget, gpointer data)
   }
   if (pscript == NULL) return;
 #else
-  pscript = (t_gennet_script *)data;
+  pscript = (t_gennet_script *) data;
 #endif /* LETO*/
 
   if (pscript->onglet_leto == NULL) return;

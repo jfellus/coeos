@@ -27,6 +27,9 @@ extern int gere_modification_lien(TxPoint point,TxDonneesFenetre *onglet_leto);
 
 extern void automatic_group_rename(t_gennet_script *script_gui);
 
+void script_slide(donnees_script *script, TxPoint translation);
+void script_zoom(donnees_script *script, TxPoint center, float scale);
+
 extern void fonction_reverse( /*w, rien, c */ );
 
 extern void creation_groupe(GtkWidget * widget, t_gennet_script *script_gui);
