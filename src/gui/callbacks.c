@@ -2041,7 +2041,7 @@ gboolean leto_quit(GtkWidget * widget, gpointer data)
     if (res == 0) return TRUE;
   }
 
-  sprintf(command_line, "rm %s.bak*", sc->nomfich1);
+  sprintf(command_line, "rm -f %s.bak*", sc->nomfich1);
 
   if (system(command_line) != 0) PRINT_WARNING("Fail suppressing history");
   printf("`%s`\nBye.\n", command_line);
