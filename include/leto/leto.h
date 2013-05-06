@@ -23,7 +23,7 @@ extern void aide();
 
 extern void select_plane(int plane,TxDonneesFenetre *onglet_leto);
 
-extern int gere_modification_lien(TxPoint point,TxDonneesFenetre *onglet_leto);
+extern int gere_modification_lien(TxPoint point, t_gennet_script *script_gui);
 
 extern void automatic_group_rename(t_gennet_script *script_gui);
 
@@ -42,7 +42,7 @@ void detruit_macro(type_groupe *groupe_cible, TxDonneesFenetre *onglet_leto);
 
 extern int detruit_ensemble_groupes(TxDonneesFenetre *onglet_leto);
 
-extern int formulaire_lien(type_liaison * liaison_courante,TxDonneesFenetre *onglet_leto);
+extern int formulaire_lien(type_liaison * liaison_courante, t_gennet_script *script_gui);
 int formulaire_groupe(t_gennet_script *script_gui);
 
 extern void zoom(GtkWidget * widget, gpointer data);

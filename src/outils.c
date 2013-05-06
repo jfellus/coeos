@@ -204,6 +204,7 @@ type_groupe *trouver_groupe(int n)
 	/*printf("trouver_groupe %d \n",n);*/
 	groupe = sc->deb_groupe;
 	if (groupe == NULL) printf("trouver_groupe(): Pas de groupe dans la liste ! \n");
+
 	while (groupe != NULL)
 	{
 		/*printf("groupe %d -> %s\n",groupe->no,groupe->no_name);*/
@@ -527,16 +528,14 @@ int selected_link(type_liaison *liaison, TxDonneesFenetre *onglet_leto)
 	groupe_depart = trouver_groupe_par_nom(liaison->depart_name, onglet_leto);
 	if (groupe_depart == NULL)
 	{
-		printf("ERROR selected_link (outils.c) input group %s does not exist \n", liaison->depart_name);
-		exit(0);
+		EXIT_ON_ERROR("input group %s does not exist \n", liaison->depart_name);
 	}
 	if (is_selected(groupe_depart) == NULL) return 0;
 
 	groupe_arrivee = trouver_groupe_par_nom(liaison->arrivee_name, onglet_leto);
 	if (groupe_arrivee == NULL)
 	{
-		printf("ERROR selected_link (outils.c) output group %s does not exist \n", liaison->arrivee_name);
-		exit(0);
+	   EXIT_ON_ERROR(" output group %s does not exist \n", liaison->arrivee_name);
 	}
 
 	if (is_selected(groupe_arrivee) == NULL) return 0;

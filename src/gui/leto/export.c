@@ -608,5 +608,4 @@ void ChangerPinceau(int id, int couleur)
 
 
 }
-
 #endif

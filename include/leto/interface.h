@@ -13,6 +13,9 @@
 #define POPUP_MENU_LINK 2
 #define POPUP_MENU_BEND 3
 
+
+
+
 extern void create_fenetre1(TxDonneesFenetre * onglet_leto);
 extern GtkWidget* create_read_link(TxDonneesFenetre *onglet_leto,type_liaison *link);
 extern GtkWidget* create_read_group(TxDonneesFenetre *onglet_leto);
@@ -105,7 +108,7 @@ void show_popup_menu(int popup_menu_type, GdkEventButton *event, TxDonneesFenetr
 void show_status(TxDonneesFenetre *onglet_leto, const char *fmt, ...);
 /* void change_dir(); */
 char *get_file_extension(const char *file);
-void set_file_with_ext(char *file, char *ext);
+void set_file_with_ext(char *file, const char *ext);
 void set_title(TxDonneesFenetre *onglet_leto);
 void scroll_window(int x, int y,TxDonneesFenetre *onglet_leto);
 GtkWidget *lookup_widget(GtkWidget * widget, const gchar * widget_name);

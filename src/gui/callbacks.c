@@ -66,15 +66,19 @@ void callback_redo(GtkWidget * widget, t_gennet_script *script_gui)
 /* chaines de caracteres (permettre l'emploi de variables symboliques).      */
 /*****************************************************************************/
 
-void entry_group_callback(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback(GtkWidget * widget, GtkWidget * entry, void* user_data)
 {
+  (void) widget;
+  (void) user_data;
   gtk_entry_get_text(GTK_ENTRY(entry));
 }
 
-void entry_group_callback_no_name(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_no_name(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  t_gennet_script *script_gui = user_data;
+  (void) widget;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
 
@@ -91,11 +95,13 @@ void entry_group_callback_no_name(GtkWidget * widget, GtkWidget * entry, t_genne
   }
 }
 
-void combo_nom_groupe_callback(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void combo_nom_groupe_callback(GtkWidget * widget, GtkWidget * entry, void* user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
   int i;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
@@ -113,10 +119,12 @@ void combo_nom_groupe_callback(GtkWidget * widget, GtkWidget * entry, t_gennet_s
     }
 }
 
-void combo_group_function_name_callback(GtkWidget * widget, GtkWidget * combo, TxDonneesFenetre *onglet_leto)
+void combo_group_function_name_callback(GtkWidget * widget, GtkWidget * combo, void* user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   entry_text = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(combo)->entry));
 
@@ -129,10 +137,13 @@ void combo_group_function_name_callback(GtkWidget * widget, GtkWidget * combo, T
   return;
 }
 
-void combo_nom_groupe_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void combo_nom_groupe_changed(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   int i;
+
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
@@ -149,10 +160,12 @@ void combo_nom_groupe_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFe
   }
 }
 
-void combo_group_algo_function_name_callback(GtkWidget * widget, GtkWidget * combo, t_gennet_script *script_gui)
+void combo_group_algo_function_name_callback(GtkWidget * widget, GtkWidget * combo, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   entry_text = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(combo)->entry));
 
@@ -164,11 +177,14 @@ void combo_group_algo_function_name_callback(GtkWidget * widget, GtkWidget * com
   }
   return;
 }
-void combo_debug_groupe_callback(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void combo_debug_groupe_callback(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   int debug = 0;
   selected_group *sel_group;
+  (void)widget;
+  (void)user_data;
+
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
@@ -193,11 +209,13 @@ void combo_debug_groupe_callback(GtkWidget * widget, GtkWidget * entry, t_gennet
   }
 }
 
-void combo_reverse_groupe_callback(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void combo_reverse_groupe_callback(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   TxPoint point;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -234,10 +252,12 @@ void combo_reverse_groupe_callback(GtkWidget * widget, GtkWidget * entry, t_genn
   }
 }
 
-void entry_group_callback_taillex(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_taillex(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -255,10 +275,12 @@ void entry_group_callback_taillex(GtkWidget * widget, GtkWidget * entry, t_genne
   }
 }
 
-void entry_group_callback_tailley(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_tailley(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
 
@@ -273,10 +295,12 @@ void entry_group_callback_tailley(GtkWidget * widget, GtkWidget * entry, t_genne
   }
 }
 
-void entry_group_callback_seuil(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_seuil(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -291,10 +315,12 @@ void entry_group_callback_seuil(GtkWidget * widget, GtkWidget * entry, t_gennet_
   }
 }
 
-void entry_group_callback_learning_rate(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_learning_rate(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -309,10 +335,12 @@ void entry_group_callback_learning_rate(GtkWidget * widget, GtkWidget * entry, t
   }
 }
 
-void entry_group_callback_simulation_speed(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_simulation_speed(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -327,10 +355,12 @@ void entry_group_callback_simulation_speed(GtkWidget * widget, GtkWidget * entry
   }
 }
 
-void entry_group_callback_type2(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_type2(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -348,10 +378,12 @@ void entry_group_callback_type2(GtkWidget * widget, GtkWidget * entry, t_gennet_
   }
 }
 
-void entry_group_callback_ech_temps(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_ech_temps(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -369,10 +401,12 @@ void entry_group_callback_ech_temps(GtkWidget * widget, GtkWidget * entry, t_gen
   }
 }
 
-void entry_group_callback_noise_level(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_noise_level(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -387,10 +421,12 @@ void entry_group_callback_noise_level(GtkWidget * widget, GtkWidget * entry, t_g
   }
 }
 
-void entry_group_callback_tolerance(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_tolerance(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -405,10 +441,12 @@ void entry_group_callback_tolerance(GtkWidget * widget, GtkWidget * entry, t_gen
   }
 }
 
-void entry_group_callback_alpha(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_alpha(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -423,10 +461,12 @@ void entry_group_callback_alpha(GtkWidget * widget, GtkWidget * entry, t_gennet_
   }
 }
 
-void entry_group_callback_nbre_de_1(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_nbre_de_1(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -441,10 +481,12 @@ void entry_group_callback_nbre_de_1(GtkWidget * widget, GtkWidget * entry, t_gen
   }
 }
 
-void entry_group_callback_dvp(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_dvp(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -459,10 +501,12 @@ void entry_group_callback_dvp(GtkWidget * widget, GtkWidget * entry, t_gennet_sc
   }
 }
 
-void entry_group_callback_dvn(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_dvn(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -477,10 +521,12 @@ void entry_group_callback_dvn(GtkWidget * widget, GtkWidget * entry, t_gennet_sc
   }
 }
 
-void entry_group_callback_sigma_f(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_sigma_f(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -495,12 +541,14 @@ void entry_group_callback_sigma_f(GtkWidget * widget, GtkWidget * entry, t_genne
   }
 }
 
-void entry_group_callback_plan(GtkWidget * widget, GtkWidget * entry, t_gennet_script *script_gui)
+void entry_group_callback_plan(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   TxPoint point;
   int plan, reverse;
   selected_group *sel_group;
+  (void) widget;
+  (void) user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -534,16 +582,11 @@ void entry_group_callback_plan(GtkWidget * widget, GtkWidget * entry, t_gennet_s
   }
 }
 
-/*****************************************************************************/
-
-void on_aide1_activate(GtkMenuItem * menuitem, gpointer user_data)
-{
-  printf("aide...\n");
-}
 
 /* Insere le menu dans l'onglet leto */
 void menu_addLeto(GtkUIManager * p_uiManager, GtkWidget * p_widget, gpointer data)
 {
+  (void) p_uiManager;
   gtk_box_pack_start(GTK_BOX(data), p_widget, FALSE, FALSE, 0);
   return;
 }
@@ -559,7 +602,7 @@ void group_validate_button_callback(GtkWidget * widget, t_gennet_script *script_
 
   for (i = 0; i < Number_of_items; i++)
   {
-    formulaire_group[i].entry_widget_callback(widget, formulaire_group[i].widget_entry, script_gui);
+    formulaire_group[i].entry_widget_callback(widget, formulaire_group[i].widget_entry, (void*) script_gui);
   }
 
   formulaire_group[No_item_comment].entry_widget_callback(widget, formulaire_group[No_item_comment].widget_entry, script_gui);
@@ -572,11 +615,6 @@ void group_validate_button_callback(GtkWidget * widget, t_gennet_script *script_
 
   if (script_set_modified(sc)) set_title(script_gui->onglet_leto);
 
-}
-
-void group_cancel_button_callback(GtkWidget * widget, gpointer data)
-{
-  /* Do nothing */
 }
 
 void entry_toggle_editable(GtkWidget * checkbutton, GtkWidget * entry)
@@ -592,10 +630,12 @@ void entry_toggle_visibility(GtkWidget * checkbutton, GtkWidget * entry)
 /*****************************************************************************/
 /* gestion des liens */
 
-void entry_link_callback_input(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_input(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   type_groupe *new_input_group;
+  t_gennet_script *script_gui = user_data;
+  (void)widget;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -604,7 +644,7 @@ void entry_link_callback_input(GtkWidget * widget, GtkWidget * entry, TxDonneesF
 
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
 
-  new_input_group = lookup_hash_table(onglet_leto->hashtab, (char *) entry_text);
+  new_input_group = lookup_hash_table(script_gui->onglet_leto->hashtab, (char *) entry_text);
   if (new_input_group != NULL)
   {
     memcpy(sc->liaison_courante->depart_name, new_input_group->no_name, (strlen(new_input_group->no_name) + 1) * sizeof(char));
@@ -616,10 +656,12 @@ void entry_link_callback_input(GtkWidget * widget, GtkWidget * entry, TxDonneesF
   }
 }
 
-void entry_link_callback_output(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_output(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   type_groupe *new_output_group;
+  t_gennet_script *script_gui = user_data;
+  (void) widget;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -628,7 +670,7 @@ void entry_link_callback_output(GtkWidget * widget, GtkWidget * entry, TxDonnees
 
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
 
-  new_output_group = lookup_hash_table(onglet_leto->hashtab, (char *) entry_text);
+  new_output_group = lookup_hash_table(script_gui->onglet_leto->hashtab, (char *) entry_text);
   if (new_output_group != NULL)
   {
     memcpy(sc->liaison_courante->arrivee_name, new_output_group->no_name, (strlen(new_output_group->no_name) + 1) * sizeof(char));
@@ -640,73 +682,100 @@ void entry_link_callback_output(GtkWidget * widget, GtkWidget * entry, TxDonnees
   }
 }
 
-void entry_link_callback_temps(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_temps(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
+
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   Str2MY_Float(sc->liaison_courante->temps, entry_text);
 }
 
-void entry_link_callback_stemps(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_stemps(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
+
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
+
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   Str2MY_Float(sc->liaison_courante->stemps, entry_text);
 }
 
-void entry_link_callback_nbre(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_nbre(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   Str2MY_Int(sc->liaison_courante->nbre, entry_text);
 }
 
-void entry_link_callback_secondaire(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_secondaire(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
+
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   sc->liaison_courante->secondaire = atoi(entry_text);
 }
 
-void entry_link_callback_mode(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_mode(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
+
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   sc->liaison_courante->mode = atoi(entry_text);
 }
 
-void entry_link_callback_dvx(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_dvx(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
+
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   Str2MY_Float(sc->liaison_courante->dv_x, entry_text);
 }
 
-void entry_link_callback_dvy(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_dvy(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
+
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   Str2MY_Float(sc->liaison_courante->dv_y, entry_text);
 }
 
-void entry_link_callback_proba(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_proba(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
+
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   Str2MY_Float(sc->liaison_courante->proba, entry_text);
 }
 
-void entry_link_callback_name(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_name(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
+
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
 
@@ -715,17 +784,23 @@ void entry_link_callback_name(GtkWidget * widget, GtkWidget * entry, TxDonneesFe
 
 }
 
-void entry_link_callback_style(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_style(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
+
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   sc->liaison_courante->style = atoi(entry_text);
 }
 
-void entry_link_callback_norme(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void entry_link_callback_norme(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
+  (void) user_data;
+  (void) widget;
+
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
 
@@ -735,10 +810,13 @@ void entry_link_callback_norme(GtkWidget * widget, GtkWidget * entry, TxDonneesF
 
 }
 
-void combo_type_link_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void combo_type_link_changed(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   int i;
+  (void) widget;
+  (void)user_data;
+
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -762,10 +840,12 @@ void combo_type_link_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFen
   }
 }
 
-void combo_type_link_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void combo_type_link_callback(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   int i;
+  (void)widget;
+  (void)user_data;
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -787,12 +867,15 @@ void combo_type_link_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFe
     }
 }
 
-void combo_mode_link_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void combo_mode_link_callback(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   type_groupe *groupe;
   int i;
   mode_lien mode_link;
+  (void) user_data;
+  (void) widget;
+
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -818,12 +901,16 @@ void combo_mode_link_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFe
   }
 }
 
-void combo_mode_link_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void combo_mode_link_changed(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
   const gchar *entry_text;
   int i;
   type_groupe *groupe;
   mode_lien mode_link;
+
+  (void) user_data;
+  (void) widget;
+
 
   if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE)
   {
@@ -849,30 +936,28 @@ void combo_mode_link_changed(GtkWidget * widget, GtkWidget * entry, TxDonneesFen
   }
 }
 
-void link_validate_button_callback(GtkWidget * widget, gpointer data)
+void link_validate_button_callback(GtkWidget * widget, void *user_data)
 {
   int i;
 
+  t_gennet_script *script_gui = user_data;
+
   for (i = 0; i < Number_of_link_items; i++)
   {
-    formulaire_link[i].entry_widget_callback(widget, formulaire_link[i].widget_entry, ((TxDonneesFenetre *) data));
+    formulaire_link[i].entry_widget_callback(widget, formulaire_link[i].widget_entry, script_gui);
   }
 
-  formulaire_link[No_item_link_comment].entry_widget_callback(widget, formulaire_link[No_item_link_comment].widget_entry, ((TxDonneesFenetre *) data));
+  formulaire_link[No_item_link_comment].entry_widget_callback(widget, formulaire_link[No_item_link_comment].widget_entry, script_gui);
 
-  combo_type_link_callback(widget, combo_type_link_entry, ((TxDonneesFenetre *) data));
-  combo_mode_link_callback(widget, combo_mode_link_entry, ((TxDonneesFenetre *) data));
+  combo_type_link_callback(widget, combo_type_link_entry, script_gui);
+  combo_mode_link_callback(widget, combo_mode_link_entry, script_gui);
 
   rescale_link(sc->liaison_courante);
 
-  if (script_set_modified(sc)) set_title(data);
+  if (script_set_modified(sc)) set_title(script_gui->onglet_leto);
 
 }
 
-void link_cancel_button_callback(GtkWidget * widget, gpointer data)
-{
-  /* Do nothing */
-}
 
 /*****************************************************************************/
 /* gestion lecture fichier                                                   */
@@ -884,6 +969,7 @@ void file_ok_sel(GtkWidget * w, gpointer data)
 {
   char nom[1024];
   int selected_plane; /*necessaire pour stocker var de read_macro mais pas utile ici*/
+ (void)w;
 
   snprintf(nom, sizeof(nom), "%s", gtk_file_selection_get_filename(GTK_FILE_SELECTION(((t_gennet_script *) data)->onglet_leto->filew)));
   if (read_macro(NULL, nom, 0, 0, 0, 0, &selected_plane, ((t_gennet_script *) data)->onglet_leto->hashtab) > 0) /* inclusion directe: mode =0 */
@@ -892,6 +978,7 @@ void file_ok_sel(GtkWidget * w, gpointer data)
 
 void file_cancel_sel(GtkWidget * w, gpointer data)
 {
+  (void)w;
   gtk_widget_hide(((t_gennet_script *) data)->onglet_leto->filew);
 }
 
@@ -903,7 +990,7 @@ void creer_acces_fichier(GtkWidget * w, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
-
+ (void)w;
   if (((t_gennet_script *) data)->onglet_leto->filew == NULL)
   {
     ((t_gennet_script *) data)->onglet_leto->filew = gtk_file_selection_new("File selection");
@@ -1097,6 +1184,7 @@ int erase_without_saving(gpointer data)
 /* creer un nouveau script vierge */
 void new_script(GtkWidget *widget, gpointer data)
 {
+  (void) widget;
 
   if (sc->modified != 0 && erase_without_saving((t_gennet_script *) data) == 0) return;
 
@@ -1128,6 +1216,7 @@ void new_script(GtkWidget *widget, gpointer data)
  */
 void open_file(GtkWidget * widget, gpointer data)
 {
+
   GtkWidget *dialog;
   GtkWidget *Winmain;
   char *filename;
@@ -1142,6 +1231,7 @@ void open_file(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+  (void) widget;
 
   if (sc->modified != 0) if (erase_without_saving(((t_gennet_script *) data)) == 0) return;
 
@@ -1294,6 +1384,8 @@ void save_file_as(GtkWidget * widget, gpointer data)
   FILE *file;
   int len;
   gint result;
+  (void) widget;
+
 
 #ifndef LETO
   /* controle si on est dans un onglet Leto
@@ -1367,6 +1459,7 @@ void save_file_as(GtkWidget * widget, gpointer data)
 void copy_selection(GtkWidget * widget, gpointer data)
 {
   char nom[1024];
+  (void) widget;
 
 #ifndef LETO
   /* controle si on est dans un onglet Leto
@@ -1386,6 +1479,8 @@ void paste_selection(GtkWidget * widget, gpointer data)
   int selected_plane; /*necessaire pour stocker var de read_macro mais pas utile ici*/
 
   char nom[1024];
+  (void) widget;
+
 
 #ifndef LETO
   /* controle si on est dans un onglet Leto
@@ -1403,8 +1498,11 @@ void paste_selection(GtkWidget * widget, gpointer data)
   regenerer_test(((t_gennet_script *) data)->onglet_leto);
 }
 
-void enter_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
+void enter_callback(GtkWidget * widget, GtkWidget * entry, void *user_data)
 {
+  (void) widget;
+  (void)user_data;
+
   gtk_entry_get_text(GTK_ENTRY(entry));
 }
 
@@ -1413,6 +1511,7 @@ void enter_callback(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *ong
 /* on laisse les commentaires et on ne prend pas les sous reseaux*/
 void sauve_selection(GtkWidget * widget, gpointer data)
 {
+  (void)widget;
 #ifndef LETO
   /* controle si on est dans un onglet Leto
    * ( l'onglet Metaleto etant le numero 0 )
@@ -1426,6 +1525,8 @@ void sauve_selection(GtkWidget * widget, gpointer data)
 /* on laisse les commentaires et on  prend  les sous reseaux*/
 void sauve_selection_a_plat(GtkWidget * widget, gpointer data)
 {
+  (void)widget;
+
 #ifndef LETO
   /* controle si on est dans un onglet Leto
    * ( l'onglet Metaleto etant le numero 0 )
@@ -1448,6 +1549,7 @@ gboolean set_binary_file(GtkWidget * widget, gpointer data)
   char buf[255];
   char buf2[255];
   gboolean res;
+  (void)widget;
 
   memset(buf, 0, 255 * sizeof(char));
   memset(buf2, 0, 255 * sizeof(char));
@@ -1525,6 +1627,8 @@ void set_random_gen(GtkWidget * widget, gpointer data)
   static int val = 1;
   int result;
   char buf[80];
+  (void)widget;
+
 
 #ifndef LETO
   /* controle si on est dans un onglet Leto
@@ -1575,20 +1679,6 @@ void set_random_gen(GtkWidget * widget, gpointer data)
   gtk_widget_destroy(dialog);
 }
 
-/*****************************************************************************/
-
-void print_hello(GtkWidget * widget, gpointer data)
-{
-  /*printf("hello!\n"); */
-  g_message("Hello, World!\n");
-}
-
-/* For the check button */
-void print_toggle(gpointer callback_data, guint callback_action, GtkWidget * menu_item)
-{
-  g_message("Check button state - %d\n", GTK_CHECK_MENU_ITEM(menu_item)->active);
-}
-
 /* For the radio buttons */
 void print_selected(GtkAction *action, gpointer callback_data)
 {
@@ -1610,6 +1700,8 @@ void print_selected(GtkAction *action, gpointer callback_data)
 
 void refresh(GtkWidget * widget, gpointer data)
 {
+  (void)widget;
+
 #ifndef LETO
   /* controle si on est dans un onglet Leto
    * ( l'onglet Metaleto etant le numero 0 )
@@ -1626,6 +1718,7 @@ void refresh(GtkWidget * widget, gpointer data)
  */
 gboolean scribble_configure_event(GtkWidget * widget, GdkEventConfigure * event, t_gennet_script *script_gui)
 {
+  (void) event;
 
   if (script_gui->onglet_leto->pixmap == NULL)
   {
@@ -1718,8 +1811,10 @@ gboolean scribble_motion_notify_event(GtkWidget * widget, GdkEventMotion * event
       script_gui->sc->pointer_selection_center.x = event->x;
       script_gui->sc->pointer_selection_center.y = event->y;
       regenerer_test(script_gui->onglet_leto);
-    } else return FALSE;
-  }  else return FALSE;
+    }
+    else return FALSE;
+  }
+  else return FALSE;
 
   /* We've handled it, stop processing */
   return TRUE;
@@ -1751,6 +1846,7 @@ void modify_callback(GtkWidget * widget, t_gennet_script *script_gui)
    */
   if (tab_is_Metaleto(script_gui->onglet_leto) == 0) return;
 #endif
+  (void) widget;
 
   if (sc->groupes_courants != NULL)
   {
@@ -1758,7 +1854,7 @@ void modify_callback(GtkWidget * widget, t_gennet_script *script_gui)
   }
   else if (sc->liaison_courante != NULL)
   {
-    formulaire_lien(sc->liaison_courante, script_gui->onglet_leto);
+    formulaire_lien(sc->liaison_courante, script_gui);
   }
 
   regenerer_test(script_gui->onglet_leto);
@@ -1778,6 +1874,7 @@ void automatic_rename_callback(GtkWidget * widget, t_gennet_script *script_gui)
   if (tab_is_Metaleto(onglet_leto) == 0) return;
 #endif
 
+  (void) widget;
   if (sc->groupes_courants != NULL)
   {
     automatic_group_rename(script_gui);
@@ -1798,6 +1895,7 @@ void delete_callback(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+  (void) widget;
 
   if (sc->groupes_courants != NULL)
   {
@@ -1821,6 +1919,7 @@ void delete_coude_callback(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+  (void) widget;
 
   if (sc->coude_courant != NULL && sc->liaison_courante != NULL)
   {
@@ -1857,6 +1956,7 @@ void delete_all_coudes_callback(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+  (void) widget;
 
   if (sc->liaison_courante != NULL)
   {
@@ -1873,6 +1973,7 @@ gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, t_gennet_scri
   TxPoint point;
   type_groupe *group;
   int popup_menu_type = -1;
+  (void) widget;
 
   /* Release dragged objects */
   sc->flag_drag_coude = 0;
@@ -1897,7 +1998,7 @@ gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, t_gennet_scri
   if (event->button == 1 || event->button == 3)
   {
     /* Detecting objects clicked upon */
-    if (gere_modification_lien(point, script_gui->onglet_leto) == 0)
+    if (gere_modification_lien(point, script_gui) == 0)
     {
       test_link_position(point);
       gere_coude(point, script_gui->onglet_leto);
@@ -1945,26 +2046,32 @@ gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, t_gennet_scri
       else if (sc->liaison_courante != NULL)
       {
         /* Link edit */
-        formulaire_lien(sc->liaison_courante, script_gui->onglet_leto);
+        formulaire_lien(sc->liaison_courante, script_gui);
       }
     }
   }
   else if (event->button == 2) /* Click molette */
   {
-    if (sc->coude_courant != NULL)
-    {
-      deplace_coude_courant(sc, point.x, point.y);
-    }
-    else if (sc->groupes_courants != NULL)
-    {
-      move_selected_groups(point, script_gui->onglet_leto);
-    }
-    else
-    {
-      sc->flag_drag_group = 1;
-      sc->pointer_selection_center.x = event->x;
-      sc->pointer_selection_center.y = event->y;
-    }
+    reset_selection_groups();
+    sc->flag_drag_coude = 0;
+    sc->flag_drag_group = 0;
+
+    /*
+     if (sc->coude_courant != NULL)
+     {
+     deplace_coude_courant(sc, point.x, point.y);
+     }
+     else if (sc->groupes_courants != NULL)
+     {
+     move_selected_groups(point, script_gui->onglet_leto);
+     }
+     else
+     {
+     }
+     sc->flag_drag_group = 1;*/
+    sc->pointer_selection_center.x = event->x;
+    sc->pointer_selection_center.y = event->y;
+
   }
   else if (event->button == 3) /* click droit */
   {
@@ -1980,6 +2087,9 @@ gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, t_gennet_scri
 
 gboolean mouse_released(GtkWidget * widget, GdkEventButton * event, t_gennet_script *script_gui)
 {
+  (void)widget;
+
+  (void) event;
   sc->flag_rectangle_selection = 0;
 
   if (sc->flag_drag_coude == 1)
@@ -2016,7 +2126,7 @@ gboolean mouse_scroll(GtkWidget *widget, GdkEventScroll *event, t_gennet_script 
 
       break;
     case GDK_SCROLL_UP:
-      script_zoom(script_gui->sc, center, 1.25);
+      script_zoom(script_gui->sc, center, 1.33);
       regenerer_test(script_gui->onglet_leto);
 
       break;
@@ -2045,6 +2155,8 @@ void about(GtkWidget * widget, gpointer data)
 
   int rev = 0;
   gchar version[20];
+  (void) widget;
+
 
 #ifndef LETO
   /* controle si on est dans un onglet Leto
@@ -2074,6 +2186,7 @@ gboolean leto_quit(GtkWidget * widget, gpointer data)
 {
   char command_line[PATH_MAX];
   gint res;
+  (void) data;
 
   if (sc->modified != 0)
   {
@@ -2089,11 +2202,12 @@ gboolean leto_quit(GtkWidget * widget, gpointer data)
   return FALSE;
 }
 
-void tabLeto_removed(GtkNotebook *notebook, GtkWidget *child, guint page_num, t_gennet *coeos)
+void tabLeto_removed(GtkNotebook *notebook, GtkWidget *child, int page_num, t_gennet *coeos)
 {
   int i = 0;
   int nPage = 0;
   t_gennet_script *pscript = NULL;
+  (void) child;
 
   nPage = gtk_notebook_get_current_page(notebook);
 
@@ -2156,6 +2270,7 @@ void slide_groups_up(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+  (void) widget;
 
   slide_groups(0, -50, 0);
 
@@ -2172,6 +2287,7 @@ void slide_groups_down(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+  (void) widget;
 
   slide_groups(0, 50, 0);
 
@@ -2188,6 +2304,7 @@ void slide_groups_left(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+  (void) widget;
 
   slide_groups(-50, 0, 0);
 
@@ -2204,6 +2321,7 @@ void slide_groups_right(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+  (void) widget;
 
   slide_groups(50, 0, 0);
 
@@ -2434,10 +2552,12 @@ void resized_cb(GtkWidget * widget, gpointer data)
 }
 
 /* gestion de l'evenement : changement d'onglet */
-void changed_tab(GtkNotebook *notebook, GtkNotebookPage *page, guint page_num, t_gennet *coeos)
+void changed_tab(GtkNotebook *notebook, GtkNotebookPage *page, int page_num, t_gennet *coeos)
 {
   t_gennet_script *pscript = NULL, *sel_script = NULL;
   int i = 0;
+  (void) page;
+  (void)notebook;
 
   /* recherche du script : les scripts ne commencant qu'a partir de la page 1,
    * on test si la page courante est egal a 0 ou pas */
@@ -2491,6 +2611,7 @@ void reload_script(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+  (void) widget;
 
   if (sc->modified != 0) if (erase_without_saving(((t_gennet_script *) data)) == 0) return;
   sc->modified = 0;
@@ -2512,6 +2633,7 @@ void edit_variables(GtkWidget * widget, gpointer data)
   int error;
   t_gennet_script *gennet_script = data;
   t_prom_script *prom_script = gennet_script->prom_script;
+  (void)widget;
 
 #ifndef LETO
   /* controle si on est dans un onglet Leto
@@ -2547,6 +2669,7 @@ void block_transfo(GtkWidget * widget, gpointer data)
   FILE *file;
   int len;
   gint result;
+  (void) widget;
 
   memset(title, 0, 40 * sizeof(char));
   memset(path, 0, 255 * sizeof(char));

@@ -53,7 +53,7 @@ void affiche_groupe(TxPoint point, type_groupe * groupe, TxDonneesFenetre *ongle
 {
   TxPoint point2, point3, point4, point5, point6, point7;
   int type, text_color;
-  char *font_weight = NULL;
+  const char *font_weight = NULL;
 
   point.x = point.x - deltax;
   point.y = point.y - deltay;
@@ -165,12 +165,12 @@ void affiche_groupe(TxPoint point, type_groupe * groupe, TxDonneesFenetre *ongle
     TxDessinerCercle(onglet_leto, lut_g[type], TxPlein, point6, 2, 1);
   }
 #else
-  if(!verify_if_int(groupe->taillex) || !verify_if_int(groupe->tailley) || (MY_Int2Int(groupe->taillex) > 1) || (MY_Int2Int(groupe->tailley) > 1))
+  if (!verify_if_int(groupe->taillex) || !verify_if_int(groupe->tailley) || (MY_Int2Int(groupe->taillex) > 1) || (MY_Int2Int(groupe->tailley) > 1))
   {
     point6.x = point2.x;
     point6.y = point2.y + 2 * deltax + 1;
 
-    if(!verify_if_int(groupe->taillex) || (MY_Int2Int(groupe->taillex) > 1))
+    if (!verify_if_int(groupe->taillex) || (MY_Int2Int(groupe->taillex) > 1))
     {
       point7.x = point6.x + 7;
       point7.y = point6.y;
@@ -179,7 +179,7 @@ void affiche_groupe(TxPoint point, type_groupe * groupe, TxDonneesFenetre *ongle
       FlecheHorizontale(onglet_leto, lut_g[type], point7, 1, 1);
 
     }
-    if(!verify_if_int(groupe->tailley) || (MY_Int2Int(groupe->tailley) > 1))
+    if (!verify_if_int(groupe->tailley) || (MY_Int2Int(groupe->tailley) > 1))
     {
       point7.x = point6.x;
       point7.y = point6.y - 7;
@@ -318,12 +318,13 @@ void affiche_parametres_liaison(type_liaison *liaison, TxPoint point2, TxDonnees
 
   point1.x = point1.x - 40;
   point1.y = point1.y + 10;
-  /*if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod)
-   {*/
-  strcpy(nom, MY_Float2Str(liaison->norme));
-  simplifie_nom(nom);
-  TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point1, nom, font_weight);
-  /*}*/
+
+  if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod)
+  {
+    strcpy(nom, MY_Float2Str(liaison->norme));
+    simplifie_nom(nom);
+    TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point1, nom, font_weight);
+  }
 }
 
 void affiche_liaison(type_liaison *liaison, type_groupe * groupe1, type_groupe * groupe2, TxDonneesFenetre *onglet_leto)
@@ -334,6 +335,8 @@ void affiche_liaison(type_liaison *liaison, type_groupe * groupe1, type_groupe *
   int thickness = 1;
   TxPoint TxTabPoint[nbPoint_max];
   TxPoint point2;
+  (void)groupe1;
+  (void)groupe2;
 
   type = liaison->type;
   secondaire = liaison->secondaire;
@@ -425,6 +428,7 @@ void show_hide_sub_networks(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+(void)widget;
 
   sc->show_sub_networks = 1 - sc->show_sub_networks;
   /*TxEffacerAireDessin2(&fenetre1, fenetre1.width, fenetre1.height);*/
@@ -491,7 +495,7 @@ void regenerer_test(TxDonneesFenetre *onglet_leto)
     {
       groupe1 = trouver_groupe(liaison->depart);
       if (groupe1 == NULL)
-        {
+      {
         printf("\nListe des groupes existants = \n\n");
         affiche_liste_groupes();
         EXIT_ON_ERROR("Le gpe1 %d %s de la liaison n'a pas ete trouve liaison->depart \n", liaison->depart, liaison->depart_name);
@@ -598,6 +602,7 @@ void invert_colors(GtkWidget * widget, gpointer data)
 
 #else
   int tmp;
+  (void)widget;
 
   tmp = sc->couleur_fond;
   sc->couleur_fond = sc->couleur_texte;

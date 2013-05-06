@@ -250,7 +250,6 @@ void Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
   GtkWidget *e_pdraw = NULL;
   GtkWidget *e_pres = NULL;
   GtkWidget *e_pconfig = NULL;
-  GtkWidget *e_pbus = NULL;
   GtkWidget *e_pvar = NULL;
   GtkWidget *e_pdev = NULL;
   GtkWidget *e_pprt = NULL;
@@ -366,7 +365,6 @@ void Edit_Properties(t_gennet *gen, t_gennet_script *pscript)
     promnet_prom_script_set_path_file_draw(script->prom_script, (char *) gtk_entry_get_text(GTK_ENTRY(e_pdraw)));
     promnet_prom_script_set_path_file_res(script->prom_script, (char *) gtk_entry_get_text(GTK_ENTRY(e_pres)));
     promnet_prom_script_set_path_file_config(script->prom_script, (char *) gtk_entry_get_text(GTK_ENTRY(e_pconfig)));
-    promnet_prom_script_set_path_file_bus(script->prom_script, (char *) gtk_entry_get_text(GTK_ENTRY(e_pbus)));
     promnet_prom_script_set_path_file_var(script->prom_script, (char *) gtk_entry_get_text(GTK_ENTRY(e_pvar)));
     promnet_prom_script_set_path_file_dev(script->prom_script, (char *) gtk_entry_get_text(GTK_ENTRY(e_pdev)));
     promnet_prom_script_set_path_file_prt(script->prom_script, (char *) gtk_entry_get_text(GTK_ENTRY(e_pprt)));

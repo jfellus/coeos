@@ -189,9 +189,14 @@ type_noeud_comment *validate_comments(type_noeud_comment *anchor_comment, GtkWid
 }
 
 
-void entry_group_callback_comment(GtkWidget * widget, GtkWidget * entry,  t_gennet_script *script_gui)
+void entry_group_callback_comment(GtkWidget * widget, GtkWidget * entry,  void* user_data)
 {
-   selected_group *sel_group;
+
+  selected_group *sel_group;
+
+  (void)widget;
+  (void)user_data;
+
 
    for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
    {
@@ -202,5 +207,8 @@ void entry_group_callback_comment(GtkWidget * widget, GtkWidget * entry,  t_genn
 
 void entry_link_callback_comment(GtkWidget * widget, GtkWidget * entry, TxDonneesFenetre *onglet_leto)
 {
+  (void)widget;
+  (void)onglet_leto;
+
    sc->liaison_courante->comment = validate_comments(sc->liaison_courante->comment, entry);
 }

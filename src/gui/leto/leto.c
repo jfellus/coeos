@@ -104,6 +104,7 @@ void fonction_reverse(GtkWidget * widget, gpointer data)
 {
   TxPoint point;
   selected_group *sel_group;
+  (void)widget;
 
 #ifndef LETO
   /* controle si on est dans un onglet Leto
@@ -206,6 +207,7 @@ void create_link_callback(GtkWidget * widget, gpointer data)
    */
   if (tab_is_Metaleto(((t_gennet_script *) data)->onglet_leto) == 0) return;
 #endif
+  (void)widget;
 
   if (sc->flag_create_link == LINK_CREATE_NO_ACTION)
   {
@@ -222,6 +224,8 @@ void create_link_callback(GtkWidget * widget, gpointer data)
 
 void create_one_to_one_link_callback(GtkWidget * widget, gpointer data)
 {
+  (void)widget;
+
 #ifndef LETO
   /* controle si on est dans un onglet Leto
    * ( l'onglet Metaleto etant le numero 0 )
@@ -418,8 +422,6 @@ void detruit_macro(type_groupe *groupe_cible, TxDonneesFenetre *onglet_leto)
   }
 }
 
-
-
 /* detruit l'ensemble des groupes ayant ete selectionnes au prealable */
 int detruit_ensemble_groupes(TxDonneesFenetre *onglet_leto)
 {
@@ -553,17 +555,6 @@ void zoom_groups(float scale, TxDonneesFenetre *onglet_leto)
   if (script_set_modified(sc)) set_title(onglet_leto);
 
   regenerer_test(onglet_leto);
-
-}
-
-void zoom_in(GtkWidget * widget, gpointer data)
-{
-  zoom_groups(1.1, ((t_gennet_script *) data)->onglet_leto);
-}
-
-void zoom_out(GtkWidget * widget, gpointer data)
-{
-  zoom_groups(0.9, ((t_gennet_script *) data)->onglet_leto);
 }
 
 void script_slide(donnees_script *script, TxPoint translation)
@@ -572,20 +563,20 @@ void script_slide(donnees_script *script, TxPoint translation)
   type_liaison *link;
   t_polyline *polyline;
 
-  for (group = script->deb_groupe; group != NULL ; group = group->s)
+  for (group = script->deb_groupe; group != NULL; group = group->s)
   {
     group->posx += translation.x;
     group->posy += translation.y;
   }
 
-  for (link = script->deb_liaison; link != NULL ; link = link->s)
+  for (link = script->deb_liaison; link != NULL; link = link->s)
   {
     link->posx1 += translation.x;
     link->posy1 += translation.y;
     link->posx2 += translation.x;
     link->posy2 += translation.y;
 
-    for (polyline = link->polyline_list->first; polyline != NULL ; polyline = polyline->next)
+    for (polyline = link->polyline_list->first; polyline != NULL; polyline = polyline->next)
     {
       polyline->x_b += translation.x;
       polyline->y_b += translation.y;
@@ -598,41 +589,57 @@ void script_slide(donnees_script *script, TxPoint translation)
 void script_zoom(donnees_script *script, TxPoint center, float scale)
 {
   type_groupe *group;
-  TxPoint point;
+  type_liaison *link;
 
-  for (group = script->deb_groupe; group != NULL ; group = group->s)
+
+  for (group = script->deb_groupe; group != NULL; group = group->s)
   {
-    point.x = center.x + (group->posx - center.x) * scale;
-    point.y = center.y + (group->posy - center.y) * scale;
-    nouvelle_position_groupe(group, point);
+    group->posx = center.x + (group->posx - center.x) * scale;
+    group->posy = center.y + (group->posy - center.y) * scale;
   }
+
+  for (link = script->deb_liaison; link != NULL; link = link->s)
+  {
+    rescale_link(link);
+  }
+}
+
+void zoom_in(GtkWidget * widget, gpointer data)
+{
+  (void)widget;
+  zoom_groups(1.1, ((t_gennet_script *) data)->onglet_leto);
+}
+
+void zoom_out(GtkWidget * widget, gpointer data)
+{
+  (void)widget;
+  zoom_groups(0.9, ((t_gennet_script *) data)->onglet_leto);
 }
 
 /*--------------------------------------------------*/
 
-void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, TxDonneesFenetre *onglet_leto, int link_type)
+void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, t_gennet_script *script_ui, int link_type)
 {
   type_liaison * liaison;
   type_groupe *groupe1, *groupe2;
   int ret;
 
-  printf("sc->deb_liaison : %p\n", (void*) sc->deb_liaison);
-
-  if (sc->deb_liaison == NULL) /* (nbre_liaison == 0) modif PG*/
+  if (script_ui->sc->deb_liaison == NULL) /* (nbre_liaison == 0) modif PG*/
   {
-    sc->deb_liaison = sc->fin_liaison = creer_liaison(NULL);
+    script_ui->sc->deb_liaison = script_ui->sc->fin_liaison = creer_liaison(NULL);
   }
   else
   {
-    sc->fin_liaison = creer_liaison(sc->fin_liaison);
+    script_ui->sc->fin_liaison = creer_liaison(script_ui->sc->fin_liaison);
   }
-  sc->liaison_courante = liaison = sc->fin_liaison;
-  groupe1 = trouver_groupe_par_nom(no_groupe_depart_name, onglet_leto);
+  script_ui->sc->liaison_courante = liaison = script_ui->sc->fin_liaison;
+
+  groupe1 = trouver_groupe_par_nom(no_groupe_depart_name, script_ui->onglet_leto);
 
   memcpy(liaison->depart_name, groupe1->no_name, (strlen(groupe1->no_name) + 1) * sizeof(char));
   liaison->depart = groupe1->no;
 
-  groupe2 = trouver_groupe_par_nom(no_groupe_arrivee_name, onglet_leto);
+  groupe2 = trouver_groupe_par_nom(no_groupe_arrivee_name, script_ui->onglet_leto);
 
   /* si on clique n'importe ou alors on prend le premier groupe */
   if (groupe2 == NULL) groupe2 = groupe1;
@@ -666,16 +673,16 @@ void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, Tx
   memcpy(liaison->nom, "???", (strlen("???") + 1) * sizeof(char));
 
   initialise_coudes_liaison(liaison);
-  affiche_liaison(liaison, groupe1, groupe2, onglet_leto);
-  sc->nbre_liaison++;
+  affiche_liaison(liaison, groupe1, groupe2, script_ui->onglet_leto);
+  script_ui->sc->nbre_liaison++;
 
-  ret = formulaire_lien(liaison, onglet_leto);
+  ret = formulaire_lien(liaison, script_ui);
 
   if (ret == GTK_RESPONSE_REJECT)
   {
-    detruit_liaison(liaison, onglet_leto);
+    detruit_liaison(liaison, script_ui->onglet_leto);
   }
-  regenerer_test(onglet_leto);
+  regenerer_test(script_ui->onglet_leto);
 }
 
 /*
@@ -683,7 +690,7 @@ void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, Tx
  * ou non une liaison est selectionnee et si on veut la modifier
  */
 
-int gere_modification_lien(TxPoint point, TxDonneesFenetre *onglet_leto)
+int gere_modification_lien(TxPoint point, t_gennet_script *script_gui)
 {
   type_groupe *group;
 
@@ -703,7 +710,7 @@ int gere_modification_lien(TxPoint point, TxDonneesFenetre *onglet_leto)
     if ((group = test_group_position(sc->point_courant_leto)) != NULL)
     {
       memcpy(sc->groupe_arrivee_name, group->no_name, (strlen(group->no_name) + 1) * sizeof(char));
-      creation_lien(sc->groupe_depart_name, sc->groupe_arrivee_name, onglet_leto, sc->type_create_link);
+      creation_lien(sc->groupe_depart_name, sc->groupe_arrivee_name, script_gui, sc->type_create_link);
       sc->flag_create_link = LINK_CREATE_NO_ACTION;
       return 1;
     }
@@ -724,6 +731,7 @@ void creation_groupe(GtkWidget * widget, t_gennet_script *script_gui)
   TxDonneesFenetre *onglet_leto = NULL;
   char base_nom[256], base_nom_complet[256];
   void *x;
+  (void)widget;
 
 #ifndef LETO
   /* controle si on est dans un onglet Leto
@@ -818,12 +826,26 @@ void creation_groupe(GtkWidget * widget, t_gennet_script *script_gui)
 
 static void target_drag_data_received(GtkWidget * widget, GdkDragContext * context, gint x, gint y, GtkSelectionData * data, guint info, guint time)
 {
+  (void)widget;
+  (void)context;
+  (void)x;
+  (void)y;
+  (void)info;
+  (void)time;
+
   g_print("Got: %s\n", data->data);
 }
 
 static void source_drag_data_get(GtkWidget * widget, GdkDragContext * context, GtkSelectionData * selection_data, guint info, guint time, gpointer data)
 {
   unsigned char string[] = "Some String!";
+
+  (void)widget;
+    (void)context;
+    (void)info;
+    (void)time;
+    (void)data;
+
   gtk_selection_data_set(selection_data, selection_data->target, 8, string, sizeof(string));
 }
 
@@ -924,12 +946,12 @@ void fill_link_dialog(type_liaison * link, int type)
   }
 }
 
-int formulaire_lien(type_liaison * link, TxDonneesFenetre *onglet_leto)
+int formulaire_lien(type_liaison * link, t_gennet_script *script_ui)
 {
   static GtkWidget *link_dialog = NULL;
   gint result;
 
-  link_dialog = create_read_link(onglet_leto, link);
+  link_dialog = create_read_link(script_ui->onglet_leto, link);
 
   fill_link_dialog(link, -1);
 
@@ -940,25 +962,24 @@ int formulaire_lien(type_liaison * link, TxDonneesFenetre *onglet_leto)
   switch (result)
   {
   case GTK_RESPONSE_ACCEPT:
-    link_validate_button_callback(link_dialog, onglet_leto);
-    show_status(onglet_leto, "Link between %s and %s modified", link->depart_name, link->arrivee_name);
+    link_validate_button_callback(link_dialog, script_ui);
+    show_status(script_ui->onglet_leto, "Link between %s and %s modified", link->depart_name, link->arrivee_name);
     gtk_widget_destroy(link_dialog);
     return GTK_RESPONSE_ACCEPT;
 
   case GTK_RESPONSE_REJECT:
-    link_cancel_button_callback(link_dialog, onglet_leto);
-    show_status(onglet_leto, "Cancelled link modification");
+    show_status(script_ui->onglet_leto, "Cancelled link modification");
     gtk_widget_destroy(link_dialog);
     return GTK_RESPONSE_REJECT;
 
   case GTK_RESPONSE_APPLY:
-    link_validate_button_callback(link_dialog, onglet_leto);
-    show_status(onglet_leto, "Link between %s and %s modified", link->depart_name, link->arrivee_name);
+    link_validate_button_callback(link_dialog, script_ui);
+    show_status(script_ui->onglet_leto, "Link between %s and %s modified", link->depart_name, link->arrivee_name);
     gtk_widget_destroy(link_dialog);
-    return formulaire_lien(link, onglet_leto);
+    return formulaire_lien(link, script_ui);
 
   default:
-    show_status(onglet_leto, "");
+    show_status(script_ui->onglet_leto, "");
     gtk_widget_destroy(link_dialog);
     return GTK_RESPONSE_ACCEPT;
   }
@@ -1209,7 +1230,6 @@ int formulaire_groupe(t_gennet_script *script_gui)
   switch (result)
   {
   case GTK_RESPONSE_REJECT:
-    group_cancel_button_callback(group_dialog, script_gui);
     show_status(script_gui->onglet_leto, "Cancelled group modification");
     gtk_widget_destroy(group_dialog);
     return GTK_RESPONSE_REJECT;
@@ -1246,6 +1266,10 @@ void run_leto(const char *fichier_script, const char *fichier_draw, const char *
 #ifndef LETO
   char *ext;
 #endif
+  (void) fichier_script;
+  (void)fichier_draw;
+  (void)fichier_res;
+  (void)fichier_var;
 
   les_scripts[idx].num_onglet = numPage;
   sc = &les_scripts[idx];
@@ -1302,7 +1326,6 @@ void run_leto(const char *fichier_script, const char *fichier_draw, const char *
 #endif
   /* lecture recursive du script par defaut, definie dans script.c */
   lecture(1, onglet_leto);
-
 
   gtk_drag_dest_set(onglet_leto->window, GTK_DEST_DEFAULT_ALL, target_table, 1, GDK_ACTION_COPY);
 
@@ -1379,13 +1402,10 @@ int main(int argc, char *argv[])
   pscript->onglet_leto->window = gtk_window_new(GTK_WINDOW_TOPLEVEL); /* creation de la fenetre principale */
 
   /* dimensionnement de la fenetre */
-  gtk_window_set_default_size(GTK_WINDOW(pscript->onglet_leto->window),
-      gdk_screen_width() - 300,
-      gdk_screen_height() - 300);
+  gtk_window_set_default_size(GTK_WINDOW(pscript->onglet_leto->window), gdk_screen_width() - 300, gdk_screen_height() - 300);
 
   /* defini le titre de la fenetre */
   gtk_window_set_title(GTK_WINDOW(pscript->onglet_leto->window), "Leto");
-
 
   sprintf(filename, "%s/bin_leto_prom/resources/leto_icon.png", getenv("HOME"));
 
@@ -1398,10 +1418,7 @@ int main(int argc, char *argv[])
   }
   else gtk_window_set_icon(GTK_WINDOW(pscript->onglet_leto->window), icon);
 
-
-
-
-  sc=&les_scripts[0];
+  sc = &les_scripts[0];
   sc->xmin = 0;
   sc->ymin = 0;
   gtk_window_get_size(GTK_WINDOW(pscript->onglet_leto->window), &sc->xmax, &sc->ymax);
@@ -1415,8 +1432,8 @@ int main(int argc, char *argv[])
   gtk_box_pack_start(GTK_BOX(vbox), vbox_menu, FALSE, TRUE, 0);
 
   create_menubar_leto(pscript, vbox_menu, 0);
-  parent = create_scroll_leto(pscript->onglet_leto,parent,vbox);
-  create_status_bar_leto(pscript,vbox);
+  parent = create_scroll_leto(pscript->onglet_leto, parent, vbox);
+  create_status_bar_leto(pscript, vbox);
   create_drawingArea_leto(pscript, parent);
 
   /* signaux de la fenetre principal */
@@ -1435,10 +1452,10 @@ int main(int argc, char *argv[])
 
   /********************************************************************************************************************/
 
-  pscript->onglet_leto->graphic=NULL;
+  pscript->onglet_leto->graphic = NULL;
 
   /******************************************************* Lancement de Leto ****************************************/
-  for(i=1;i<argc;i++)
+  for (i = 1; i < argc; i++)
   {
 
     if (argv[i][0] == '-')
@@ -1449,20 +1466,18 @@ int main(int argc, char *argv[])
       switch (argv[i][1])
       {
 
-        case 'G':
+      case 'G':
         if (i < argc - 1)
         {
           seed_tmp = strtol(argv[++i], &tailptr, 10);
-          if (strcmp(tailptr, "\0") == 0)
-          seed = seed_tmp;
-          else
-          fprintf(stderr, "A number must be supplied after parameter -G (found %s)\n", argv[i]);
+          if (strcmp(tailptr, "\0") == 0) seed = seed_tmp;
+          else fprintf(stderr, "A number must be supplied after parameter -G (found %s)\n", argv[i]);
         }
-        else
-        fprintf(stderr, "A number must be supplied after parameter -G\n");
+        else fprintf(stderr, "A number must be supplied after parameter -G\n");
         break;
 
-        default: fprintf(stderr, "Unknown parameter %s\n", argv[i]);
+      default:
+        fprintf(stderr, "Unknown parameter %s\n", argv[i]);
         break;
 
       }
@@ -1474,12 +1489,12 @@ int main(int argc, char *argv[])
 #ifdef SYMBOLIQUE_VERSION
       if (strcmp(ext, "symb") == 0)
       {
-        memcpy(sc->nomfich1, argv[i], (strlen(argv[i])+1) * sizeof(char));
+        memcpy(sc->nomfich1, argv[i], (strlen(argv[i]) + 1) * sizeof(char));
         sc->flag_symb = 1;
       }
       else if (strcmp(ext, "script") == 0)
       {
-        memcpy(sc->nomfich1, argv[i], (strlen(argv[i])+1) * sizeof(char));
+        memcpy(sc->nomfich1, argv[i], (strlen(argv[i]) + 1) * sizeof(char));
         sc->flag_symb = 0;
       }
 #else
@@ -1495,8 +1510,7 @@ int main(int argc, char *argv[])
       memcpy(sc->freseau, argv[i], (strlen(argv[i])+1) * sizeof(char));
 #endif
 
-      if (strcmp(ext, "draw") == 0)
-      memcpy(sc->draw, argv[i], (strlen(argv[i])+1) * sizeof(char));
+      if (strcmp(ext, "draw") == 0) memcpy(sc->draw, argv[i], (strlen(argv[i]) + 1) * sizeof(char));
     }
   }
 
@@ -1516,7 +1530,7 @@ int main(int argc, char *argv[])
    * les .scripts et .draw sont deja definie avant donc inutile de les mettres en arguments,
    * comme leto est un unique onglet, l'indice d'onglet et de script sont egal a zero */
   run_leto("", "", "", "", pscript->onglet_leto, 0, 0, seed);
-  pscript->sc=sc;
+  pscript->sc = sc;
 
   set_title(pscript->onglet_leto);
 
@@ -1525,19 +1539,16 @@ int main(int argc, char *argv[])
 
   /* initialise le gc car cela genere parfois des erreurs de segmentations au demarrage */pscript->onglet_leto->gc = gdk_gc_new(GDK_DRAWABLE(pscript->onglet_leto->window->window));
 
-  gtk_drag_dest_set(pscript->onglet_leto->window, GTK_DEST_DEFAULT_ALL,
-      target_table, 1, GDK_ACTION_COPY);
+  gtk_drag_dest_set(pscript->onglet_leto->window, GTK_DEST_DEFAULT_ALL, target_table, 1, GDK_ACTION_COPY);
 
-  gtk_signal_connect(GTK_OBJECT(pscript->onglet_leto->window), "drag_data_received",
-      GTK_SIGNAL_FUNC(target_drag_data_received), NULL);
+  gtk_signal_connect(GTK_OBJECT(pscript->onglet_leto->window), "drag_data_received", GTK_SIGNAL_FUNC(target_drag_data_received), NULL);
 
   /* gtk_drag_source_set(fenetre3.window, GDK_BUTTON1_MASK|GDK_BUTTON3_MASK,
    * target_table, 1, GDK_ACTION_COPY); */
 
-  gtk_signal_connect(GTK_OBJECT(pscript->onglet_leto->window), "drag_data_get",
-      GTK_SIGNAL_FUNC(source_drag_data_get), NULL);
+  gtk_signal_connect(GTK_OBJECT(pscript->onglet_leto->window), "drag_data_get", GTK_SIGNAL_FUNC(source_drag_data_get), NULL);
 
-  pscript->onglet_leto->graphic=NULL;
+  pscript->onglet_leto->graphic = NULL;
 
   gdk_threads_enter();
 
