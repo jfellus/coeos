@@ -304,7 +304,6 @@ void print_warning(const char *name_of_file, const char* name_of_function, int n
     vkprints(message, arguments);
     kprints("\033[0m\n\n");
     va_end(arguments);
-    /* exit(EXIT_FAILURE);  On exit pas mais on devrait avoir une fenetre claire */
 }
 
 void fatal_error(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
@@ -315,7 +314,8 @@ void fatal_error(const char *name_of_file, const char* name_of_function, int num
     vkprints(message, arguments);
     kprints("\033[0m\n\n");
     va_end(arguments);
-    /* exit(EXIT_FAILURE);  On exit pas mais on devrait avoir une fenetre claire */
+    raise(SIGABRT);
+    exit(EXIT_FAILURE);
 }
 
 /*
@@ -330,9 +330,9 @@ void fatal_system_error(const char *name_of_file, const char* name_of_function, 
     vkprints(message, arguments);
     kprints("System error: %s\n\n", strerror(errno));
     kprints("\033[0m\n\n");
-
+    raise(SIGABRT);
     va_end(arguments);
-    /* exit(EXIT_FAILURE); On exit pas mais on devrait avoir une fenetre claire */
+    exit(EXIT_FAILURE);
 }
 
 
