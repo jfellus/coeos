@@ -393,31 +393,26 @@ void del_all_comlinklist(t_gennet *data, t_gennet_script *script)
 	if (script->comlinklist_out != NULL) del_all_comlinklist_out(data, script);
 }
 
-t_gennet_script *add_gennet_script(t_gennet *data)
+t_gennet_script *add_gennet_script(t_gennet *coeos)
 {
-	t_gennet_script *script = NULL;
+	t_gennet_script *script_gui = NULL;
 
-	if ((script = malloc(sizeof(t_gennet_script))) == NULL)
-	{
-		g_critical("add_gennet_script : Memory error");
-		return NULL;
-	}
-	memset(script, 0, sizeof(t_gennet_script));
+	script_gui = ALLOCATION(t_gennet_script);
+	memset(script_gui, 0, sizeof(t_gennet_script));
 
-	if (data->scripts == NULL)
+	if (coeos->scripts == NULL)
 	{
-		data->scripts = script;
+		coeos->scripts = script_gui;
 	}
 	else
 	{
-		data->scripts->prev = script;
-		script->next = data->scripts;
-		data->scripts = script;
+		coeos->scripts->prev = script_gui;
+		script_gui->next = coeos->scripts;
+		coeos->scripts = script_gui;
 	}
 
-	init_draw_script(data, script);
-
-	return script;
+	init_draw_script(coeos, script_gui);
+	return script_gui;
 }
 
 char *get_leto_binary()
@@ -448,7 +443,7 @@ char *get_leto_binary()
 /**************************************************************************************/
 
 /* Permet d'editer un script leto dans un nouvel onglet */
-void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
+void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *script_gui)
 {
 	int i, nPage, idx;
 	char *logical_name = NULL;
@@ -474,13 +469,13 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 
 	t_prom_script *prom_script;
 
-	if (pscript->sc != NULL)
+	if (script_gui->sc != NULL)
 	{
 		return;
 	}
 
 
-	prom_script = pscript->prom_script;
+	prom_script = script_gui->prom_script;
 
 	/* Tout d'abord on regarde a� quel indice peut-on creer l'onglet, si il reste encore de la place */
 	idx = tab_is_Free();
@@ -507,8 +502,8 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 
 			/* fermer ce qu'il faut */
 			free(logical_name);
-			pscript->onglet_leto = NULL;
-			pscript->fenetre_dialogue = NULL;
+			script_gui->onglet_leto = NULL;
+			script_gui->fenetre_dialogue = NULL;
 			return;
 		}
 
@@ -536,8 +531,8 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 				g_critical("Edit_Script_With_Leto : Memory error");
 
 				/* fermer ce qu'il faut */
-				pscript->onglet_leto = NULL;
-				pscript->fenetre_dialogue = NULL;
+				script_gui->onglet_leto = NULL;
+				script_gui->fenetre_dialogue = NULL;
 				return;
 			}
 			memset(logical_name, 0, (strlen(script_path_symb) + 1) * sizeof(char));
@@ -562,8 +557,8 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 			/* fermer ce qu'il faut */
 			free(logical_name);
 			free(script_path_symb);
-			pscript->onglet_leto = NULL;
-			pscript->fenetre_dialogue = NULL;
+			script_gui->onglet_leto = NULL;
+			script_gui->fenetre_dialogue = NULL;
 			return;
 		}
 		memset(nom_script_draw, 0, sizeof(char) * strlen(script_path_symb));
@@ -576,8 +571,8 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 			free(logical_name);
 			free(script_path_symb);
 			free(nom_script_draw);
-			pscript->onglet_leto = NULL;
-			pscript->fenetre_dialogue = NULL;
+			script_gui->onglet_leto = NULL;
+			script_gui->fenetre_dialogue = NULL;
 			return;
 		}
 
@@ -611,7 +606,7 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 		tab_name = gtk_notebook_get_tab_label_text(pNotebook, page);
 		if (strncmp(tab_name, logical_name, strlen(logical_name) * sizeof(char)) == 0 && (tab_name[strlen(logical_name)] == '*' || tab_name[strlen(logical_name)] == '\0'))
 		{
-			fprintf(stderr, "WARNING: the script already has a Leto tab\n");
+			PRINT_WARNING("The script already has a Leto tab\n");
 			break;
 		}
 	}
@@ -621,59 +616,58 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 	{
 		/********************************************** Creation de l'onglet ***********************************************/
 
-		pscript->onglet_leto = ALLOCATION(TxDonneesFenetre);
-		pscript->onglet_leto->hashtab = ALLOCATION(struct hsearch_data);
+		script_gui->onglet_leto = ALLOCATION(TxDonneesFenetre);
+		script_gui->onglet_leto->hashtab = ALLOCATION(struct hsearch_data);
 		/* TODO free memory */
-		memset(pscript->onglet_leto->hashtab, 0, sizeof(struct hsearch_data));
-		memset(pscript->onglet_leto, 0, sizeof(TxDonneesFenetre));
+		memset(script_gui->onglet_leto->hashtab, 0, sizeof(struct hsearch_data));
 
 		sMenuLabel = g_strdup_printf("Menu -> Page %d", nPage);
 		pMenuLabel = gtk_label_new(sMenuLabel);
 
 		NomOnglet = gtk_label_new(logical_name);
-		pscript->onglet_leto->window = gtk_vbox_new(FALSE, 1);
+		script_gui->onglet_leto->window = gtk_vbox_new(FALSE, 1);
 
 		/********************************* Creation de la fenetre ***********************************************************/
 
 		/* Pour le leto (non metaleto) faire la meme chose pour la fenetre principal de Leto avec le meme nom (Winmain) */
 		g_object_ref(gen->gui->WinMain);
-		g_object_set_data_full(G_OBJECT(pscript->onglet_leto->window), "Winmain", gen->gui->WinMain, (GDestroyNotify) g_object_unref);
+		g_object_set_data_full(G_OBJECT(script_gui->onglet_leto->window), "Winmain", gen->gui->WinMain, (GDestroyNotify) g_object_unref);
 
 		/* save du notebook */
 		g_object_ref(pNotebook);
-		g_object_set_data_full(G_OBJECT(pscript->onglet_leto->window), "Notebook", pNotebook, (GDestroyNotify) g_object_unref);
+		g_object_set_data_full(G_OBJECT(script_gui->onglet_leto->window), "Notebook", pNotebook, (GDestroyNotify) g_object_unref);
 
 		/* creation d'une box vertical pour le menu */
 		vbox = gtk_vbox_new(FALSE, 1);
-		gtk_box_pack_start(GTK_BOX(pscript->onglet_leto->window), vbox, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(script_gui->onglet_leto->window), vbox, FALSE, FALSE, 0);
 
 		/* on l'attache a une vbox pour que le menu soit en haut de la fenetre */
-		create_menubar_leto(pscript, vbox, nPage);
+		create_menubar_leto(script_gui, vbox, nPage);
 		/* le dernier parametre est null car seulement utile pour la version Leto seul */
-		parent = create_scroll_leto(pscript->onglet_leto, parent, NULL);
-		create_drawingArea_leto(pscript, parent);
-		create_status_bar_leto(pscript, NULL);
+		parent = create_scroll_leto(script_gui->onglet_leto, parent, NULL);
+		create_drawingArea_leto(script_gui, parent);
+		create_status_bar_leto(script_gui, NULL);
 
-		if ((pscript->fenetre_dialogue = malloc(sizeof(TxDonneesFenetre))) == NULL)
+		if ((script_gui->fenetre_dialogue = malloc(sizeof(TxDonneesFenetre))) == NULL)
 		{
 			g_critical("Edit_Script_With_Leto : Memory error");
 			/* fermer ce qu'il faut */
 			free(logical_name);
-			free(pscript->onglet_leto);
-			pscript->onglet_leto = NULL;
+			free(script_gui->onglet_leto);
+			script_gui->onglet_leto = NULL;
 			return;
 		}
-		memset(pscript->fenetre_dialogue, 0, sizeof(TxDonneesFenetre));
+		memset(script_gui->fenetre_dialogue, 0, sizeof(TxDonneesFenetre));
 
-		create_fenetre_dialogue(pscript->fenetre_dialogue, pscript->onglet_leto); /* pour Find no */
+		create_fenetre_dialogue(script_gui->fenetre_dialogue, script_gui->onglet_leto); /* pour Find no */
 
 		/********************************************************************************************************************/
 
-		pscript->onglet_leto->graphic = NULL;
+		script_gui->onglet_leto->graphic = NULL;
 
 		/* insere un onglet dans pNotebook, qui a pour nom NomOnglet, 
 		 * contient pscript->onglet_leto->window et a comme menu pMenuLabel */
-		gtk_notebook_append_page_menu(pNotebook, pscript->onglet_leto->window, NomOnglet, pMenuLabel);
+		gtk_notebook_append_page_menu(pNotebook, script_gui->onglet_leto->window, NomOnglet, pMenuLabel);
 
 		/* on libere */
 		g_free(sMenuLabel);
@@ -687,7 +681,7 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 		/******************************************************* Lancement de Leto ****************************************/
 
 		/* initialise le gc car cela genere parfois des erreurs de segmentations au demarrage */
-		pscript->onglet_leto->gc = gdk_gc_new(pscript->onglet_leto->window->window);
+		script_gui->onglet_leto->gc = gdk_gc_new(script_gui->onglet_leto->window->window);
 
 		/* On ajpoute le repertoire de travail */
 
@@ -709,10 +703,10 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *pscript)
 		strcpy(les_scripts[idx].directory, prom_script->path_prom_deploy);
 
 		/* lancement de leto avec les nom de fichier.script et . draw et l'indice de script disponible et l'indice de l'onglet */
-		run_leto(leto_first_argument, nom_script_draw, nom_script_res, nom_script_var, pscript->onglet_leto, idx, nPage, gen->seed);
+		run_leto(leto_first_argument, nom_script_draw, nom_script_res, nom_script_var, script_gui->onglet_leto, idx, nPage, gen->seed);
 	    strcpy(sc->directory, ".");
 
-		pscript->sc = sc;
+		script_gui->sc = sc;
 		sc = NULL;
 
 		if (script_path_symb != NULL) free(script_path_symb);
@@ -1971,50 +1965,50 @@ void init_gui_arg_find_symb(t_gennet *data)
 	}
 }
 
-void init_gui_arg_find_script(t_gennet *data)
+void init_gui_arg_find_script(t_gennet *coeos)
 {
 	int i = 0;
 	char *ext = NULL;
 	char nom[1024];
 	char *end_path = NULL;
 	char basepath[MAX_ALL_PATH];
-	t_gennet_script *pscript = NULL;
+	t_gennet_script *script_gui = NULL;
 
-	for (i = 1; i < data->ac; i++)
+	for (i = 1; i < coeos->ac; i++)
 	{
-		ext = get_file_extension(data->av[i]);
+		ext = get_file_extension(coeos->av[i]);
 		if (strcmp(ext, "script") == 0)
 		{
 			/* c'est un script donc on creer le pscript
 			 * et on ouvre l'onglet */
-			pscript = add_gennet_script(data);
-			pscript->prom_script = promnet_add_new_prom_script(data->promnet);
-			if (pscript->prom_script != promnet_prom_script_get_next(data->promnet, NULL)) fprintf(stderr, "Probleme d'ajout du script %s a la liste des scripts\n", data->av[i]);
+			script_gui = add_gennet_script(coeos);
+			script_gui->prom_script = promnet_add_new_prom_script(coeos->promnet);
+			if (script_gui->prom_script != promnet_prom_script_get_next(coeos->promnet, NULL)) fprintf(stderr, "Probleme d'ajout du script %s a la liste des scripts\n", coeos->av[i]);
 
 
 			/* on ajoute le nom logique du script */
 			memset(nom, 0, sizeof(char) * 1024);
-			memcpy(nom, data->av[i], (strlen(data->av[i]) + 1) * sizeof(char));
+			memcpy(nom, coeos->av[i], (strlen(coeos->av[i]) + 1) * sizeof(char));
 			get_base_name(nom);
-			promnet_prom_script_set_logical_name(pscript->prom_script, nom);
-			if ((end_path = rindex(data->av[i], '/')) != NULL)
+			promnet_prom_script_set_logical_name(script_gui->prom_script, nom);
+			if ((end_path = rindex(coeos->av[i], '/')) != NULL)
 			{
 				memset(basepath, 0, MAX_ALL_PATH);
-				memcpy(basepath, data->av[i], end_path - data->av[i]);
-				strcpy(pscript->prom_script->path_file_script, end_path+1);
+				memcpy(basepath, coeos->av[i], end_path - coeos->av[i]);
+				strcpy(script_gui->prom_script->path_file_script, end_path+1);
 				/* on ajoute le chemin du script */
-				promnet_prom_script_set_all_path(pscript->prom_script, basepath, nom);
+				promnet_prom_script_set_all_path(script_gui->prom_script, basepath, nom);
 			}
 			else
 			{
-			  strcpy(pscript->prom_script->path_file_script, data->av[i]);
-			  promnet_prom_script_set_all_path(pscript->prom_script, ".", nom);
+			  strcpy(script_gui->prom_script->path_file_script, coeos->av[i]);
+			  promnet_prom_script_set_all_path(script_gui->prom_script, ".", nom);
 			  /* 	      promnet_prom_script_set_path_file_script(pscript->prom_script, data->av[i]); */
 			}
-			pscript->pango = gtk_widget_create_pango_layout(GTK_WIDGET(data->gui->DrawingArea), nom);
+			script_gui->pango = gtk_widget_create_pango_layout(GTK_WIDGET(coeos->gui->DrawingArea), nom);
 
 			/* on ouvre l'onglet */
-			Edit_Script_With_Leto(data, pscript);
+			Edit_Script_With_Leto(coeos, script_gui);
 		}
 	}
 }

@@ -647,12 +647,13 @@ void entry_link_callback_input(GtkWidget * widget, GtkWidget * entry, void *user
   new_input_group = lookup_hash_table(script_gui->onglet_leto->hashtab, (char *) entry_text);
   if (new_input_group != NULL)
   {
+
     memcpy(sc->liaison_courante->depart_name, new_input_group->no_name, (strlen(new_input_group->no_name) + 1) * sizeof(char));
     sc->liaison_courante->depart = new_input_group->no;
   }
   else
   {
-    fprintf(stderr, "WARNING: input group %s doesn't exists => keeping old link input group\n", entry_text);
+    PRINT_WARNING("input group %s doesn't exists => keeping old link input group\n", entry_text);
   }
 }
 
