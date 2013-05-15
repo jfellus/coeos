@@ -198,21 +198,21 @@ void free_vecteur(type_vecteur_entier *t)
 /*        Utilitaire recherche adr a partir du numero           */
 /*--------------------------------------------------------------*/
 
-type_groupe *trouver_groupe(int n)
+type_groupe *trouver_groupe(int gpe)
 {
 	type_groupe *groupe;
-	/*printf("trouver_groupe %d \n",n);*/
 	groupe = sc->deb_groupe;
-	if (groupe == NULL) printf("trouver_groupe(): Pas de groupe dans la liste ! \n");
+	if (groupe == NULL) EXIT_ON_ERROR("trouver_groupe(): Pas de groupe dans la liste ! \n");
 
 	while (groupe != NULL)
 	{
-		/*printf("groupe %d -> %s\n",groupe->no,groupe->no_name);*/
-		if (groupe->no == n) return (groupe);
+		/*printf("groupe %d -> %s\gpe",groupe->no,groupe->no_name);*/
+		if (groupe->no == gpe) return (groupe);
 		groupe = groupe->s;
 	}
-	printf("Error (trouver_groupe): group %d not found \n", n);
-	return (type_groupe *) NULL; /* pour eviter erreur systeme */
+
+	EXIT_ON_ERROR("Error (trouver_groupe): group %d not found \n", gpe);
+	return NULL; /* pour eviter erreur systeme */
 }
 
 type_groupe *trouver_groupe_par_nom_old(char *nom)

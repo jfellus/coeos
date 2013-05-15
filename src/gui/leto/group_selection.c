@@ -314,7 +314,8 @@ void slide_groups(int x, int y, int selection)
   liaison = sc->deb_liaison;
   while (liaison != NULL)
   {
-    rescale_link(liaison);
+
+    if ((liaison->depart != -1) && (liaison->arrivee != -1) ) rescale_link(liaison);
     liaison = liaison->s;
   }
 }

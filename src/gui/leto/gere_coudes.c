@@ -53,13 +53,10 @@ void rescale_link(type_liaison *liaison)
   type_groupe *groupe1, *groupe2;
   int start_x, start_y, end_x, end_y;
 
+  if (liaison->depart == -1 && liaison->arrivee == -1) return;
+
   groupe1 = trouver_groupe(liaison->depart);
   groupe2 = trouver_groupe(liaison->arrivee);
-
-  if (!groupe1 || !groupe2)
-  {
-    return;
-  }
 
   start_group_get_link_pos(groupe1, liaison, &start_x, &start_y);
   end_group_get_link_pos(groupe2, liaison, &end_x, &end_y);
