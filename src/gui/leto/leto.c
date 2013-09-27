@@ -1503,9 +1503,7 @@ int main(int argc, char *argv[])
         memcpy(sc->nomfich1, argv[i], (strlen(argv[i])+1) * sizeof(char));
         sc->flag_symb = 0;
       }
-#endif
-
-#ifndef SYMBOLIQUE_VERSION
+      
       if (strcmp(ext, "res") == 0)
       memcpy(sc->freseau, argv[i], (strlen(argv[i])+1) * sizeof(char));
 #endif
