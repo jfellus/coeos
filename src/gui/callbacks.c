@@ -2646,7 +2646,7 @@ void edit_variables(GtkWidget * widget, gpointer data)
   editor = getenv("EDITOR");
   if (editor == NULL) editor = "gedit";
 
-  snprintf(command_line, COMMAND_LINE_MAX, "%s %s &", editor, prom_script->path_file_var);
+  snprintf(command_line, COMMAND_LINE_MAX, "%s %s/%s &", editor, prom_script->path_prom_deploy, prom_script->path_file_var);
   error = system(command_line);
 
   if (error != 0)
