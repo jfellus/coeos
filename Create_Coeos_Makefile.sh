@@ -49,7 +49,7 @@ do
 
 	if [ $CONFIGURATION == "debug" ]
 	then
-		FINALCFLAGS="$CFLAGS -g3"
+		FINALCFLAGS="$CFLAGS -g"
 		POSTFIX="_debug"
 		
 	else
