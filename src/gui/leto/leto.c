@@ -576,13 +576,16 @@ void script_slide(donnees_script *script, TxPoint translation)
     link->posx2 += translation.x;
     link->posy2 += translation.y;
 
-    for (polyline = link->polyline_list->first; polyline != NULL; polyline = polyline->next)
-    {
-      polyline->x_b += translation.x;
-      polyline->y_b += translation.y;
-      polyline->x_e += translation.x;
-      polyline->y_e += translation.y;
-    }
+	if (link->polyline_list != NULL)
+		{
+		for (polyline = link->polyline_list->first; polyline != NULL; polyline = polyline->next)
+			{
+			polyline->x_b += translation.x;
+			polyline->y_b += translation.y;
+			polyline->x_e += translation.x;
+			polyline->y_e += translation.y;
+			}
+		}
   }
 }
 
