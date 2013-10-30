@@ -1165,7 +1165,8 @@ void init_gui_winmain(t_gennet *data)
   GdkPixbuf *icon;
   GError *error = NULL;
   char filename[PATH_MAX];
-
+  int i = 0;
+  char *ext = NULL;
 
   data->gui->WinMain = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
@@ -1202,6 +1203,18 @@ void init_gui_winmain(t_gennet *data)
   label = gtk_label_new("Coeos");
   gtk_notebook_append_page(GTK_NOTEBOOK(data->gui->tabbedWin), data->gui->vBoxMain, label);
 
+
+
+  /* Set Title of Coeos's Window*/
+
+    for (i = 1; i < data->ac; i++) /*Boucle pour trouver le nom du fichier .net*/
+    {
+        ext = get_file_extension(data->av[i]);
+        if (strcmp(ext, "net") == 0)
+        {
+          gtk_window_set_title(GTK_WINDOW(data->gui->WinMain), data->av[i]);
+        }
+    }
 }
 
 static void OpenNetwork(GtkWidget *widget, gpointer data)
@@ -1225,6 +1238,7 @@ static void OpenNetwork(GtkWidget *widget, gpointer data)
   OpenFile_control_browse(dialog, e_cptfile, "Path to cpt file :");
 
   result = gtk_dialog_run(GTK_DIALOG(dialog));
+  
 
   switch (result)
   {
@@ -1349,6 +1363,8 @@ void init_gui_toolbar(t_gennet *data)
   button = gtk_toolbar_append_item(GTK_TOOLBAR(ToolBar), "Quit", "Quit", "Private", NULL, GTK_SIGNAL_FUNC(WinMain_destroy), data);
   gtk_widget_show(button);
   gtk_toolbar_append_space(GTK_TOOLBAR(ToolBar));
+
+
 
 }
 
