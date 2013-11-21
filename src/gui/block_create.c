@@ -28,7 +28,7 @@ int rename_group(type_groupe *group, char *nom, struct hsearch_data *hashtab)
   group_temp = lookup_hash_table(hashtab, nom);
   if (group_temp == NULL)
   {
-    memcpy(group->no_name, nom, (strlen(nom) + 1) * sizeof(char));
+    strcpy(group->no_name, nom);
     insert_hash_table(hashtab, group->no_name, group);
     return 1;
   }

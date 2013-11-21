@@ -1030,7 +1030,7 @@ GtkWidget* create_read_group(TxDonneesFenetre *onglet_leto)
 
   gtk_entry_set_text(GTK_ENTRY(combo_debug_groupe), "Debug group on");
 
-  /*g_signal_connect(G_OBJECT(combo_debug_groupe), "changed", G_CALLBACK(combo_debug_groupe_callback), (gpointer) combo_debug_groupe);*/
+  g_signal_connect(G_OBJECT(combo_debug_groupe), "changed", G_CALLBACK(combo_debug_groupe_callback), (gpointer) combo_debug_groupe);
 
   /********* reverse combo list *********/
 

@@ -269,12 +269,12 @@ void renumeroter()
       if (liaison->depart == n1)
       {
         liaison->depart = n;
-        memcpy(liaison->depart_name, groupe->no_name, (strlen(groupe->no_name) + 1) * sizeof(char));
+        strcpy(liaison->depart_name, groupe->no_name);
       }
       if (liaison->arrivee == n1)
       {
         liaison->arrivee = n;
-        memcpy(liaison->arrivee_name, groupe->no_name, (strlen(groupe->no_name) + 1) * sizeof(char));
+        strcpy(liaison->arrivee_name, groupe->no_name);
       }
       liaison = liaison->s;
     }
@@ -376,6 +376,8 @@ void detruit_groupe(type_groupe *group, TxDonneesFenetre *onglet_leto)
     }
     groupe1->s = groupe2;
   }
+  show_status(onglet_leto, "Group %s deleted", group->no_name);
+
   memset(group, 0, sizeof(type_groupe));
 
   /*       supprimer toutes les liaisons et mettre a jour         */
@@ -384,8 +386,6 @@ void detruit_groupe(type_groupe *group, TxDonneesFenetre *onglet_leto)
 
   renumeroter(); /* toujours necessaire pour creation .res (meme avec les no_groupes symboliques)*/
   sc->nbre_groupe--;
-
-  show_status(onglet_leto, "Group %s deleted", group->no_name);
 
   if (script_set_modified(sc)) set_title(onglet_leto);
 
@@ -746,6 +746,7 @@ void creation_groupe(GtkWidget * widget, t_gennet_script *script_gui)
   onglet_leto = script_gui->onglet_leto;
 
   groupe2 = creer_groupeb(NULL);
+
   if (sc->fin_groupe != NULL)
   {
     sc->fin_groupe->s = groupe2;
@@ -785,7 +786,7 @@ void creation_groupe(GtkWidget * widget, t_gennet_script *script_gui)
 
       sc->nbre_groupes_lus = sc->last_groupe_number + 1;
 
-      read_macro(groupe2->no_name, groupe2->nom, groupe2->posx, groupe2->posy, 1, 1, &selected_plane, script_gui->onglet_leto->hashtab);
+      read_macro(groupe2->no_name, groupe2->nom, groupe2->posx, groupe2->posy, 1, 1, &selected_plane, onglet_leto->hashtab);
       /* le nbre de groupes a ete modifie dans read_macro */
 
       if (groupe2->reverse > 0)
@@ -812,11 +813,6 @@ void creation_groupe(GtkWidget * widget, t_gennet_script *script_gui)
     else
     {
       exists = create_new_entry_in_hash_table(groupe2, NULL);
-    }
-
-    if (exists < 0)
-    {
-      EXIT_ON_ERROR(" Ce groupe existe deja dans la table. \n");
     }
   }
   else if (res == GTK_RESPONSE_REJECT)
