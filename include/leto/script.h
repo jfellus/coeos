@@ -111,6 +111,7 @@ typedef struct donnees_script
 
    char nomfich1[PATH_MAX], freseau[PATH_MAX], draw[PATH_MAX], fvar[PATH_MAX];
    char directory[PATH_MAX];
+   char fscript[PATH_MAX];
 
   int nbre_groupe, nbre_liaison;
 

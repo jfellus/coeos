@@ -25,12 +25,16 @@ void get_base_path_name(char *filename)
 void get_base_name(char *filename)
 {
 	char *pt;
+	char basename[NAME_MAX+1];
 
 	/* recherche l'adr du debut de l'extension */
 	pt = rindex(filename, '.');
 	if (pt != NULL) *pt = '\0'; /* on oublie l'extension du fichier: on met fin de chaine au debut de l'extension*/
 	pt = rindex(filename, '/'); /* trouve le dernier '/' pour enlever le path du nom*/
-	if (pt != NULL) memcpy(filename, &(pt[1]), (strlen(&(pt[1])) + 1) * sizeof(char)); /* on saute le '/' */
+	if (pt != NULL){
+		strcpy(basename, &(pt[1])); /* on saute le '/' */
+		strcpy(filename, basename);
+	}
 
 }
 

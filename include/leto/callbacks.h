@@ -144,6 +144,7 @@ void edit_variables(GtkWidget * widget, gpointer data);
 void block_transfo(GtkWidget * widget, gpointer data);
 
 /* #ifndef SYMBOLIQUE_VERSION */
+void compile_script_cb(GtkWidget * widget, gpointer data);
 void creation_cb(GtkWidget * widget, gpointer data);
 /* #endif */
 

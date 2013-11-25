@@ -38,12 +38,12 @@
       <menuitem name="Zoom Out" action="/View/Zoom Out" />
       <separator />
       <menu name="Unselect plane" action="/View/Unselect plane">
-	<menuitem name="Plane 1" action="/View/Unselect plane/Plane 1" />
-	<menuitem name="Plane 2" action="/View/Unselect plane/Plane 2" />
-	<menuitem name="Plane 3" action="/View/Unselect plane/Plane 3" />
-	<menuitem name="Plane 4" action="/View/Unselect plane/Plane 4" />
-	<menuitem name="Plane 5" action="/View/Unselect plane/Plane 5" />
-	<menuitem name="Plane 6" action="/View/Unselect plane/Plane 6" />
+			<menuitem name="Plane 1" action="/View/Unselect plane/Plane 1" />
+			<menuitem name="Plane 2" action="/View/Unselect plane/Plane 2" />
+			<menuitem name="Plane 3" action="/View/Unselect plane/Plane 3" />
+			<menuitem name="Plane 4" action="/View/Unselect plane/Plane 4" />
+			<menuitem name="Plane 5" action="/View/Unselect plane/Plane 5" />
+			<menuitem name="Plane 6" action="/View/Unselect plane/Plane 6" />
       </menu>
       <separator />
       <menuitem name="Slide groups up" action="/View/Slide groups up" />

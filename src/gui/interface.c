@@ -207,6 +207,7 @@ static GtkActionEntry menu_items[] =
     { "/Edit/Search group Name", GTK_STOCK_FIND, "Search Name", "<Control>F", "Search group Name", G_CALLBACK(callback_search_group_by_name) },
     { "/Edit/Find group No", GTK_STOCK_INDEX, "Find No", "<Shift><Control>F", "Find group No", G_CALLBACK(callback_find_group) },
     { "/Edit/Compile _NN", GTK_STOCK_EXECUTE, "Compile _NN", "<Release>C", "Compile_NN", G_CALLBACK(creation_cb) },
+    { "/Edit/Compile _script", GTK_STOCK_CONVERT, "Compile _script", "<Shift><Control>C", "Compile_script", G_CALLBACK(compile_script_cb) },
     /*{"/Edit/Edit configuration... (BETA)", "<CTRL>F",  edit_config,          0, "<StockItem>", GTK_STOCK_PREFERENCES },*/
     { "/Edit/Binary file (.res)...", GTK_STOCK_PREFERENCES, "Binary file (.res)...", NULL, "Binary file (.res)...", G_CALLBACK(set_binary_file) },
     { "/Edit/Random generator...", GTK_STOCK_PREFERENCES, "Random generator...", NULL, "Random generator...", G_CALLBACK(set_random_gen) },

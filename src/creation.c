@@ -11,7 +11,7 @@
 
 /*-------------------------------------------------------------------------*/
 
-void creation(TxDonneesFenetre *onglet_leto)
+void creation(TxDonneesFenetre *onglet_leto,int flag_save_res)
 {
 	int i, j, k;
 	int s_deb, s_fin, e_deb, e_fin;
@@ -187,7 +187,12 @@ void creation(TxDonneesFenetre *onglet_leto)
 		}
 		groupe = groupe->s;
 	} /*       etude du groupe suivant       */
-	ecrit_reseau();
+
+	if(flag_save_res){
+		/*printf("compile res et enregistre");*/
+		ecrit_reseau();
+	}
+	/*else printf("compile res et enregistre PAS");*/
 	/*   save_script(1,0,onglet_leto);*/ /*CG: sauvegarde  le .script*/
 	save_script(1, 1, onglet_leto); /*PG: sauve le script et met a plat les sous reseau utile avec le .res mais pb denomination */
 }
