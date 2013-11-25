@@ -47,8 +47,14 @@ $(bindir)/$(PROGRAM):$(foreach object, $(OBJECTS), $(release_objdir)/$(object))
 
  $(bindir)/resources/leto_icon.png:resources/leto_icon.png
 	cp $< $@
+	
+$(bindir)/menu_leto.xml:xml/menu_leto.xml
+	cp $< $@
+	
+ $(bindir)/resources/leto_icon.png:resources/leto_icon.png
+	cp $< $@
 
-all:$(bindir)/$(PROGRAM)_debug $(bindir)/$(PROGRAM) $(bindir)/resources/leto_icon.png
+all:$(bindir)/$(PROGRAM)_debug $(bindir)/$(PROGRAM) $(bindir)/resources/leto_icon.png $(bindir)/menu_leto.xml
 
 clean:
 	rm -f $(debug_objdir)/*.o $(release_objdir)/*.o 
