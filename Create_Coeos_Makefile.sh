@@ -59,7 +59,7 @@ do
 	PROG_NAME="coeos$POSTFIX"
 	
 	# Initialisation des libs, includes et flags
-	LIBS="$GTKLIB -lmxml"
+	LIBS="$GTKLIB -lmxml -lm -ldl"
 	INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$SIMULATOR_PATH/shared/include -I$PWD/include -I$PWD/include/shared -I."
 
 	#Version finale des libs, includes et flags
