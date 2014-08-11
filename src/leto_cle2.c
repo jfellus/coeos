@@ -565,7 +565,7 @@ void creer_liaison_1_vers_tous_neurone(type_groupe * groupe, type_liaison * liai
 
     pt->type = no_voie + liaison->mode;
     pt->gpe_liaison = no_gpe_liaison;
-    pt->val = norme + 0.001 + alea(0.001);
+    pt->val = norme + 0.0001 + alea(0.0001);
 
     if (groupe->type == No_Ou)
     {
@@ -607,7 +607,7 @@ void creer_liaison_1_vers_tous_neurone(type_groupe * groupe, type_liaison * liai
     pt->entree = e_deb + pas_entree - 1;
     pt->type = no_voie + liaison->mode;
     pt->gpe_liaison = no_gpe_liaison;
-    pt->val = norme + 0.001 + alea(0.001);
+    pt->val = norme + 0.0001 + alea(0.0001);
 
     if (groupe->type == No_Ou)
     {
@@ -649,7 +649,7 @@ void creer_liaison_1_vers_tous_neurone(type_groupe * groupe, type_liaison * liai
     pt->entree = i; /* pointe vers entree couche -1  */
     pt->type = no_voie + liaison->mode;
     pt->gpe_liaison = no_gpe_liaison;
-    pt->val = norme + 0.001 + alea(0.001);
+    pt->val = norme + 0.0001 + alea(0.0001);
 
     if (groupe->type == No_KO_Discret || groupe->type == No_KO_Continu)
     {
