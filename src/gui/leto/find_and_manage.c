@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-#define DEBUG 1
+/*#define DEBUG 1*/
 #include "outils_script.h"
 #include "outils.h"
 #include "draw_leto.h"
@@ -174,13 +174,13 @@ GtkWidget *do_find_completion(GtkWidget *do_widget, gpointer data)
 	/*GTK_WINDOW (do_widget)*/
 	if (!sc->fm_window)
 	{
-		sc->fm_window = gtk_dialog_new_with_buttons("GtkEntryCompletion", NULL, GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+		sc->fm_window = gtk_dialog_new_with_buttons("GtkEntryCompletion", NULL/*GTK_WINDOW(((t_gennet_script *) data)->onglet_leto)*/, GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_STOCK_CLOSE, GTK_RESPONSE_NONE,GTK_STOCK_MEDIA_NEXT,REPONSE_SUIVANT,NULL);
 		gtk_window_set_resizable(GTK_WINDOW (sc->fm_window), FALSE);
 
 		/*	Commentaire des deux lignes pour Pouvoir ajouter d'autre bouton actif sinon n'importe quel evenemenement fermait la fentre*/
 		/*g_signal_connect(sc->fm_window, "response", G_CALLBACK (gtk_widget_destroy), NULL);*/
-		g_signal_connect(sc->fm_window, "destroy", G_CALLBACK (gtk_widget_destroyed), &sc->fm_window);
+		/*g_signal_connect(sc->fm_window, "destroy", G_CALLBACK (gtk_widget_destroyed), &sc->fm_window);*/
 
 		vbox = gtk_vbox_new(FALSE, 5);
 		gtk_box_pack_start(GTK_BOX (GTK_DIALOG (sc->fm_window)->vbox), vbox, TRUE, TRUE, 0);
@@ -221,87 +221,58 @@ GtkWidget *do_find_completion(GtkWidget *do_widget, gpointer data)
 	list_store=sc->fm_group_list_store;
 	onglet_leto = ((t_gennet_script *) data)->onglet_leto;
 	valid = gtk_tree_model_get_iter_first(list_store, &iter);
+	/*Recherche suivant uniquement. Les iterateur dans gtk 2.0 sont forward uniquement avec GTK3 les iterateurs sont bidirectionnels.*/
 	do
 	{
 		result = gtk_dialog_run(GTK_DIALOG(sc->fm_window));
-		dprints("RESULT =  %d\n",result);
+		/*dprints("result = %d\n",result);*/
 		switch (result)
 		{
 		case REPONSE_SUIVANT:
-			dprints("REPONSE SUIVANT et valid == %d\n",valid);
+			dprints("reponse : SUIVANT valid : %d\n",valid);
 			entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
-			memcpy(nom, entry_text, (strlen(entry_text) + 1) * sizeof(char));
-			//explore_list_by_name(sc->fm_group_list_store, nom, ((t_gennet_script *) data)->onglet_leto);
-			/*iterer sur la liste et sortir si iterator = end*/
-
+			strcpy(nom, entry_text);
 			/*Recuperer le nom du script a la ligne iter si il y a qqchose a recuperer*/
 			if (valid)
 			{
 				gtk_tree_model_get(list_store, &iter, 0, &str_data1, 1, &str_data2, 2, &int_data, -1);
 
-				dprints("REPONSE SCRIPT = %s \n",str_data1);
 				/* Tant que le nom du script n'est pas celui recherche on avance dans la liste */
 				while (strcmp(nom, str_data1) != 0 && valid)
 				{
+					dprints("comparer a : %s \n",str_data1);
 					g_free(str_data1);
 					g_free(str_data2);
 					gtk_tree_model_get(list_store, &iter, 0, &str_data1, 1, &str_data2, 2, &int_data, -1);
 					valid = gtk_tree_model_iter_next(list_store, &iter);
 				}
-
-				dprints("VALID ==== %d\n",valid);
-				dprints("TEXTE = %s  dans %s\n\n",entry_text,__FUNCTION__);
-				if(valid){
+				dprints("valid :  %d\n",valid);
+				if(valid)
+				{
 					highlight_group_selected(str_data2, onglet_leto);
 					valid = gtk_tree_model_iter_next(list_store, &iter);
 				}
 				g_free(str_data1);
 				g_free(str_data2);
 			}
-			if(!valid){
+			if(!valid)
+			{
 				dprints("Reprise du debut \n");
 				valid = gtk_tree_model_get_iter_first(list_store, &iter);
 			}
 			break;
-			/*Les iterateur dans gtk 2.0 sont forward uniquement avec GTK3. les iterateurs sont bidirectionnels.
-			 * Le jour ou on passera a GTK3.0 suffira de decommenter cette section ;)
-			 * 	case REPONSE_PRECEDANT:
-			printf("REPONSE SUIVANT et valid == %d\n",valid);
-			entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
-			memcpy(nom, entry_text, (strlen(entry_text) + 1) * sizeof(char));
 
-			if (valid)
-			{
-				gtk_tree_model_get(list_store, &iter, 0, &str_data1, 1, &str_data2, 2, &int_data, -1);
-
-				printf("REPONSE SCRIPT = %s \n",str_data1);
-				while (strcmp(nom, str_data1) != 0 && valid)
-				{
-					g_free(str_data1);
-					g_free(str_data2);
-					gtk_tree_model_get(list_store, &iter, 0, &str_data1, 1, &str_data2, 2, &int_data, -1);
-					valid = gtk_tree_model_iter_previous(list_store, &iter);
-				}
-
-				printf("VALID ==== %d\n",valid);
-				printf("TEXTE = %s  ///////// %s\n\n",entry_text,__FUNCTION__);
-				if(valid){
-					highlight_group_selected(str_data2, onglet_leto);
-					valid = gtk_tree_model_iter_previous(list_store, &iter);
-				}
-				g_free(str_data1);
-				g_free(str_data2);
-			}
-			break;*/
 		case GTK_RESPONSE_NONE:
-			dprints("RESPONSE FERMER \n");
-			gtk_widget_hide(sc->fm_window);
-			gtk_widget_destroyed(sc->fm_window,&sc->fm_window);
+			dprints("reponse : FERMER \n");
+			//gtk_widget_hide(sc->fm_window);
+			gtk_widget_destroy(sc->fm_window/*,&sc->fm_window*/);
+			sc->fm_window = NULL;
 			break;
 		default:
-			dprints("RESPONSE DEFAULT %d \n",result);
-			gtk_widget_hide(sc->fm_window);
-			gtk_widget_destroyed(sc->fm_window,&sc->fm_window);
+			dprints("reponse : DEFAULT %d \n",result);
+			//gtk_widget_hide(sc->fm_window);
+			gtk_widget_destroy(sc->fm_window/*,&sc->fm_window*/);
+			sc->fm_window = NULL;
 			break;
 		}
 
