@@ -1310,11 +1310,28 @@ void separate_superimposed_comlink(t_gennet *gen)
 void loadNetwork_net(t_gennet *data, char *netfile)
 {
 
+  int i = 0, iscpt = 0;
+  char *ext = NULL;
+
+
 	if (promnet_load_file_net(data->promnet, netfile) == -1)
 	{
 		g_critical("loadNetwork : loading net file failed");
 		return;
 	}
+
+  /* Ajout Ali K. */
+
+  for (i = 1; i < data->ac; i++)
+  {
+    ext = get_file_extension(data->av[i]);
+    if (strcmp(ext, "cpt") == 0)
+      iscpt = 1;
+  }
+  if(!iscpt)
+    loadComputer(data);
+
+
 	/*
 	 ** Puis les scripts
 	 */
