@@ -714,7 +714,7 @@ void creation_lien(char *no_groupe_depart_name, char *no_groupe_arrivee_name, t_
  * ou non une liaison est selectionnee et si on veut la modifier
  */
 
-int gere_modification_lien(TxPoint point, t_gennet_script *script_gui)
+int gere_modification_lien(t_gennet_script *script_gui)
 {
   type_groupe *group;
 
@@ -751,7 +751,7 @@ int gere_modification_lien(TxPoint point, t_gennet_script *script_gui)
 void creation_groupe(GtkWidget * widget, t_gennet_script *script_gui)
 {
   type_groupe *groupe2 = NULL;
-  int res = -1, selected_plane, reverse, exists;
+  int res = -1, selected_plane, reverse, exists=1 /*Variable utilisee pour la verification par comparaison a 0*/;
   TxDonneesFenetre *onglet_leto = NULL;
   char base_nom[256], base_nom_complet[256];
   void *x;
@@ -842,6 +842,8 @@ void creation_groupe(GtkWidget * widget, t_gennet_script *script_gui)
     detruit_groupe(groupe2, onglet_leto);
   }
   regenerer_test(onglet_leto);
+  
+	  (void) exists; /*pour eviter le warning*/
 }
 
 static void target_drag_data_received(GtkWidget * widget, GdkDragContext * context, gint x, gint y, GtkSelectionData * data, guint info, guint time)
@@ -1010,7 +1012,7 @@ void fill_group_dialog(int type)
   int i;
   type_groupe *group;
   int *editable;
-  char *entry_text;
+  char *entry_text=NULL;
 
   if (sc->groupes_courants == NULL)
   {
@@ -1204,9 +1206,10 @@ void fill_group_dialog(int type)
         break;
       default:
         field_editable = 0;
-        entry_text = "X";
+        entry_text= (gchar*) "X";
         break;
       }
+     
 
       TxUpdateChampsdansFormulaire(&formulaire_group[i], entry_text, field_editable);
     }
@@ -1275,7 +1278,7 @@ int formulaire_groupe(t_gennet_script *script_gui)
 
 void init_target_table()
 {
-  target_table[0].target = "plain";
+  target_table[0].target=(gchar*) "plain";
   target_table[0].flags = 0;
   target_table[0].info = 0;
 }

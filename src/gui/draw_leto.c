@@ -218,7 +218,7 @@ void affiche_groupe(TxPoint point, type_groupe * groupe, TxDonneesFenetre *ongle
 #endif
   point3.x = point3.x /*+ deltax*/;
   point3.y = point3.y + 3 * (deltay + 1);
-  TxEcrireChaine(onglet_leto, lut_g[type]/*sc->couleur_texte*/, point3, groupe->nom, font_weight);
+  TxEcrireChaine(onglet_leto, lut_g[type]/*sc->couleur_texte*/, point3, groupe->nom, (gchar*)font_weight);
 }
 
 void affiche_liaison_b(TxDonneesFenetre * onglet_leto, TxPoint point1, TxPoint point2, int type)
@@ -276,7 +276,7 @@ void affiche_parametres_liaison(type_liaison *liaison, TxPoint point2, TxDonnees
 
   if (liaison == sc->liaison_courante)
   {
-    font_weight = "bold";
+    font_weight = (gchar*)"bold";
   }
 
   if (liaison->type == No_l_algorithmique || liaison->type == No_l_neuro_mod)
@@ -305,7 +305,7 @@ void affiche_parametres_liaison(type_liaison *liaison, TxPoint point2, TxDonnees
     }
     if (!updated)
     {
-      TxEcrireChaine(onglet_leto, lut_l[type2], point1, "?", font_weight);
+      TxEcrireChaine(onglet_leto, lut_l[type2], point1, (gchar*)"?", font_weight);
     }
     /* !!      switch(liaison->mode) { */
     /* 	 case 0: */
@@ -331,11 +331,11 @@ void affiche_parametres_liaison(type_liaison *liaison, TxPoint point2, TxDonnees
    TxEcrireChaine(onglet_leto, sc->couleur_texte, point1, ".", font_weight);
    }*/
 
-  if (liaison->type == No_l_1_a) TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point2, "A", font_weight);
-  else if (liaison->type == No_l_1_t) TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point2, "//", font_weight);
-  else if (liaison->type == No_l_1_1_non_modif) TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point2, "/", font_weight);
-  else if (liaison->type == No_l_1_1_modif) TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point2, "\\", font_weight);
-  else if (liaison->type == No_l_1_v) TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point2, "V", font_weight);
+  if (liaison->type == No_l_1_a) TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point2, (gchar*)"A", font_weight);
+  else if (liaison->type == No_l_1_t) TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point2, (gchar*)"//", font_weight);
+  else if (liaison->type == No_l_1_1_non_modif) TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point2, (gchar*)"/", font_weight);
+  else if (liaison->type == No_l_1_1_modif) TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point2, (gchar*)"\\", font_weight);
+  else if (liaison->type == No_l_1_v) TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point2, (gchar*)"V", font_weight);
 
   point1.x = point1.x - 40;
   point1.y = point1.y + 10;

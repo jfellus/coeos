@@ -1554,7 +1554,7 @@ char *get_file_extension(const char *file)
 
   if (file == NULL) return NULL;
 
-  base = (char *) g_basename(file);
+  base = (char *) g_path_get_basename(file);
   ext = strrchr(base, '.');
 
   if ((ext == NULL) || (ext == base)) return (base + strlen(base));

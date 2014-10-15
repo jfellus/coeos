@@ -38,6 +38,7 @@ selected_group * is_selected(type_groupe *group)
   return NULL;
 }
 
+
 void selection_unselect_group(selected_group *sel_group)
 {
   if (sel_group == sc->groupes_courants)
@@ -122,7 +123,7 @@ void update_selection_rectangle(int xmin, int ymin, int xmax, int ymax, int ctrl
   }
 }
 
-type_groupe *selection_groupe(TxPoint point)
+type_groupe *selection_groupe()
 {
   type_groupe *group = NULL;
   selected_group *sel_group = NULL;
@@ -228,7 +229,7 @@ type_groupe *test_group_position(TxPoint point)
 
 /*--------------------------------------------------------------*/
 
-void drag_selected_groups(TxPoint point, TxDonneesFenetre *data)
+void drag_selected_groups(TxPoint point)
 {
   int nb_selected_groups = 0;
   int x_center = 0., y_center = 0.;
@@ -248,7 +249,7 @@ void drag_selected_groups(TxPoint point, TxDonneesFenetre *data)
   slide_groups(target_center_x - x_center / nb_selected_groups, target_center_y - y_center / nb_selected_groups, 1);
 }
 
-void move_selected_groups(TxPoint point, TxDonneesFenetre *data)
+void move_selected_groups(TxPoint point)
 {
   int nb_selected_groups = 0;
   float x_center = 0., y_center = 0.;

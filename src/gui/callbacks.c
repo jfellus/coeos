@@ -1809,7 +1809,7 @@ gboolean scribble_motion_notify_event(GtkWidget * widget, GdkEventMotion * event
 
 			if (sc->flag_drag_group == 1)
 			{
-				drag_selected_groups(point, script_gui->onglet_leto);
+				drag_selected_groups(point);
 				scroll(point, script_gui->onglet_leto);
 				regenerer_test(script_gui->onglet_leto);
 			}
@@ -2009,7 +2009,7 @@ gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, t_gennet_scri
 
 	if ((event->state & GDK_CONTROL_MASK) && (event->button == 1))
 	{
-		group = selection_groupe(point); /* ou de-selection si deja selectionne */
+		group = selection_groupe(); /* ou de-selection si deja selectionne */
 		if (group != NULL)
 		{
 			show_status(script_gui->onglet_leto, "Group %s added to selection", group->no_name);
@@ -2021,7 +2021,7 @@ gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, t_gennet_scri
 	if (event->button == 1 || event->button == 3)
 	{
 		/* Detecting objects clicked upon */
-		if (gere_modification_lien(point, script_gui) == 0)
+		if (gere_modification_lien(script_gui) == 0)
 		{
 			test_link_position(point);
 			gere_coude(point, script_gui->onglet_leto);
@@ -2086,7 +2086,7 @@ gboolean mouse_clicked(GtkWidget * widget, GdkEventButton * event, t_gennet_scri
      }
      else if (sc->groupes_courants != NULL)
      {
-     move_selected_groups(point, script_gui->onglet_leto);
+     move_selected_groups(point);
      }
      else
      {

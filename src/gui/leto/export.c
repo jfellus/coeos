@@ -45,7 +45,6 @@ int test_dessiner()
 }
 
 
-
 /* code proche de regenere */
 int export(const int format, const char *nom,
            const type_groupe * liste_groupe,
@@ -626,7 +625,10 @@ void ChangerPinceau(int id, int couleur)
         g2_pen(id, 1);
         break;
     }
-
-
 }
 #endif
+void vide_(){
+char rien;
+
+(void) rien;
+}

@@ -471,7 +471,7 @@ void lecture(int recursive_load, TxDonneesFenetre *onglet_leto)
   j = script_load_file_xml(sc->draw);
   if (j == 1)
   {
-    fprintf(stderr, "pb chargement fichier xml \n");
+    fprintf(stderr, "pb chargement fichier .draw (fichier introuvbale ou non defini) \n");
   }
   else if (j == -1)
   {
@@ -731,7 +731,7 @@ void save_script(int comment, int save_sub_networks, TxDonneesFenetre *onglet_le
   else
   {
     printf("Pour sauvegarder les coudes il faut un fichier .draw (sauvegarde dans provisoire.draw)\n");
-    xml_saveLiaisonFile(sc->deb_liaison, "provisoire.draw");
+    xml_saveLiaisonFile(sc->deb_liaison, (gchar*)"provisoire.draw");
   }
 #endif
 }

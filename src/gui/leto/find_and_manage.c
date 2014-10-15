@@ -28,6 +28,7 @@ The fact that you are presently reading this means that you have had knowledge o
 #include "gennet.h"
 #include "interface.h"
 
+
 /*Macros pour le find and manage*/
 #define REPONSE_SUIVANT 26
 /* recentre l'affichage sur le groupe considere */
@@ -285,13 +286,13 @@ GtkWidget *do_find_completion(GtkWidget *do_widget, gpointer data)
 
 		case GTK_RESPONSE_NONE:
 			dprints("reponse : FERMER \n");
-			//gtk_widget_hide(sc->fm_window);
+			/*gtk_widget_hide(sc->fm_window);*/
 			gtk_widget_destroy(sc->fm_window/*,&sc->fm_window*/);
 			sc->fm_window = NULL;
 			break;
 		default:
 			dprints("reponse : DEFAULT %d \n",result);
-			//gtk_widget_hide(sc->fm_window);
+			/*gtk_widget_hide(sc->fm_window);*/
 			gtk_widget_destroy(sc->fm_window/*,&sc->fm_window*/);
 			sc->fm_window = NULL;
 			break;
