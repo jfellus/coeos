@@ -100,17 +100,16 @@ int main(int argc, char *argv[])
 	{
 		if(argc == 4 && strcmp(argv[3],"--no_res")==0 ){
 			flag_save_res = 0;
-			printf ("cc_leto  %s %s %s \n",argv[1],argv[2],flag_save_res);
+			dprints("cc_leto  %s %s %s \n",argv[1],argv[2],(char*)flag_save_res);
 		}
 		else{
-			fprintf(stderr, "\nincorrect number of arguments ! ");
-			fprintf(stderr, "cc_leto system.script systen.res [--no_res]\n");
-			exit(1);
+			EXIT_ON_ERROR("\nincorrect number of arguments ! \n cc_leto system.script systen.res [--no_res]\n");
+			
 		}
 	}
 	if(argc == 3) printf ("cc_leto : %s %s \n",argv[1],argv[2]);
 
-	printf("initial value of the pseudo random generator : ");
+	dprints("initial value of the pseudo random generator : ");
 	if (scanf("%d", &val) != 1) PRINT_WARNING("Wrong value (not integer) of generator");
 	srand48((long) val);
 
@@ -130,8 +129,8 @@ int main(int argc, char *argv[])
 	setlocale(LC_ALL, "C");
 
 	script_load(sc, sc->nomfich1, 1, NULL);  /* lecture recursive a priori */
-	printf("\nscript read: starting res file generation\n");
-	creation(NULL,flag_save_res);
+	dprints("\nscript read: starting res file generation\n");
+	creation(NULL,(char*) (intptr_t) flag_save_res);
 	/*   ecrit_reseau();
 	 save_script(1,1);*/ /* on garde les commentaires , 0 pour les enlever*/
 	/* on sauvegarde les groupes et liens des sous reseau (tout mis a plat) pour promethe */
