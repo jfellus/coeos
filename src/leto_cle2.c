@@ -75,7 +75,7 @@ void ecrit_reseau_ascii()
   {
     j = 0; /* nbre d'entrees                  */
     pt = sc->neurone[i].coeff;
-    while (pt != nil) /* compte le nombre d'entrees      */
+    while (pt != NULL) /* compte le nombre d'entrees      */
     {
       j++;
       pt = pt->s;
@@ -106,7 +106,7 @@ void ecrit_reseau_ascii()
 
       fprintf(f1, "%f %f %f\n", sc->neurone[i].posx, sc->neurone[i].posy, sc->neurone[i].posz);
       pt = (sc->neurone[i]).coeff;
-      while (pt != nil) /* ecrit tous les coefficients     */
+      while (pt != NULL) /* ecrit tous les coefficients     */
       {
         fprintf(f1, "%f ", pt->val);
         fprintf(f1, "%d ", pt->entree);
@@ -171,7 +171,7 @@ void ecrit_reseau()
   for (i = 0; i < sc->nbre_neurone; i++)
   {
     pt = sc->neurone[i].coeff;
-    while (pt != nil) /* ecrit tous les coefficients     */
+    while (pt != NULL) /* ecrit tous les coefficients     */
     {
       fwrite(&(pt->val), taille_float, 1, f1);
       fwrite(&(pt->entree), taille_int, 1, f1);
@@ -185,7 +185,7 @@ void ecrit_reseau()
 
       pt = pt->s; /* inscrit coeff suivant           */
 
-      if (pt == nil)
+      if (pt == NULL)
       {
        fwrite(&statut_fin, taille_char, 1, f1);
       }
