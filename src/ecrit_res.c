@@ -68,7 +68,7 @@ void ecriture_reseau2( char freseau[100], char nomfich1[100])
     {
         j = 0;                  /* nbre d'entrees                  */
         pt = sc->neurone[i].coeff;
-        while (pt != nil)       /* compte le nombre d'entrees      */
+        while (pt != NULL)       /* compte le nombre d'entrees      */
         {
             j++;
             pt = pt->s;
@@ -84,7 +84,7 @@ void ecriture_reseau2( char freseau[100], char nomfich1[100])
     for (i = 0; i < sc->nbre_neurone; i++)
     {
         pt = (sc->neurone[i]).coeff;
-        while (pt != nil)       /* ecrit tous les coefficients     */
+        while (pt != NULL)       /* ecrit tous les coefficients     */
         {
             fwrite((type_coeff *) pt, sizeof(type_coeff), 1, f1);
             pt = pt->s;         /* inscrit coeff suivant           */

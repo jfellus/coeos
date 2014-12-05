@@ -498,7 +498,7 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *script_gui)
 
 	prom_script = script_gui->prom_script;
 
-	/* Tout d'abord on regarde a� quel indice peut-on creer l'onglet, si il reste encore de la place */
+	/* Tout d'abord on regarde a quel indice peut-on creer l'onglet, si il reste encore de la place */
 	idx = tab_is_Free();
 
 	if (idx == -1)
@@ -632,7 +632,7 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *script_gui)
 		}
 	}
 
-	/* si le script n'est pas deja� ouvert alors on creer un nouvel onglet */
+	/* si le script n'est pas deja ouvert alors on creer un nouvel onglet */
 	if (i >= nPage)
 	{
 		/********************************************** Creation de l'onglet ***********************************************/
@@ -664,6 +664,7 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *script_gui)
 
 		/* on l'attache a une vbox pour que le menu soit en haut de la fenetre */
 		create_menubar_leto(script_gui, vbox, nPage);
+
 		/* le dernier parametre est null car seulement utile pour la version Leto seul */
 		parent = create_scroll_leto(script_gui->onglet_leto, parent, NULL);
 		create_drawingArea_leto(script_gui, parent);
