@@ -527,6 +527,10 @@ void init_corps_neurone(type_groupe * groupe, int j)
   {
     sc->neurone[j].seuil = 0.;
   } /* PG ce n'est pas tres propre utilser le groupe !!! */
+  if (groupe->type == No_SAW)
+  {
+      sc->neurone[j].seuil = 0.;
+  } /* PG ce n'est pas tres propre utilser le groupe !!! */
   if (groupe->type == No_Special)
   {
     sc->neurone[j].seuil = 0.;
