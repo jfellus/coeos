@@ -77,7 +77,7 @@ type_group_function_pointers NN_Core_function_pointers[] =
 /* pour indiquer la fin du tableau*/
 { NULL, NULL, NULL, NULL, NULL, NULL, -1, -1 } };
 
-
+char bus_id[]; // Pour eviter un problème au chargement des lib promethe
 
 
 
