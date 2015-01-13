@@ -27,12 +27,12 @@ SHELL = /bin/sh
 default:all
 
 PROGRAM:=cc_leto
-include ../scripts/variables.mk
+include ../scripts/local_config.mk
 
 SOURCES:=$(wildcard src/*.c) $(wildcard src/cc_leto/*.c) 
 OBJECTS:=$(notdir $(patsubst %.c,%.o,$(SOURCES)))
-INCLUDES:=-I../shared/include  -I../enet/include  -I.. $(GLIB_INCLUDES) $(GTK_INCLUDES) -Iinclude/leto -Iinclude 
-LIBS:=  -L../lib/$(system)/script -lscript -L../lib/$(system)/graphique -lgraphique -lmxml $(GLIB_LIBS) $(GTK_LIBS) -ldl -lm
+INCLUDES:=-I../shared/include  -I../enet/include  -I.. $(GTK_INCLUDES) -Iinclude/leto -Iinclude -I$$HOME/.local/include
+LIBS:=   -L$$HOME/.local/lib -lblc -lrt -L../lib/$(system)/script -lscript -L../lib/$(system)/graphique -lgraphique -lmxml $(GTK_LIBS) -ldl -lm 
 CFLAGS:=$(CFLAGS)  -DAVEUGLE
 
 debug_objdir:=$(objdir)/$(PROGRAM)/debug

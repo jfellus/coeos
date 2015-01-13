@@ -31,9 +31,9 @@ include ../scripts/local_config.mk
 
 SOURCES:=$(wildcard src/*.c) $(wildcard src/gui/*.c) $(wildcard src/gui/leto/*.c)
 OBJECTS:=$(notdir $(patsubst %.c,%.o,$(SOURCES)))
-INCLUDES:=-I../shared/include  -I../enet/include  -I.. $(GTK_INCLUDES) -Iinclude/leto -Iinclude -Isrc/gui/leto -Isrc/gui
+INCLUDES:=-I../shared/include  -I../enet/include  -I.. $(GTK_INCLUDES) -Iinclude/leto -Iinclude -Isrc/gui/leto -Isrc/gui -I$$HOME/.local/include
 
-LIBS:=  -L../lib/$(system)/script -lscript_symb -L../lib/$(system)/graphique -lgraphique -lmxml $(GTK_LIBS) -ldl -lm
+LIBS:=  -L../lib/$(system)/script -lscript_symb -L../lib/$(system)/graphique -lgraphique -lmxml $(GTK_LIBS) -ldl -lm -L$$HOME/.local/lib -lblc
 CFLAGS:=$(CFLAGS) -DLETO -DSYMBOLIQUE_VERSION -rdynamic
 
 debug_objdir:=$(objdir)/$(PROGRAM)/debug

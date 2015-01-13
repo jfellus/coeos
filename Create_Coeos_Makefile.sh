@@ -48,7 +48,7 @@ GTKLIB=`pkg-config --libs gtk+-2.0 gthread-2.0`
 
 ALL_CONFIGURATIONS=(debug release)
 
-CFLAGS="-Wall -pedantic -D_REENTRANT -D_GNU_SOURCE -DDAEMON_COM -D`uname` -Wno-variadic-macros -DSYMBOLIQUE_VERSION"
+CFLAGS="-Wall -std=c99 -pedantic -D_REENTRANT -D_GNU_SOURCE -DDAEMON_COM -D`uname` -Wno-variadic-macros -DSYMBOLIQUE_VERSION"
 
 MAKEFILE="Makefile.coeos"
 	
@@ -81,11 +81,11 @@ do
 	
 	# Initialisation des libs, includes et flags
 	LIBS="$GTKLIB -lmxml -lm -ldl"
-	INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$SIMULATOR_PATH/shared/include -I$PWD/include -I$PWD/include/shared -I."
+	INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$SIMULATOR_PATH/shared/include -I$PWD/include -I$PWD/include/shared -I. -I$HOME/.local/include"
 
 	#Version finale des libs, includes et flags
 	FINALINCLUDES="$INCLUDES"
-	FINALLIBS="-L$SCRIPTLIBPATH -lscript_symb -L$GRAPHICLIBPATH -l${GRAPHICLIB} $LIBS"
+	FINALLIBS="-L$SCRIPTLIBPATH -lscript_symb -L$GRAPHICLIBPATH -l${GRAPHICLIB} $LIBS -L$HOME/.local/lib -lblc"
 	
 	OBJDIR=$OBJPATH/$PROG_NAME
 	
