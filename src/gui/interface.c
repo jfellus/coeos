@@ -178,7 +178,11 @@ type_lien_no_nom lien_no_nom_type_groupe[nbre_type_groupes] =
 { No_Selverston, "Selverston",
 { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } }, /* 45 */
 { No_RCO, "RankCodingOrder",
-{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } } /* 46:Alex */
+{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } }, /* 46:Alex */
+{ No_selective_winner_modulated, "Selective Winner Modulated",
+{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } }, /* 47 */
+{No_Kmean_R,"Kmean_R",
+{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } } /*48:Nils*/
 };
 
 static GtkToggleActionEntry menu_toggle_items[] =
@@ -577,6 +581,12 @@ void init_group_visibility_properties()
   t[No_item_tolerance] = t[No_item_alpha] = t[No_item_nbre_de_1] = t[No_item_sigma_f] = -1;
 
   t = lien_no_nom_type_groupe[No_SAW].editable;
+  t[No_item_noise_level] = -1;
+  t[No_item_dvp] = -1;
+  t[No_item_dvn] = -1;
+  t[No_item_tolerance] = t[No_item_sigma_f] = -1;
+
+  t = lien_no_nom_type_groupe[No_Kmean_R].editable;
   t[No_item_noise_level] = -1;
   t[No_item_dvp] = -1;
   t[No_item_dvn] = -1;
