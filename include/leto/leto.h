@@ -47,6 +47,7 @@ extern void select_plane(int plane,TxDonneesFenetre *onglet_leto);
 extern int gere_modification_lien(t_gennet_script *script_gui);
 
 extern void automatic_group_rename(t_gennet_script *script_gui);
+extern void automatic_group_comment(t_gennet_script *script_gui);
 
 void script_slide(donnees_script *script, TxPoint translation);
 void script_zoom(donnees_script *script, TxPoint center, float scale);

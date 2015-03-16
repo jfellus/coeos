@@ -73,6 +73,8 @@ type_group_function_pointers NN_Core_function_pointers[] =
 { "f_seuil_et_memoire", NULL, NULL, NULL, NULL, NULL, -1, -1 },
 { "f_ctrnn", NULL, NULL, NULL, NULL, NULL, -1, -1 },
 { "f_lissage_temp", NULL, NULL, NULL, NULL, NULL, -1, -1 },
+{ "f_fin_echelle", NULL, NULL, NULL, NULL, NULL, -1, -1 },
+
 
 /* pour indiquer la fin du tableau*/
 { NULL, NULL, NULL, NULL, NULL, NULL, -1, -1 } };
@@ -258,6 +260,7 @@ static GtkActionEntry menu_items[] =
     { "/Group/_New", GTK_STOCK_ADD, "_New group", "<Release>G", "New", G_CALLBACK(creation_groupe) },
     { "/Group/_Modify", NULL, "_Modify", "<Release>M", NULL, G_CALLBACK(modify_callback) },
     { "/Group/_Automatic rename", NULL, "_Automatic rename", "<Control>A", NULL, G_CALLBACK(automatic_rename_callback) },
+    { "/Group/_Automatic comment", NULL, "_Automatic comment", "<Control>u", NULL, G_CALLBACK(automatic_comment_callback) },
     { "/Group/_Delete", GTK_STOCK_DELETE, "_Delete", "<Release>Delete", "Delete", G_CALLBACK(delete_callback) },
     { "/Group/_Reverse", GTK_STOCK_REDO, "_Reverse", "<Release>R", "Reverse", G_CALLBACK(fonction_reverse) },
     { "/_Link", NULL, "_Link", NULL, NULL, NULL },

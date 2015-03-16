@@ -145,6 +145,8 @@ void about();
 
 void modify_callback(GtkWidget * widget,  t_gennet_script *script_gui);
 void automatic_rename_callback(GtkWidget * widget, t_gennet_script *script_gui);
+void automatic_comment_callback(GtkWidget * widget, t_gennet_script *script_gui);
+
 void delete_callback(GtkWidget * widget, gpointer data);
 
 void dupliquer_coude_callback(GtkWidget * widget, gpointer data);

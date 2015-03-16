@@ -336,6 +336,28 @@ void automatic_group_rename(t_gennet_script *script_gui)
 
 }
 
+void automatic_group_comment(t_gennet_script *script_gui)
+{
+  selected_group *sel_group;
+  void *x;
+  char temp_name[255] = "";
+  int index = 0;
+
+  for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
+  {
+    if(sel_group->group->nom[0]!='%') /*COMMENT*/
+    {
+      sprintf(temp_name, "%%%s", sel_group->group->nom);
+      strcpy(sel_group->group->nom, temp_name);
+    }
+    else /*UNCOMMENT*/
+    {
+      sprintf(temp_name, "%s", sel_group->group->nom);
+      strcpy(sel_group->group->nom, temp_name+1);
+    }
+  }
+}
+
 /*------------------------------------------------------------------*/
 void detruit_groupe(type_groupe *group, TxDonneesFenetre *onglet_leto)
 {

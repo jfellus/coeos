@@ -1908,6 +1908,30 @@ void automatic_rename_callback(GtkWidget * widget, t_gennet_script *script_gui)
 }
 
 /**
+ * Callback to automatically comment groups
+ */
+void automatic_comment_callback(GtkWidget * widget, t_gennet_script *script_gui)
+{
+    TxDonneesFenetre *onglet_leto = script_gui->onglet_leto;
+
+#ifndef LETO
+    /* controle si on est dans un onglet Leto
+     * ( l'onglet Metaleto etant le numero 0 )
+     */
+    if (tab_is_Metaleto(onglet_leto) == 0) return;
+#endif
+
+    (void) widget;
+    if (sc->groupes_courants != NULL)
+    {
+        automatic_group_comment(script_gui);
+        show_status(onglet_leto, "Group(s) commented");
+    }
+
+    regenerer_test(script_gui->onglet_leto);
+}
+
+/**
  * Callback to delete a group or a link.
  */
 void delete_callback(GtkWidget * widget, gpointer data)

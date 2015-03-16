@@ -58,6 +58,7 @@
       <separator />
       <menuitem name="_Reverse" action="/Group/_Reverse" />
       <menuitem name="_Automatic rename" action="/Group/_Automatic rename" />
+      <menuitem name="_Automatic comment" action="/Group/_Automatic comment" />
     </menu>
     <menu name="_Link" action="/_Link">
       <menuitem name="_New" action="/Link/_New" />
@@ -108,6 +109,7 @@
 	  <separator />
 	  <menuitem name="_Reverse" action="/Group/_Reverse" /> 
 	  <menuitem name="_Automatic rename" action="/Group/_Automatic rename" />
+	  <menuitem name="_Automatic comment" action="/Group/_Automatic comment" />
   </popup>
 
   <popup name="popupLink">
