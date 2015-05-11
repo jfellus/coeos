@@ -81,7 +81,7 @@ do
 	
 	# Initialisation des libs, includes et flags
 	LIBS="$GTKLIB -lmxml -lm -ldl"
-	INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$SIMULATOR_PATH/shared/include -I$PWD/include -I$PWD/include/shared -I. -I$HOME/.local/include"
+	INCLUDES="$GTKINCLUDES -I$PWD/include/leto -I$SIMULATOR_PATH/shared/include -I$PWD/include -I$PWD/include/shared -I. -I$HOME/.local/include -I$SIMULATOR_PATH/prom_kernel/include/network"
 
 	#Version finale des libs, includes et flags
 	FINALINCLUDES="$INCLUDES"
