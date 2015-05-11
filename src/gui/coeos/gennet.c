@@ -512,7 +512,6 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *script_gui)
 
 	/* On memorise le chemin du script */
 	script_path_symb = promnet_prom_script_get_argument(prom_script, prom_script->path_file_symb);
-
 	script_path_script = promnet_prom_script_get_argument(prom_script, prom_script->path_file_script);
 
 	/* cas ou il n'y a pas de chemin de definis */
@@ -568,7 +567,6 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *script_gui)
 		}
 	}
 
-
 	/* On memorise le chemin du script */
 	nom_script_draw = promnet_prom_script_get_argument(prom_script, prom_script->path_file_draw);
 
@@ -611,19 +609,9 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *script_gui)
 
 	/* On memorise le chemin du reseau */
 	nom_script_res = promnet_prom_script_get_argument(prom_script, prom_script->path_file_res);
-		
-	/* On memorise le chemin du .var */
-	
 
-	if( strlen(prom_script->path_file_var) == 0 )
-	{
-		nom_script_var =  gen->promnet->global->var;
-	//		printf("PATH VAR |%s| %d   \n", nom_script_var, strlen(nom_script_var));
-	}
-	else
-	{
-			nom_script_var = promnet_prom_script_get_argument(prom_script, prom_script->path_file_var);
-	}
+	/* On memorise le chemin du .var */
+	nom_script_var = promnet_prom_script_get_argument(prom_script, prom_script->path_file_var);
 
 	/*** Controle si le script n'est pas deja ouvert, cela est utile uniquement 
 	 *** si le nombre d'onglet genere par gtk est superieur a 1 
@@ -729,13 +717,10 @@ void Edit_Script_With_Leto(t_gennet *gen, t_gennet_script *script_gui)
 		nom_script_res = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
 		strcpy(nom_script_res, tmp_path);
 
-		if( strlen(prom_script->path_file_var) != 0 )
-		{
-			snprintf(tmp_path, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, nom_script_var);
-			free(nom_script_var);
-			nom_script_var = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
-			strcpy(nom_script_var, tmp_path);
-		}
+		snprintf(tmp_path, PATH_MAX, "%s/%s", prom_script->path_prom_deploy, nom_script_var);
+		free(nom_script_var);
+		nom_script_var = MANY_ALLOCATIONS(strlen(tmp_path)+1, char);
+		strcpy(nom_script_var, tmp_path);
 
 		strcpy(les_scripts[idx].directory, prom_script->path_prom_deploy);
 
@@ -1616,7 +1601,6 @@ t_gennet_script *find_receive_script_by_network_liaison_name(t_gennet *gen, char
 	type_liaison *liaison_recv = NULL;
 	type_groupe *groupe_recv = NULL;
 
-
 	memset(lname, 0, LETO_LIAISON_NAME_SIZE * sizeof(char));
 	name = strstr(liaison_name, LETO_NETWORK_OPTION_SEPARATOR);
 	if (name != NULL)
@@ -1630,14 +1614,12 @@ t_gennet_script *find_receive_script_by_network_liaison_name(t_gennet *gen, char
 
 	for (script = gen->scripts; script != NULL; script = script->next)
 	{
-
 		if (script->sc == NULL)
 		{
 			Edit_Script_With_Leto(gen, script);
 		}
 		liaison_recv = script->sc->deb_liaison;
 		liaison_recv = find_liaison_by_name(liaison_recv, lname);
-
 		if (liaison_recv == NULL)
 		{
 			continue;
