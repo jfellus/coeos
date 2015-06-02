@@ -49,12 +49,12 @@ The fact that you are presently reading this means that you have had knowledge o
 #include "creation.h"
 
 #include <locale.h>
-
+/*
 void vkprints(const char *fmt, va_list ap)
 {
 	vfprintf(stdout, fmt, ap);
 }
-
+*/
 void kprints(const char *fmt, ...) /* version simplifiee du kernel pour permettre la compilation des librairies*/
 {
 	va_list ap;
@@ -62,7 +62,7 @@ void kprints(const char *fmt, ...) /* version simplifiee du kernel pour permettr
 	vfprintf(stdout, fmt, ap);
 	va_end(ap);
 }
-
+/*
 void print_warning(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
 {
 	va_list arguments;
@@ -84,7 +84,7 @@ void fatal_error(const char *name_of_file, const char* name_of_function, int num
 	va_end(arguments);
 	exit(EXIT_FAILURE);
 }
-
+*/
 
 /*---------------------------------------------------------------*/
 /*                      PROG PRINCIPAL                           */

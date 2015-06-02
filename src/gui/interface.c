@@ -324,7 +324,7 @@ void kprints(const char *fmt, ...) /* version simplifiee du kernel pour permettr
     vfprintf(stdout, fmt, ap);
     va_end(ap);
 }
-
+/*
 void print_warning(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
 {
     va_list arguments;
@@ -346,11 +346,13 @@ void fatal_error(const char *name_of_file, const char* name_of_function, int num
     raise(SIGABRT);
     exit(EXIT_FAILURE);
 }
-
+*/
 /*
  * Envoie un message d'erreur avec name_of_file, name_of_function, number_of_line et affiche le message formate avec les parametres variables.
  * Puis exit le programme avec le parametre EXIT_FAILURE.
  */
+
+/* 
 void fatal_system_error(const char *name_of_file, const char* name_of_function, int numero_of_line, const char *message, ...)
 {
     va_list arguments;
@@ -363,7 +365,7 @@ void fatal_system_error(const char *name_of_file, const char* name_of_function, 
     va_end(arguments);
     exit(EXIT_FAILURE);
 }
-
+*/
 
 /* Permet de recuperer le menu_items dans d'autres sources */
 void get_menu_items(GtkActionEntry *menu)

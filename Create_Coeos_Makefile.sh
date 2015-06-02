@@ -85,7 +85,7 @@ do
 
 	#Version finale des libs, includes et flags
 	FINALINCLUDES="$INCLUDES"
-	FINALLIBS="-L$SCRIPTLIBPATH -lscript_symb -L$GRAPHICLIBPATH -l${GRAPHICLIB} $LIBS -L$HOME/.local/lib -lblc"
+	FINALLIBS="-L$SCRIPTLIBPATH -lscript_symb -L$GRAPHICLIBPATH -l${GRAPHICLIB} $LIBS -L../lib/Linux/blc/ -lblc"
 	
 	OBJDIR=$OBJPATH/$PROG_NAME
 	

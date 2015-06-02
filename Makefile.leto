@@ -31,8 +31,10 @@ include ../scripts/local_config.mk
 
 SOURCES:=$(wildcard src/*.c) $(wildcard src/gui/*.c) $(wildcard src/gui/leto/*.c)
 OBJECTS:=$(notdir $(patsubst %.c,%.o,$(SOURCES)))
-INCLUDES:=-I../shared/include  -I../enet/include  -I.. $(GTK_INCLUDES) -Iinclude/leto -Iinclude -Isrc/gui/leto -Isrc/gui -I$$HOME/.local/include -I../prom_kernel/include/network
-LIBS:=  -L../lib/$(system)/script -lscript -L../lib/$(system)/graphique -lgraphique -lmxml $(GTK_LIBS) -ldl -lm -L$$HOME/.local/lib -lblc
+#INCLUDES:=-I../shared/include  -I../enet/include  -I.. $(GTK_INCLUDES) -Iinclude/leto -Iinclude -Isrc/gui/leto -Isrc/gui -I$$HOME/.local/include -I../prom_kernel/include/network
+INCLUDES:=-I../shared/include  -I../enet/include  -I.. $(GTK_INCLUDES) -Iinclude/leto -Iinclude -Isrc/gui/leto -Isrc/gui  -I../prom_kernel/include/network
+
+LIBS:=  -L../lib/$(system)/script -lscript -L../lib/$(system)/graphique -lgraphique -lmxml $(GTK_LIBS) -ldl -lm -L../lib/$(system)/blc -lblc
 CFLAGS:=$(CFLAGS) -DLETO -rdynamic
 
 debug_objdir:=$(objdir)/$(PROGRAM)/debug
