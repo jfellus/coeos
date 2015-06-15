@@ -406,7 +406,7 @@ int compte_neurone()
 		}
 		if (nbre_voie > 1
 				&& (groupe->type == No_PTM || groupe->type == No_Winner_Macro || groupe->type == No_PLG || groupe->type == No_Winner_Colonne || groupe->type == No_But || groupe->type == No_Pyramidal || groupe->type == No_Pyramidal_plan
-						|| groupe->type == No_Sigma_PI || groupe->type == No_Macro_Colonne || groupe->type == No_KO_Discret || groupe->type == No_KO_Continu || groupe->type == No_Selverston))
+						|| groupe->type == No_Sigma_PI || groupe->type == No_Macro_Colonne || groupe->type == No_KO_Discret || groupe->type == No_KO_Continu || groupe->type == No_Selverston || groupe->type == No_selective_winner_modulated))
 		{
 			/* #ifndef SYMBOLIQUE_VERSION */
 			/*             groupe->nbre = */
