@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
 
 	script_load(sc, sc->nomfich1, 1, NULL);  /* lecture recursive a priori */
 	dprints("\nscript read: starting res file generation\n");
-	creation(NULL,(char*) (intptr_t) flag_save_res);
+	creation(NULL, flag_save_res);
 	/*   ecrit_reseau();
 	 save_script(1,1);*/ /* on garde les commentaires , 0 pour les enlever*/
 	/* on sauvegarde les groupes et liens des sous reseau (tout mis a plat) pour promethe */

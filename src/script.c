@@ -77,7 +77,7 @@ void script_backup(donnees_script *script)
   fprintf(file, "nombre de groupes = %d\n", groups_nb);
   for (group = script->deb_groupe; group != NULL; group = group->s)
   {
-    write_one_group(file, group, 1);
+    write_one_group(file, group, 1, script->infos_xyz[group->no-1]);
   }
   save_comment(file, script->first_comment_link);
   fprintf(file, "nombre de liaisons = %d\n", links_nb);
@@ -289,6 +289,8 @@ int compte_nbre_liaison_propre_au_script(int selection, TxDonneesFenetre *onglet
   return nbre_liaison_propre_au_script;
 }
 
+
+
 void script_load(donnees_script *script, char *filename, int recursive_load, struct hsearch_data *hash_table)
 {
   FILE *file;
@@ -296,6 +298,7 @@ void script_load(donnees_script *script, char *filename, int recursive_load, str
   int i, reverse, selected_plane;
   type_groupe *group;
   type_liaison *group_link;
+  char* retour_xyz=NULL;
   static char ligne[TAILLE_CHAINE];
 
   file = fopen(filename, "r");
@@ -317,13 +320,20 @@ void script_load(donnees_script *script, char *filename, int recursive_load, str
   {
     recursive_load = 0;
   }
+  sc->infos_xyz=MANY_ALLOCATIONS(1000,char*); // en attendant !
+  printf("Nombre de groupe = %d\n",sc->nbre_groupe);
+  for(i=0;i<1000;i++)
+  {
+    sc->infos_xyz[i]=NULL;
+  }
 
   for (i = 0; i < script->nbre_groupe; i++)
   {
     if (i != 0) script->fin_groupe = group = creer_groupeb(script->fin_groupe);
     else group = script->deb_groupe = script->fin_groupe = creer_groupeb(NULL);
 
-    script->nbre_neurone += read_one_group_leto(file, group, NULL, hash_table);
+
+    script->nbre_neurone += read_one_group_leto(file, group, NULL, hash_table,&(sc->infos_xyz[i]));
 
     /* gestion de la lecture d'un sous reseau */
     if (group->type == No_Sub_Network && recursive_load == 1)
@@ -411,6 +421,7 @@ void lecture(int recursive_load, TxDonneesFenetre *onglet_leto)
   sc->first_comment_group = (type_noeud_comment *) read_line_with_comment(f1, NULL, ligne);
 
   sscanf(ligne, "nombre de groupes = %d\n", &sc->nbre_groupe);
+  printf("Nombre de groupe = %d\n",sc->nbre_groupe);
   if (sc->first_comment_group != NULL && strstr(sc->first_comment_group->chaine, "!ignore_include") != NULL)
   {
 
@@ -420,12 +431,19 @@ void lecture(int recursive_load, TxDonneesFenetre *onglet_leto)
     }
   }
 
+  sc->infos_xyz=MANY_ALLOCATIONS(1000,char*);
+  for(i=0;i<1000;i++)
+  {
+    sc->infos_xyz[i]=NULL;
+  }
+
+
   for (i = 0; i < sc->nbre_groupe; i++)
   {
     if (i != 0) sc->fin_groupe = groupe = creer_groupeb(sc->fin_groupe);
     else groupe = sc->deb_groupe = sc->fin_groupe = creer_groupeb(NULL);
 
-    sc->nbre_neurone += read_one_group_leto(f1, groupe, NULL, onglet_leto->hashtab);
+    sc->nbre_neurone += read_one_group_leto(f1, groupe, NULL, onglet_leto->hashtab,&(sc->infos_xyz[i]));
 
     /* gestion de la lecture d'un sous reseau */
     if (groupe->type == No_Sub_Network && recursive_load == 1)
@@ -435,12 +453,13 @@ void lecture(int recursive_load, TxDonneesFenetre *onglet_leto)
       if (groupe->reverse > 0) reverse = 1;
       else reverse = -1;
       groupe->reverse = reverse * selected_plane; /* plan >100 pour tout bouger ensemble */
+      PRINT_WARNING("Les densites perso sont incompatible avec les macro-scripts pour le moment !\n");
     }
 
     groupe->deja_active = 0; /* c'est un groupe en direct de ce script, non un groupe insere */
   }
-  sc->nbre_groupes_lus = nbre_groupes_lus = sc->nbre_groupe;
 
+  sc->nbre_groupes_lus = nbre_groupes_lus = sc->nbre_groupe;
 
   sc->first_comment_link = (type_noeud_comment *) read_line_with_comment(f1, NULL, ligne);
 
@@ -482,6 +501,7 @@ void lecture(int recursive_load, TxDonneesFenetre *onglet_leto)
   script_backup(sc);
 #endif
   sc->premiere_lecture = 0;
+
 }
 
 /* insert a script or a macro, return 0 if nothing can be read */
@@ -574,7 +594,7 @@ int read_macro(char *base_base, char *nom, int px, int py, int relatif, int mode
     groupe_local = (type_groupe *) creer_groupeb(groupe_local);
     if (sc->deb_groupe == NULL) sc->deb_groupe = groupe_local; /* c'est le 1er groupe lu */
 
-    sc->nbre_neurone += read_one_group_leto(f1, groupe_local, base_nom_complet, hash_table);
+    sc->nbre_neurone += read_one_group_leto(f1, groupe_local, base_nom_complet, hash_table, NULL);
 
     if (debut_macro == NULL) debut_macro = groupe_local;
     sc->fin_groupe = groupe_local;
@@ -707,7 +727,7 @@ void save_script(int comment, int save_sub_networks, TxDonneesFenetre *onglet_le
   groupe = sc->deb_groupe;
   while (groupe != NULL)
   {
-    if (save_sub_networks == 1 || groupe->deja_active == 0) write_one_group(f1, groupe, comment);
+    if (save_sub_networks == 1 || groupe->deja_active == 0) write_one_group(f1, groupe, comment, sc->infos_xyz[groupe->no-1]);
     groupe = groupe->s;
   }
 
@@ -778,7 +798,7 @@ void save_script_selected(int comment, int save_sub_networks, char *nom, TxDonne
 
   for (sel_group = sc->groupes_courants; sel_group != NULL; sel_group = sel_group->next)
   {
-    if (save_sub_networks == 1 || sel_group->group->deja_active == 0) write_one_group(f1, sel_group->group, comment);
+    if (save_sub_networks == 1 || sel_group->group->deja_active == 0) write_one_group(f1, sel_group->group, comment, sc->infos_xyz[sel_group->group->no-1]);
   }
 
   if (comment == 1 && sc->first_comment_link != NULL) save_comment(f1, sc->first_comment_link);

@@ -381,13 +381,11 @@ void DessinerLiaison(int id, type_liaison * liaison, type_groupe * groupe1,
     point1.x = point2.x;
     point1.y = point2.y;
 
-    if (liaison->type == No_l_algorithmique
-        || liaison->type == No_l_neuro_mod)
+    if (liaison->type == No_l_algorithmique || liaison->type == No_l_neuro_mod || liaison->type == No_l_1_patern_modif || liaison->type == No_l_1_patern_non_modif)
         EcrireChaine(id, couleur_texte, point1, liaison->nom, NULL);
 
     point1.x = point2.x + 14;
-    if (liaison->type != No_l_algorithmique
-        && liaison->type != No_l_neuro_mod)
+    if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod && liaison->type != No_l_1_patern_modif && liaison->type != No_l_1_patern_non_modif)
     {
         if (liaison->mode == 0 || liaison->mode == 2)
             EcrireChaine(id, couleur_texte, point1, "X", NULL);
@@ -412,8 +410,7 @@ void DessinerLiaison(int id, type_liaison * liaison, type_groupe * groupe1,
 
 
     point1.x = point1.x + 10;
-    if (liaison->type != No_l_algorithmique
-        && liaison->type != No_l_neuro_mod)
+    if (liaison->type != No_l_algorithmique && liaison->type != No_l_neuro_mod && liaison->type != No_l_1_patern_modif && liaison->type != No_l_1_patern_non_modif)
         EcrireChaine(id, couleur_texte, point1, liaison->nom, NULL);
 
 

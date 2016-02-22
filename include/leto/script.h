@@ -148,6 +148,7 @@ typedef struct donnees_script
   int backup_id;
 
   long int seed;
+  char** infos_xyz;
 } donnees_script;
 
 extern donnees_script les_scripts[NB_MAX_SCRIPTS];
@@ -237,5 +238,5 @@ void initialise_liaisons();
 /* fonction a moi */
 extern void get_base_path_name(char *filename);
 extern void get_base_name(char *filename);
-
+void creer_liaison_1_vers_patern_neurone(donnees_script *sc,type_groupe * groupe, type_liaison * liaison, int no_premier_neurone, int pas, int pas_entree, int no_voie, int no_gpe_liaison, int s_deb, int s_fin, int e_deb, int e_fin, int *pos1);
 #endif

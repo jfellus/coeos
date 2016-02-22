@@ -279,7 +279,7 @@ void affiche_parametres_liaison(type_liaison *liaison, TxPoint point2, TxDonnees
     font_weight = (char*)"bold";
   }
 
-  if (liaison->type == No_l_algorithmique || liaison->type == No_l_neuro_mod)
+  if (liaison->type == No_l_algorithmique || liaison->type == No_l_neuro_mod || liaison->type == No_l_1_patern_non_modif || liaison->type == No_l_1_patern_modif)
   {
     TxEcrireChaine(onglet_leto, lut_l[type]/*sc->couleur_texte*/, point1, liaison->nom, font_weight);
   }

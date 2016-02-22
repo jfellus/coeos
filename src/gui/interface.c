@@ -184,7 +184,9 @@ type_lien_no_nom lien_no_nom_type_groupe[nbre_type_groupes] =
 { No_selective_winner_modulated, "Selective Winner Modulated",
 { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } }, /* 47 */
 {No_Kmean_R,"Kmean_R",
-{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } } /*48:Nils*/
+{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } }, /*48:Nils*/
+{No_CTRNN2,"CTRNN2",
+{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } } /*49:Nils*/
 };
 
 static GtkToggleActionEntry menu_toggle_items[] =
@@ -1257,6 +1259,10 @@ type_lien_no_nom lien_no_nom_type_link[nbre_type_links] =
 { No_l_1_v_non_modif, "one to neighborhood (NON modifiable)",
 { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } },
 { No_l_neuro_mod, "global neuro modulation link (virtual)",
+{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } },
+{ No_l_1_patern_non_modif, "one to patern (non modifiable)",
+{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } },
+{ No_l_1_patern_modif, "one to patern (modifiable)",
 { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } } };
 
 void init_link_visibility_properties()
@@ -1286,6 +1292,8 @@ void init_link_visibility_properties()
   lien_no_nom_type_link[No_l_1_t].editable[No_item_link_proba] = 1;
 
   lien_no_nom_type_link[No_l_algorithmique].editable[No_item_link_name] = 1;
+  lien_no_nom_type_link[No_l_1_patern_modif].editable[No_item_link_name] = 1;
+  lien_no_nom_type_link[No_l_1_patern_non_modif].editable[No_item_link_name] = 1;
   lien_no_nom_type_link[No_l_neuro_mod].editable[No_item_link_name] = 1;
   lien_no_nom_type_link[No_l_1_1_non_modif_bloqueur].editable[No_item_link_name] = 1;
 

@@ -1,24 +1,24 @@
 /*
-Copyright  ETIS — ENSEA, Université de Cergy-Pontoise, CNRS (1991-2014)
-promethe@ensea.fr
+ Copyright  ETIS — ENSEA, Université de Cergy-Pontoise, CNRS (1991-2014)
+ promethe@ensea.fr
 
-Authors: P. Andry, J.C. Baccon, D. Bailly, A. Blanchard, S. Boucena, A. Chatty, N. Cuperlier, P. Delarboulas, P. Gaussier, 
-C. Giovannangeli, C. Grand, L. Hafemeister, C. Hasson, S.K. Hasnain, S. Hanoune, J. Hirel, A. Jauffret, C. Joulain, A. Karaouzène,  
-M. Lagarde, S. Leprêtre, M. Maillard, B. Miramond, S. Moga, G. Mostafaoui, A. Pitti, K. Prepin, M. Quoy, A. de Rengervé, A. Revel ...
+ Authors: P. Andry, J.C. Baccon, D. Bailly, A. Blanchard, S. Boucena, A. Chatty, N. Cuperlier, P. Delarboulas, P. Gaussier,
+ C. Giovannangeli, C. Grand, L. Hafemeister, C. Hasson, S.K. Hasnain, S. Hanoune, J. Hirel, A. Jauffret, C. Joulain, A. Karaouzène,
+ M. Lagarde, S. Leprêtre, M. Maillard, B. Miramond, S. Moga, G. Mostafaoui, A. Pitti, K. Prepin, M. Quoy, A. de Rengervé, A. Revel ...
 
-See more details and updates in the file AUTHORS 
+ See more details and updates in the file AUTHORS
 
-This software is a computer program whose purpose is to simulate neural networks and control robots or simulations.
-This software is governed by the CeCILL v2.1 license under French law and abiding by the rules of distribution of free software. 
-You can use, modify and/ or redistribute the software under the terms of the CeCILL v2.1 license as circulated by CEA, CNRS and INRIA at the following URL "http://www.cecill.info".
-As a counterpart to the access to the source code and  rights to copy, modify and redistribute granted by the license, 
-users are provided only with a limited warranty and the software's author, the holder of the economic rights,  and the successive licensors have only limited liability. 
-In this respect, the user's attention is drawn to the risks associated with loading, using, modifying and/or developing or reproducing the software by the user in light of its specific status of free software, 
-that may mean  that it is complicated to manipulate, and that also therefore means that it is reserved for developers and experienced professionals having in-depth computer knowledge. 
-Users are therefore encouraged to load and test the software's suitability as regards their requirements in conditions enabling the security of their systems and/or data to be ensured 
-and, more generally, to use and operate it in the same conditions as regards security. 
-The fact that you are presently reading this means that you have had knowledge of the CeCILL v2.1 license and that you accept its terms.
-*/
+ This software is a computer program whose purpose is to simulate neural networks and control robots or simulations.
+ This software is governed by the CeCILL v2.1 license under French law and abiding by the rules of distribution of free software.
+ You can use, modify and/ or redistribute the software under the terms of the CeCILL v2.1 license as circulated by CEA, CNRS and INRIA at the following URL "http://www.cecill.info".
+ As a counterpart to the access to the source code and  rights to copy, modify and redistribute granted by the license,
+ users are provided only with a limited warranty and the software's author, the holder of the economic rights,  and the successive licensors have only limited liability.
+ In this respect, the user's attention is drawn to the risks associated with loading, using, modifying and/or developing or reproducing the software by the user in light of its specific status of free software,
+ that may mean  that it is complicated to manipulate, and that also therefore means that it is reserved for developers and experienced professionals having in-depth computer knowledge.
+ Users are therefore encouraged to load and test the software's suitability as regards their requirements in conditions enabling the security of their systems and/or data to be ensured
+ and, more generally, to use and operate it in the same conditions as regards security.
+ The fact that you are presently reading this means that you have had knowledge of the CeCILL v2.1 license and that you accept its terms.
+ */
 #include <stdio.h>
 #include <math.h>
 
@@ -28,6 +28,7 @@ The fact that you are presently reading this means that you have had knowledge o
 #include "script.h"
 #include "reseau.h"
 #include "outils.h"
+#include <limits.h>
 
 int liste[100000]; /* tableau contenant la liste des liens tires au hasard lors de la creation de liens aleatoires*/
 /* pour eviter de retirer plusieurs fois le meme lien */
@@ -138,7 +139,6 @@ void ecrit_reseau()
     exit(1);
   }
 
-
   fprintf(f1, "Reseau de neurone\n");
   fprintf(f1, "Copyright Philippe GAUSSIER oct 1991\n");
 
@@ -187,7 +187,7 @@ void ecrit_reseau()
 
       if (pt == NULL)
       {
-       fwrite(&statut_fin, taille_char, 1, f1);
+        fwrite(&statut_fin, taille_char, 1, f1);
       }
       else
       {
@@ -529,7 +529,7 @@ void init_corps_neurone(type_groupe * groupe, int j)
   } /* PG ce n'est pas tres propre utilser le groupe !!! */
   if (groupe->type == No_SAW)
   {
-      sc->neurone[j].seuil = 0.;
+    sc->neurone[j].seuil = 0.;
   } /* PG ce n'est pas tres propre utilser le groupe !!! */
   if (groupe->type == No_Special)
   {
@@ -554,6 +554,317 @@ void init_corps_neurone(type_groupe * groupe, int j)
   {
     init_seuils_alea_gauss(j, seuil, tolerance);
   }
+}
+
+
+
+
+void creer_liaison_a_b(donnees_script *sc, type_liaison * liaison, float val, int no_neurone_depart, int no_neurone_arrive, int no_voie)
+{
+  type_coeff *pt, *pt1;
+  if (sc->neurone[no_neurone_arrive].coeff == NULL)
+    {
+    pt = creer_coeff();
+    sc->neurone[no_neurone_arrive].coeff = pt;
+    }
+  else
+  {
+    pt1 = pointe_vers_dernier(no_neurone_arrive);
+     pt = creer_coeff();
+     pt1->s = pt;
+  }
+  if (liaison->type == No_l_1_patern_non_modif)
+    {
+      pt->type = no_voie + liaison->mode;
+      pt->evolution = 0;
+    }
+  else if (liaison->type == No_l_1_patern_modif)
+    {
+      pt->type = no_voie + 1;
+      pt->evolution = 1;
+    }
+  //printf("CREATION LIENS ENTRE NEURO no_neurone_depart = %d et no_neurone_arrive=%d\n",no_neurone_depart,no_neurone_arrive);
+  pt->entree = no_neurone_depart;
+  pt->val = val;
+  pt->proba = 0.5;
+}
+
+/*--------------------------------------------------*/
+/*                 liaisons 1 vers 1                */
+/*--------------------------------------------------*/
+
+/* pos1 numero du neurone dans le groupe d'entree a associer (doit etre global car son increment est global) */
+/* le numero du neurone peut etre modifie par la fonction: cas moins de neurone en sortie qu'en entree */
+
+void creer_liaison_1_vers_patern_neurone(donnees_script *sc, type_groupe * groupe, type_liaison * liaison, int no_premier_neurone, int pas, int pas_entree, int no_voie, int no_gpe_liaison, int s_deb, int s_fin, int e_deb, int e_fin, int *pos1) //argument à nettoyer, peu d'utile
+{
+#define BUFF_MAX 1024
+  char nom_fichier[NAME_MAX];
+  char path_fichier[PATH_MAX];
+  char* buffer_matrice=NULL;
+  char buffer_matrice2[BUFF_MAX];
+  char buffer_cara[10];
+  float norme,valeur;
+  FILE* fichier = NULL;
+  char cara, cara2;
+  int no_neurone_vise_maintenant_x=0,no_neurone_vise_maintenant_y=0,no_neurone_vise_maintenant=0,stop=0;
+  int no_neurone_origine_first, no_neurone_origine_last, centre_x_patern, centre_y_patern, no_neuro_vise, i;
+  float posi_relative_entree_x=0,posi_relative_entree_y=0;
+  int ligne = 1, ret2, emplacement, ancien_emplacement, nbre_coeff_x_traite, nbre_coeff_y_traite,no_neurone_vise_y=-1,no_neurone_vise_x=-1,decalagex=0,decalagey=0;
+  int inverse=0;
+  type_groupe * groupe_entree_actuel;
+  type_groupe * groupe_actuel;
+
+  type_groupe* groupe_entree=trouver_groupe(liaison->depart);
+
+
+  norme = MY_Float2Float(liaison->norme);
+  strcpy(path_fichier, sc->directory);
+
+ // printf("%s\n",liaison->nom);
+  if (sscanf(liaison->nom, "%[^'.'].patern", nom_fichier) != 1)
+  {
+    EXIT_ON_ERROR("Verifiez que le .patern est bien definis en nom du liens patern en entree du groupe %s", groupe->no_name);
+  }
+ // printf("%s\n",nom_fichier);
+  strcat(nom_fichier, ".patern");
+ // strcat(path_fichier, nom_fichier);
+
+  //printf("%s\n",nom_fichier);
+  fichier = fopen(nom_fichier, "r");
+  if (fichier == NULL)
+  {
+    EXIT_ON_ERROR("Fichier fournis pour le groupe %s non-trouve", groupe->no_name);
+  }
+
+// rajouter ici init du groupe de sortie (groupe) init_corps_neurone(groupe, j);!
+
+  groupe_entree_actuel=groupe_entree;
+  groupe_actuel=groupe;
+
+  while ((cara = fgetc(fichier)) != EOF)
+  {
+    inverse = 0;
+    if(cara == 'i')
+    {
+      cara = fgetc(fichier); // pour avoir le ; suivant
+      if (cara!=';') EXIT_ON_ERROR("format incorect, ; attendu après le i ligne %d", ligne);
+      cara = fgetc(fichier);
+    //  printf("carac = %c\n",cara);
+      inverse = 1;
+    }
+    //printf("inverse = %d\n",inverse);
+    if (inverse==1)
+    {
+      groupe_actuel=groupe_entree;
+      groupe_entree_actuel=groupe;
+    }
+    else
+    {
+      groupe_entree_actuel=groupe_entree;
+      groupe_actuel=groupe;
+    }
+
+    if (cara == '[')
+    {
+      ret2 = fscanf(fichier, "%d;%d];xc=%d;yc=%d", &no_neurone_origine_first, &no_neurone_origine_last, &centre_x_patern, &centre_y_patern);
+      if (ret2 != 4) EXIT_ON_ERROR("caractere incorect dans le .patern ligne %d, error no 1", ligne);
+      if(no_neurone_origine_first<0 || no_neurone_origine_last<0 || centre_x_patern<0 || centre_y_patern<0) EXIT_ON_ERROR("nombre negatif dans les no de neurones ligne %d , error no 1", ligne);
+    }
+    else if (sscanf(&cara, "%[0-9]", &cara2) == 1)
+    {
+      ungetc(cara, fichier);
+      ret2 = fscanf(fichier, "%d;xc=%d;yc=%d", &no_neurone_origine_first, &centre_x_patern, &centre_y_patern);
+      if (ret2 != 3) EXIT_ON_ERROR("caractere incorect dans le .patern ligne %d avec un ret2 de %d, error no 2", ligne,ret2);
+      if(no_neurone_origine_first<0 || centre_x_patern<0 || centre_y_patern<0) EXIT_ON_ERROR("nombre negatif dans les no de neurones ligne %d , error no 2", ligne);
+      no_neurone_origine_last = no_neurone_origine_first;
+    }
+    else
+    {
+      EXIT_ON_ERROR("caractere %c incorect dans le .patern , error no 3", cara);
+    }
+
+    cara2 = fgetc(fichier);
+    if (cara2 == ';')
+    {
+      ret2 = fscanf(fichier, "v=%d\n", &no_neuro_vise);
+      if (ret2 != 1) EXIT_ON_ERROR("caractere incorect dans le .patern ligne %d , error no 4", ligne);
+      if(no_neuro_vise>(MY_Int2Int(groupe_actuel->taillex)*MY_Int2Int(groupe_actuel->tailley))) EXIT_ON_ERROR("caractere incorect dans le .patern ligne %d , error no 5", ligne);
+      ligne++;
+    }
+    else if (cara2 == '\n')
+    {
+      no_neuro_vise = -1; //a calculer en dynamique proportionnel
+      ligne++;
+    }
+    else
+    {
+      EXIT_ON_ERROR("fin de ligne dans l'une des matrices chargee du .patern non valide (ni un numero ni un \n) : ligne %d", ligne);
+    }
+
+    //printf("no neuro_vise lecture= %d\n",no_neuro_vise);
+    if (no_neuro_vise!=-1)
+    {
+      no_neurone_vise_x=no_neuro_vise % MY_Int2Int(groupe_actuel->taillex);
+      //printf("no_neurone_vise_x_init = %d\n",no_neurone_vise_x);
+      no_neurone_vise_y=no_neuro_vise / MY_Int2Int(groupe_actuel->taillex);
+      //printf("no_neurone_vise_y_init = %d\n",no_neurone_vise_y);
+    }
+
+
+    nbre_coeff_x_traite = 0;
+    nbre_coeff_y_traite = 0;
+    buffer_matrice = fgets(buffer_matrice2, 1024, fichier);
+
+    while ((buffer_matrice != NULL))
+    {
+      nbre_coeff_x_traite=0;
+      //printf("buffer matrice = %s\n",buffer_matrice);
+      if (buffer_matrice[0] == ' ' || buffer_matrice[0] == '\n' || buffer_matrice[0] == EOF) break;
+
+      ret2 = sscanf(buffer_matrice, "%s %n", buffer_cara, &emplacement);
+      //printf("buffer cara_init = %s emplacement_init = %d\n",buffer_cara,emplacement);
+
+      while (ret2 == 1)
+      {
+        if (buffer_cara[0] == '#')
+        {
+          nbre_coeff_x_traite++;
+        }
+        else
+        {
+          valeur = strtof(buffer_cara, NULL);
+        //  printf("valeur = %f\n",valeur);
+          valeur=valeur*norme;
+
+        //  printf("nbre_coeff_x_traite = %d nbre_coeff_y_traite = %d\n",nbre_coeff_x_traite,nbre_coeff_y_traite);
+        //  printf("valeur*norme = %f\n",valeur);
+
+          decalagex=nbre_coeff_x_traite-centre_x_patern;
+          decalagey=nbre_coeff_y_traite-centre_y_patern;
+          //printf("decalagex = %d, centre_x_patern=%d decalagey = %d centre_y_patern=%d emplacement=%d\n",decalagex,centre_x_patern,decalagey,centre_y_patern,emplacement);
+
+          nbre_coeff_x_traite++; // on le met ici et non à la fin de la boucle pour qu'en cas de break de la boucle ce soit bien pris en compte
+
+
+          for(i=no_neurone_origine_first;i<=no_neurone_origine_last;i+=pas)
+          {
+            stop=0;
+              if(no_neuro_vise==-1)
+              {
+                if(MY_Int2Int(groupe_entree_actuel->taillex)>1)
+                posi_relative_entree_x=((float)(i%MY_Int2Int(groupe_entree_actuel->taillex)))/(float)((float)MY_Int2Int(groupe_entree_actuel->taillex)-1.0);
+                else
+                posi_relative_entree_x=0.0; // si le groupe est de taille 1 en x, on est forcement à 0.0 ou à 1.0 (indiferement) de la taille totale
+
+                if(MY_Int2Int(groupe_entree_actuel->tailley)>1)
+                posi_relative_entree_y=((float)(i/MY_Int2Int(groupe_entree_actuel->taillex)))/(float)((float)MY_Int2Int(groupe_entree_actuel->tailley)-1.0);
+                else
+                posi_relative_entree_y=0.0;
+
+            //    printf("neuro vise = -1 : i = %d,MY_Int2Int(groupe_entree->taillex) = %d MY_Int2Int(groupe_entree->tailley)=%d\n",i,MY_Int2Int(groupe_entree_actuel->taillex),MY_Int2Int(groupe_entree_actuel->tailley));
+                no_neurone_vise_x=(int)round(posi_relative_entree_x*((float)MY_Int2Int(groupe_actuel->taillex)-1.0));
+                no_neurone_vise_y=(int)round(posi_relative_entree_y*((float)MY_Int2Int(groupe_actuel->tailley)-1.0));
+              //  printf("neuro vise = -1 posi_relative_entree_x = %f,posi_relative_entree_y = %f no_neurone_vise_x=%d no_neurone_vise_y = %d\n",posi_relative_entree_x,posi_relative_entree_y,no_neurone_vise_x,no_neurone_vise_y);
+              }
+
+            if(no_neurone_vise_x<0) EXIT_ON_ERROR("no_neurone_vise_x < 0 dans leto_cle 2, probleme dans le link one to patern ligne %d du fichier .patern",ligne);
+            if(no_neurone_vise_y<0) EXIT_ON_ERROR("no_neurone_vise_y < 0 dans leto_cle 2, probleme dans le link one to patern ligne %d du fichier .patern",ligne);
+
+            no_neurone_vise_maintenant_x=no_neurone_vise_x+decalagex;
+            no_neurone_vise_maintenant_y=no_neurone_vise_y+decalagey;
+
+            //creation_lien depuis le neurone no_depart jusqu'au neurone
+            if (no_neurone_vise_maintenant_x>=MY_Int2Int(groupe_actuel->taillex) || no_neurone_vise_maintenant_y >= MY_Int2Int(groupe_actuel->tailley)) stop=1;
+
+            // printf("no_neurone_vise_maintenant_x avant break =%d no_neurone_vise_maintenant_y avant break = %d\n", no_neurone_vise_maintenant_x,no_neurone_vise_maintenant_y);
+            if(no_neurone_vise_maintenant_x<0) stop=1; // on ne construit pas le liens si on déborde avec le patern matriciel (comme une conv non circulaire)
+            if(no_neurone_vise_maintenant_y<0) stop=1; // on ne construit pas le liens si on déborde avec le patern matriciel (comme une conv non circulaire)
+
+           // printf("no_neurone_vise_maintenant_x = %d no_neurone_vise_maintenant_y = %d\n",no_neurone_vise_maintenant_x,no_neurone_vise_maintenant_y);
+
+            no_neurone_vise_maintenant=no_neurone_vise_maintenant_y*MY_Int2Int(groupe_actuel->taillex)+no_neurone_vise_maintenant_x;
+            //printf("no_neurone_vise_maintenant = %d \n",no_neurone_vise_maintenant);
+            if (stop!=1)
+              {
+
+
+          //    printf("inverse=%d valeur= %f no_neurone_vise_maintenant+e_deb=%d, i+s_deb=%d no_voie=%d\n",inverse,valeur,no_neurone_vise_maintenant+e_deb,i+s_deb,no_voie);
+
+                if (inverse==0) creer_liaison_a_b(sc, liaison,valeur, i+e_deb, no_neurone_vise_maintenant+s_deb, no_voie);
+                else creer_liaison_a_b(sc, liaison,valeur,no_neurone_vise_maintenant+e_deb, i+s_deb, no_voie);
+
+              }
+          }
+
+        }
+      //  printf("nbre_coeff_x_traite =%d\n\n\n",nbre_coeff_x_traite);
+        if(nbre_coeff_x_traite>MY_Int2Int(groupe_actuel->taillex)) EXIT_ON_ERROR("L'une des matrice donnee n'est pas compatible avec la taille en x du groupe visee ligne %d\n", ligne);
+
+        //nettoyage buffer_cara
+        ancien_emplacement = emplacement;
+
+        ret2 = sscanf(&(buffer_matrice[ancien_emplacement]), "%s %n", buffer_cara, &emplacement);
+        emplacement+=ancien_emplacement;
+
+       // printf("buffer cara2 = %s emplacement2 = %d\n",buffer_cara,emplacement);
+      }
+     // printf("sortie ! \n");
+
+      nbre_coeff_y_traite++;
+   //   printf("nbre_coeff_y_traite =%d\n\n\n\n",nbre_coeff_y_traite);
+      if(nbre_coeff_y_traite>MY_Int2Int(groupe_actuel->tailley)) EXIT_ON_ERROR("L'une des matrice donnee n'est pas compatible avec la taille en y du groupe visee ligne %d\n", ligne);
+
+      //nettoyage buffer_matrice
+     // printf("segfault1 ? ! \n");
+      buffer_matrice=NULL;
+      buffer_matrice = fgets(buffer_matrice2, 1024, fichier);
+     // printf("buffer matrice=%s bas buffer_matrice2= %s\n",buffer_matrice,buffer_matrice2);
+    }
+
+  }
+
+  /*
+   if (sc->neurone[j].coeff == NULL)
+   {
+   pt = creer_coeff();
+   sc->neurone[j].coeff = pt;
+   }
+   else
+   {
+   pt1 = pointe_vers_dernier(j);
+   pt = creer_coeff();
+   pt1->s = pt;
+   }
+
+   pt->entree = *pos1;
+   if (groupe->type == No_Ou)
+   {
+   pt->val = 1.;
+   pt->evolution = 0;
+   }
+   else if (groupe->type == No_Et)
+   {
+   pt->val = 1. / ((float) groupe->nbre_voie);
+   pt->evolution = 0;
+   }
+   else
+   {
+   if (liaison->type == No_l_1_1_non_modif) pt->type = no_voie + liaison->mode;
+   else if (liaison->type == No_l_1_1_modif) pt->type = no_voie + 1;
+   else pt->type = -1;
+   pt->val = norme;
+   pt->evolution = sorte_liaison(liaison->type);
+   }
+
+   pt->proba = 0.5;
+
+   pt->gpe_liaison = no_gpe_liaison;
+   *pos1 = *pos1 + pas_entree;
+
+   if (j == s_fin && *pos1 <= e_fin) *no_neurone = s_deb - 1;
+   else if (*pos1 > e_fin) *pos1 = e_deb + pas_entree - 1;
+   */
 }
 
 /*--------------------------------------------------*/
@@ -825,12 +1136,13 @@ void creer_liaison_1_vers_voisinage_neurone(type_groupe * groupe, type_liaison *
 /* pas correspond a la taille en nbre de micro neurones d'un macro neurone */
 /*-------------------------------------------------------------------------*/
 
-void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin, int gpe, int gpe_entree, type_liaison * liaison, int no_voie, int pas, int no_gpe_liaison)
+void creer_liaisons_entre_groupe(donnees_script *sc, int e_deb, int e_fin, int s_deb, int s_fin, int gpe, int gpe_entree, type_liaison * liaison, int no_voie, int pas, int no_gpe_liaison)
 {
   int x, y, z;
   int dx, dy; /* taille du groupe de sortie */
   int j;
   int pos1; /* position entree prise pour 1 vers 1       */
+  int j_deb;
 
   type_groupe *groupe, *groupe_entree;
   int pas_entree, nbre = 0;
@@ -866,7 +1178,6 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin, int
   dx = groupe_taillex;
   dy = groupe_tailley;
 
-
   pos1 = e_deb + pas_entree - 1;
 
   if (groupe->type == No_Winner_Colonne || groupe->type == No_PTM || groupe->type == No_Winner_Macro || groupe->type == No_PLG || groupe->type == No_But || groupe->type == No_Pyramidal || groupe->type == No_Pyramidal_plan || groupe->type == No_Sigma_PI
@@ -876,7 +1187,6 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin, int
   /** neuromod -> pas de micro neurone */
   if (liaison->mode >= NEUROMOD) decalage = 0;
 
-
   if (pas < 0)
   {
     cluster_manage = 1;
@@ -885,6 +1195,10 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin, int
   }
 
   x = y = z = 0;
+
+  j_deb = s_deb + decalage;
+//  if (liaison->type == No_l_1_patern) creer_liaison_1_vers_patern_neurone(sc,groupe, liaison, j_deb, pas, s_fin, pas_entree, no_voie, no_gpe_liaison, e_deb, e_fin);
+
   for (j = s_deb + decalage; j <= s_fin; j += pas)
   {
     init_corps_neurone(groupe, j);
@@ -918,5 +1232,10 @@ void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb, int s_fin, int
       y++;
     }
   }
+
+  if (liaison->type == No_l_1_patern_modif || liaison->type == No_l_1_patern_non_modif)
+    {
+    creer_liaison_1_vers_patern_neurone(sc,groupe,liaison,j_deb,pas,pas_entree,no_voie, no_gpe_liaison,s_deb,s_fin, e_deb, e_fin,&pos1);
+    }
 }
 

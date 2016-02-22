@@ -25,14 +25,14 @@ The fact that you are presently reading this means that you have had knowledge o
 /*---------------------------------------------------------------*/
 /* fonctions utilisees dans leto_cle.o                           */
 /*---------------------------------------------------------------*/
+#include <script.h>
+
 
 extern void ecrit_reseau();
 
 
-extern void creer_liaisons_entre_groupe(int e_deb, int e_fin, int s_deb,
-                                        int s_fin, int gpe, int gpe_entree,
-                                        type_liaison * liaison, int no_voie,
-                                        int pas, int no_gpe_liaison);
+extern void creer_liaisons_entre_groupe(donnees_script *sc,int e_deb, int e_fin, int s_deb, int s_fin, int gpe, int gpe_entree, type_liaison * liaison, int no_voie, int pas, int no_gpe_liaison);
+
 extern void creer_micro_liens(int s_deb, int s_fin, int nbre_voie, int gpe,
                               float val);
 

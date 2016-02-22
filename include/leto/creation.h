@@ -21,6 +21,6 @@ The fact that you are presently reading this means that you have had knowledge o
 */
 #ifndef CREATION_H
 #define CREATION_H
-extern void creation(TxDonneesFenetre *onglet_leto,char* flag_save_res );
+extern void creation(TxDonneesFenetre *onglet_leto,int flag_save_res );
 
 #endif

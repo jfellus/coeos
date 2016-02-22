@@ -827,7 +827,7 @@ void entry_link_callback_norme(GtkWidget * widget, GtkWidget * entry, void *user
 	if (gtk_editable_get_editable(GTK_EDITABLE(entry)) == FALSE) return;
 	entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
 
-	if (sc->liaison_courante->type != No_l_algorithmique && sc->liaison_courante->type != No_l_neuro_mod) memcpy(sc->liaison_courante->nom, entry_text, (strlen(entry_text) + 1) * sizeof(char));
+	if (sc->liaison_courante->type != No_l_1_patern_non_modif && sc->liaison_courante->type != No_l_1_patern_modif && sc->liaison_courante->type != No_l_algorithmique && sc->liaison_courante->type != No_l_neuro_mod) memcpy(sc->liaison_courante->nom, entry_text, (strlen(entry_text) + 1) * sizeof(char));
 
 	Str2MY_Float(sc->liaison_courante->norme, entry_text);
 
@@ -2507,10 +2507,12 @@ void compile_script_cb(GtkWidget * widget, gpointer data)
 void creation_cb(GtkWidget * widget, gpointer data)
 {
 	gboolean res = TRUE;
+	int i;
 	char chemin_env[PATH_MAX];
 
 	/*dans le cas d un script simple le nom du script est dans sc->nomfich1 et non dans sc->fscript*/
 	printf("Callbacks : compilation script + nouveau res\n");
+
 	creer_point_script(widget, data);
 	if (strlen(sc->nomfich1) == 0) return;
 

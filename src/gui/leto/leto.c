@@ -278,7 +278,7 @@ void renumeroter()
   type_groupe *groupe = NULL;
   type_liaison *liaison = NULL;
   int n1 = 0;
-  int n = 0;
+  int n = 1;
   groupe = sc->deb_groupe;
   while (groupe != NULL)
   {
